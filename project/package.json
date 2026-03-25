@@ -1,0 +1,17 @@
+{
+  "name": "one-commerce-project",
+  "private": true,
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "build": "npm run build --workspace=frontend",
+    "start": "npm run start --workspace=frontend",
+    "dev": "npm run dev --workspace=frontend",
+    "install": "npm install --workspaces"
+  }
+}
