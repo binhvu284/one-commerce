@@ -3,9 +3,9 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { Building2, Search, Filter, MoreVertical, ShieldCheck, ShieldAlert, Eye, Power, PowerOff } from "lucide-react";
-import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
-import { DropdownMenu, DropdownMenuItem } from "@/components/ui/DropdownMenu";
+import { Button } from "../../../components/ui/Button";
+import { Input } from "../../../components/ui/Input";
+import { DropdownMenu, DropdownMenuItem } from "../../../components/ui/DropdownMenu";
 
 // Mock Data
 type OrganizationStatus = "Active" | "Inactive" | "Suspended";

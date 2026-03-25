@@ -3,8 +3,8 @@
 import React from "react";
 import Link from "next/link";
 import { ArrowLeft, Building2, Users, CreditCard, Clock, MapPin, Globe, ShieldCheck, Mail, Phone, Edit, Settings, FileText } from "lucide-react";
-import { Button } from "@/components/ui/Button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/Card";
+import { Button } from "../../../../components/ui/Button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../../../components/ui/Card";
 
 // Mock Data for single organization
 const MOCK_ORG_DETAIL = {
