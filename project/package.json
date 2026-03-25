@@ -14,7 +14,6 @@
   "scripts": {
     "build": "npm run build --workspace=frontend",
     "start": "npm run start --workspace=frontend",
-    "dev": "npm run dev --workspace=frontend",
-    "install": "npm install --workspaces"
+    "dev": "npm run dev --workspace=frontend"
   }
 }
