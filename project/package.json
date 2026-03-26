@@ -1,19 +1,31 @@
 {
-  "name": "one-commerce-project",
+  "name": "one-commerce",
+  "version": "0.1.0",
   "private": true,
-  "engines": {
-    "node": ">=20.0.0"
-  },
-  "workspaces": [
-    "frontend",
-    "backend"
-  ],
-  "dependencies": {
-    "next": "14.2.35"
-  },
   "scripts": {
-    "build": "npm run build --workspace=frontend",
-    "start": "npm run start --workspace=frontend",
-    "dev": "npm run dev --workspace=frontend"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "^15",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "framer-motion": "^11.18.2",
+    "lucide-react": "^0.475.0",
+    "recharts": "^2.15.0",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^2.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@tailwindcss/postcss": "^4",
+    "typescript": "^5",
+    "tailwindcss": "^4",
+    "eslint": "^9",
+    "eslint-config-next": "^15"
   }
 }

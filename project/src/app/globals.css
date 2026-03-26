@@ -1,0 +1,110 @@
+@import "tailwindcss";
+@config "../../tailwind.config.ts";
+
+@theme {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  --color-primary-50: #eef2ff;
+  --color-primary-100: #e0e7ff;
+  --color-primary-200: #c7d2fe;
+  --color-primary-300: #a5b4fc;
+  --color-primary-400: #818cf8;
+  --color-primary-500: #6366f1;
+  --color-primary-600: #4f46e5;
+  --color-primary-700: #4338ca;
+  --color-primary-800: #3730a3;
+  --color-primary-900: #312e81;
+  --color-primary-950: #1e1b4b;
+}
+
+@layer base {
+  :root {
+    --bg-page: #f8fafc;
+    --bg-surface: #ffffff;
+    --bg-muted: #f1f5f9;
+    --bg-sidebar: #0f172a;
+    --bg-sidebar-hover: rgba(255,255,255,0.08);
+    --bg-sidebar-active: rgba(99,102,241,0.2);
+    --text-primary: #0f172a;
+    --text-secondary: #64748b;
+    --text-muted: #94a3b8;
+    --text-sidebar: #cbd5e1;
+    --text-sidebar-active: #ffffff;
+    --border: #e2e8f0;
+    --border-subtle: #f1f5f9;
+    --accent: #4f46e5;
+    --accent-hover: #4338ca;
+    --accent-light: #eef2ff;
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+    --radius: 0.5rem;
+    --sidebar-width: 240px;
+    --header-height: 60px;
+  }
+
+  .dark {
+    --bg-page: #07090f;
+    --bg-surface: #0f1629;
+    --bg-muted: #162032;
+    --bg-sidebar: #070b14;
+    --bg-sidebar-hover: rgba(255,255,255,0.06);
+    --bg-sidebar-active: rgba(99,102,241,0.25);
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-muted: #475569;
+    --text-sidebar: #94a3b8;
+    --text-sidebar-active: #ffffff;
+    --border: #1e2d45;
+    --border-subtle: #162032;
+    --accent: #6366f1;
+    --accent-hover: #818cf8;
+    --accent-light: rgba(99,102,241,0.15);
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5), 0 4px 6px -4px rgb(0 0 0 / 0.35);
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--bg-page);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+  }
+  .dark * {
+    scrollbar-color: #1e2d45 transparent;
+  }
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+  .dark ::-webkit-scrollbar-thumb { background: #1e2d45; }
+}
+
+@layer utilities {
+  .bg-page { background-color: var(--bg-page); }
+  .bg-surface { background-color: var(--bg-surface); }
+  .bg-muted-token { background-color: var(--bg-muted); }
+  .bg-sidebar { background-color: var(--bg-sidebar); }
+  .text-primary-token { color: var(--text-primary); }
+  .text-secondary-token { color: var(--text-secondary); }
+  .text-muted-token { color: var(--text-muted); }
+  .border-token { border-color: var(--border); }
+  .shadow-token-sm { box-shadow: var(--shadow-sm); }
+  .shadow-token-md { box-shadow: var(--shadow-md); }
+  .shadow-token-lg { box-shadow: var(--shadow-lg); }
+  .accent-bg { background-color: var(--accent); }
+  .accent-bg-light { background-color: var(--accent-light); }
+  .accent-text { color: var(--accent); }
+  .sidebar-text { color: var(--text-sidebar); }
+  .sidebar-text-active { color: var(--text-sidebar-active); }
+}
