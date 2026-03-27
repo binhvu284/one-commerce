@@ -184,15 +184,19 @@ export function Header() {
           </button>
 
           {/* User Profile */}
-          <div className="ml-1 flex items-center gap-2.5 p-1 pr-3 rounded-xl hover:bg-[var(--bg-muted)] transition-colors cursor-pointer group">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center ring-2 ring-[var(--border)] group-hover:ring-indigo-500 transition-all shadow-md overflow-hidden">
+          <Link 
+            href="/"
+            className="ml-1 flex items-center gap-2.5 p-1 pr-3 rounded-xl hover:bg-red-500/10 hover:text-red-500 transition-colors cursor-pointer group"
+            title="Switch Context / Logout"
+          >
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center ring-2 ring-[var(--border)] group-hover:ring-red-500 transition-all shadow-md overflow-hidden">
               <span className="text-white text-xs font-black">SA</span>
             </div>
             <div className="hidden lg:block min-w-0">
-               <p className="text-[11px] font-bold text-[var(--text-primary)] truncate leading-none mb-0.5">Super Admin</p>
-               <p className="text-[9px] text-[var(--text-muted)] font-medium truncate leading-none">Standard Plan</p>
+               <p className="text-[11px] font-bold text-[var(--text-primary)] group-hover:text-red-500 truncate leading-none mb-0.5 transition-colors">Super Admin</p>
+               <p className="text-[9px] text-[var(--text-muted)] group-hover:text-red-400 font-medium truncate leading-none transition-colors underline decoration-dotted">Switch Role</p>
             </div>
-          </div>
+          </Link>
         </div>
       </div>
     </header>

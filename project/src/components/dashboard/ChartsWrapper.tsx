@@ -19,6 +19,20 @@ const RevenueChartLazy = dynamic(
   { ssr: false, loading: ChartSkeleton }
 );
 
+export function ChartsWrapper({ children, title, subtitle }: { children: React.ReactNode, title: string, subtitle?: string }) {
+  return (
+    <div className="bg-[var(--bg-surface)] rounded-2xl border border-[var(--border)] overflow-hidden">
+      <div className="px-6 py-4 border-b border-[var(--border)]">
+        <h3 className="text-sm font-bold text-[var(--text-primary)]">{title}</h3>
+        {subtitle && <p className="text-[11px] text-[var(--text-muted)] font-medium">{subtitle}</p>}
+      </div>
+      <div className="p-6">
+        {children}
+      </div>
+    </div>
+  );
+}
+
 export function OrgGrowthChart({ data }: { data: ChartDataPoint[] }) {
   return <OrgGrowthChartLazy data={data} />;
 }
