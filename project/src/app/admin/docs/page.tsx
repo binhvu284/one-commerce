@@ -15,6 +15,7 @@ import {
   Zap
 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { cn } from '@/lib/cn';
 
 const techSections = [
   { id: 'api', title: 'API Reference', icon: Code, desc: 'REST API endpoints, Token authentication & Scopes.' },
@@ -25,48 +26,48 @@ const techSections = [
 
 export default function AdminDocsPage() {
   return (
-    <div className="max-w-6xl mx-auto space-y-12 pb-20">
+    <div className="max-w-6xl mx-auto space-y-12 pb-20 px-4 sm:px-0">
       {/* Header */}
-      <header className="space-y-6 pt-10 border-b border-white/5 pb-12">
-        <div className="flex items-center gap-3 text-indigo-400">
+      <header className="space-y-6 pt-10 border-b border-[var(--border)] pb-12">
+        <div className="flex items-center gap-3 text-indigo-500">
            <Terminal className="w-5 h-5" />
            <span className="text-[10px] font-black uppercase tracking-[0.2em] leading-none">Engineering Documentation</span>
         </div>
         <div className="max-w-3xl space-y-4">
-          <h1 className="text-5xl font-black text-white tracking-tight">System Core Guides</h1>
-          <p className="text-base text-slate-500 font-medium leading-relaxed italic">
+          <h1 className="text-5xl font-black text-[var(--text-primary)] tracking-tight">System Core Guides</h1>
+          <p className="text-base text-[var(--text-secondary)] font-medium leading-relaxed italic">
             "Design is not just what it looks like and feels like. Design is how it works." — Essential technical resources for OneCommerce high-level management.
           </p>
         </div>
 
-        <div className="relative max-w-xl">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-600" />
+        <div className="relative max-w-xl group">
+          <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--text-muted)] group-focus-within:text-indigo-500 transition-colors" />
           <input 
             type="text" 
             placeholder="Search tech specs..." 
-            className="w-full pl-12 pr-4 py-4 bg-slate-900 border border-white/5 rounded-2xl text-sm outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all font-mono"
+            className="w-full pl-13 pr-6 py-5 bg-[var(--bg-surface)] border border-[var(--border)] rounded-[1.5rem] text-sm outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/50 transition-all font-mono placeholder:text-[var(--text-muted)] shadow-sm"
           />
         </div>
       </header>
 
       {/* Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
         {techSections.map((section, idx) => (
           <motion.div
             key={section.id}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, scale: 0.98, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ delay: idx * 0.1 }}
-            className="p-8 bg-slate-900 border border-white/5 rounded-[2.5rem] hover:bg-slate-800/50 transition-all group flex gap-6 items-start"
+            className="p-10 bg-[var(--bg-surface)] border border-[var(--border)] rounded-[3rem] hover:bg-[var(--bg-muted)]/50 transition-all group flex gap-8 items-start shadow-token-sm hover:shadow-xl hover:shadow-indigo-500/5 duration-500"
           >
-            <div className="w-14 h-14 rounded-2xl bg-indigo-500/10 flex items-center justify-center text-indigo-500 group-hover:scale-110 group-hover:bg-indigo-500 group-hover:text-white transition-all">
-              <section.icon className="w-7 h-7" />
+            <div className="w-16 h-16 rounded-3xl bg-indigo-500/10 flex items-center justify-center text-indigo-600 dark:text-indigo-400 group-hover:scale-110 group-hover:bg-indigo-600 group-hover:text-white transition-all shadow-sm border border-indigo-500/10">
+              <section.icon className="w-8 h-8" />
             </div>
-            <div className="flex-1 space-y-2">
-               <h3 className="text-xl font-black text-white tracking-tight group-hover:text-indigo-400 transition-colors">{section.title}</h3>
-               <p className="text-sm text-slate-500 font-medium leading-relaxed">{section.desc}</p>
-               <button className="flex items-center gap-2 text-[10px] font-black uppercase text-indigo-500 tracking-widest pt-2 group-hover:gap-3 transition-all">
-                  Read Guides <ChevronRight className="w-3.5 h-3.5" />
+            <div className="flex-1 space-y-3">
+               <h3 className="text-2xl font-black text-[var(--text-primary)] tracking-tight group-hover:text-indigo-600 transition-colors uppercase text-[15px]">{section.title}</h3>
+               <p className="text-sm text-[var(--text-secondary)] font-medium leading-relaxed">{section.desc}</p>
+               <button className="flex items-center gap-2 text-[10px] font-black uppercase text-indigo-600 tracking-widest pt-2 group-hover:gap-3 transition-all">
+                  Access Specs <ChevronRight className="w-4 h-4" />
                </button>
             </div>
           </motion.div>
@@ -75,37 +76,39 @@ export default function AdminDocsPage() {
 
       {/* Quick Access Info */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 p-8 rounded-[2.5rem] bg-indigo-500 text-white space-y-6 shadow-2xl shadow-indigo-500/10 group overflow-hidden relative">
-           <Zap className="absolute -bottom-10 -right-10 w-64 h-64 opacity-10 group-hover:rotate-12 transition-transform duration-1000" />
-           <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
-              <Info className="w-6 h-6" />
+        <div className="lg:col-span-2 p-12 rounded-[3.5rem] bg-indigo-600 text-white space-y-8 shadow-2xl shadow-indigo-500/20 group overflow-hidden relative border border-white/10 dark:border-none">
+           <Zap className="absolute -bottom-10 -right-10 w-72 h-72 opacity-10 group-hover:rotate-12 transition-transform duration-1000" />
+           <div className="w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-lg flex items-center justify-center border border-white/20">
+              <Info className="w-7 h-7" />
            </div>
-           <div className="space-y-4 max-w-lg relative z-10">
-              <h2 className="text-3xl font-black tracking-tight leading-none">Security First Architecture</h2>
-              <p className="text-sm text-indigo-100 font-medium leading-relaxed">
+           <div className="space-y-5 max-w-xl relative z-10">
+              <h2 className="text-4xl font-black tracking-tight leading-tight">Security First Architecture</h2>
+              <p className="text-base text-indigo-50/80 font-medium leading-relaxed">
                 OneCommerce enforces a strict Row-Level Security (RLS) model on Supabase. Every API Access Token uses asymmetric JWT signing to ensure data integrity across multiple tenants.
               </p>
-              <div className="flex gap-4 pt-2">
-                 <button className="px-6 py-3 bg-white text-indigo-600 rounded-xl font-black text-[10px] uppercase tracking-widest shadow-lg">Auth Docs</button>
-                 <button className="px-6 py-3 bg-indigo-600 text-white border border-white/20 rounded-xl font-black text-[10px] uppercase tracking-widest">Security Specs</button>
+              <div className="flex gap-4 pt-4">
+                 <button className="px-8 py-4 bg-white text-indigo-700 rounded-2xl font-black text-[11px] uppercase tracking-widest shadow-xl hover:scale-105 transition-all">Auth Docs</button>
+                 <button className="px-8 py-4 bg-indigo-700 text-white border border-white/20 rounded-2xl font-black text-[11px] uppercase tracking-widest hover:bg-indigo-800 transition-all">Security Specs</button>
               </div>
            </div>
         </div>
 
-        <div className="p-8 rounded-[2.5rem] bg-slate-900 border border-white/5 space-y-8">
-           <h3 className="text-sm font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Core Resources</h3>
-           <div className="space-y-4">
+        <div className="p-10 rounded-[3.5rem] bg-[var(--bg-surface)] border border-[var(--border)] space-y-10 shadow-token-sm">
+           <h3 className="text-[11px] font-black text-[var(--text-muted)] uppercase tracking-[0.3em] mb-4">Core Resources</h3>
+           <div className="space-y-5">
               {[
-                { label: 'Supabase Dashboard', icon: ExternalLink },
-                { id: 'schema', label: 'Database Schema Map', icon: Database },
-                { id: 'tokens', label: 'Token Policy v2.1', icon: Shield },
+                { label: 'Supabase Dashboard', icon: ExternalLink, color: 'text-emerald-500' },
+                { id: 'schema', label: 'Database Schema Map', icon: Database, color: 'text-blue-500' },
+                { id: 'tokens', label: 'Token Policy v2.1', icon: Shield, color: 'text-indigo-500' },
               ].map((res, i) => (
-                <button key={i} className="w-full flex items-center justify-between p-3 hover:bg-white/5 rounded-xl transition-all group">
-                   <div className="flex items-center gap-3">
-                      <res.icon className="w-4 h-4 text-indigo-500" />
-                      <span className="text-sm font-bold text-slate-300">{res.label}</span>
+                <button key={i} className="w-full flex items-center justify-between p-4 hover:bg-[var(--bg-muted)] rounded-[1.5rem] transition-all group border border-transparent hover:border-[var(--border)] shadow-sm hover:shadow-md">
+                   <div className="flex items-center gap-4">
+                      <div className={cn("w-10 h-10 rounded-xl bg-[var(--bg-muted)] flex items-center justify-center shadow-inner group-hover:bg-white transition-colors")}>
+                        <res.icon className={cn("w-5 h-5", res.color)} />
+                      </div>
+                      <span className="text-sm font-bold text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] transition-colors">{res.label}</span>
                    </div>
-                   <ChevronRight className="w-3.5 h-3.5 text-slate-700 group-hover:text-white transition-all" />
+                   <ChevronRight className="w-4 h-4 text-[var(--text-muted)] group-hover:text-[var(--text-primary)] transition-all" />
                 </button>
               ))}
            </div>

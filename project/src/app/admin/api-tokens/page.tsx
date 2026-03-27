@@ -79,8 +79,8 @@ export default function ApiTokensPage() {
             <Key className="w-4 h-4" />
             <span className="text-[10px] font-black uppercase tracking-[0.2em]">Security & Infrastructure</span>
           </div>
-          <h1 className="text-3xl font-black text-white tracking-tight leading-none">API Access Tokens</h1>
-          <p className="text-sm text-slate-500 mt-2 max-w-xl">
+          <h1 className="text-3xl font-black text-[var(--text-primary)] tracking-tight leading-none">API Access Tokens</h1>
+          <p className="text-sm text-[var(--text-secondary)] mt-2 max-w-xl font-medium">
             Generate secure access tokens for external apps and services to interact with OneCommerce API.
           </p>
         </div>
@@ -92,61 +92,64 @@ export default function ApiTokensPage() {
       </header>
 
       {/* Warning Box */}
-      <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex gap-4 items-start">
+      <div className="p-5 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex gap-4 items-start shadow-sm">
         <AlertCircle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
         <div className="space-y-1">
-           <p className="text-sm font-bold text-amber-500">Security Requirement</p>
-           <p className="text-xs text-slate-400 leading-relaxed">
+           <p className="text-sm font-bold text-amber-500 uppercase tracking-widest text-[10px]">Security Requirement</p>
+           <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-medium">
              Access tokens should be treated with the same sensitivity as your main password. Use tokens to connect to external MCP servers or mobile applications.
            </p>
         </div>
       </div>
 
-      <div className="bg-slate-900/50 border border-white/5 rounded-3xl overflow-hidden shadow-sm">
-        <table className="w-full text-left">
-          <thead>
-            <tr className="border-b border-white/5 bg-white/[0.02]">
-              <th className="px-6 py-4 text-[10px] uppercase font-black tracking-widest text-slate-500">Token Name</th>
-              <th className="px-6 py-4 text-[10px] uppercase font-black tracking-widest text-slate-500">Created</th>
-              <th className="px-6 py-4 text-[10px] uppercase font-black tracking-widest text-slate-500">Last Used</th>
-              <th className="px-6 py-4 text-[10px] uppercase font-black tracking-widest text-slate-500">Status</th>
-              <th className="px-6 py-4 text-[10px] uppercase font-black tracking-widest text-slate-500 text-right">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-white/5">
-            {tokens.map((token) => (
-              <tr key={token.id} className="group hover:bg-white/[0.02] transition-colors">
-                <td className="px-6 py-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500">
-                      <Zap className="w-4 h-4" />
-                    </div>
-                    <span className="text-sm font-bold text-white">{token.name}</span>
-                  </div>
-                </td>
-                <td className="px-6 py-4">
-                  <div className="flex items-center gap-2 text-slate-400 text-xs font-semibold">
-                    <Calendar className="w-3.5 h-3.5" />
-                    {token.createdAt}
-                  </div>
-                </td>
-                <td className="px-6 py-4 text-slate-500 text-xs font-medium">
-                  {token.lastUsed || <span className="text-blue-400/50 italic">Never used</span>}
-                </td>
-                <td className="px-6 py-4">
-                  <Badge variant={token.status === 'active' ? 'success' : 'neutral'} className="rounded-md uppercase text-[9px] font-black tracking-widest px-2">
-                    {token.status}
-                  </Badge>
-                </td>
-                <td className="px-6 py-4 text-right">
-                   <button className="p-2 text-slate-500 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-all">
-                      <Trash2 className="w-4 h-4" />
-                   </button>
-                </td>
+      <div className="bg-[var(--bg-surface)] border border-[var(--border)] rounded-3xl overflow-hidden shadow-token-sm">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left">
+            <thead>
+              <tr className="border-b border-[var(--border)] bg-[var(--bg-muted)]/50">
+                <th className="px-6 py-4 text-[10px] uppercase font-black tracking-widest text-[var(--text-muted)]">Token Name</th>
+                <th className="px-6 py-4 text-[10px] uppercase font-black tracking-widest text-[var(--text-muted)]">Created</th>
+                <th className="px-6 py-4 text-[10px] uppercase font-black tracking-widest text-[var(--text-muted)]">Last Used</th>
+                <th className="px-6 py-4 text-[10px] uppercase font-black tracking-widest text-[var(--text-muted)]">Status</th>
+                <th className="px-6 py-4 text-[10px] uppercase font-black tracking-widest text-[var(--text-muted)] text-right">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-[var(--border)]">
+              {tokens.map((token) => (
+                <tr key={token.id} className="group hover:bg-[var(--bg-muted)]/30 transition-colors">
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-xl bg-blue-500/10 dark:bg-blue-500/20 flex items-center justify-center text-blue-500 shadow-sm border border-blue-500/10">
+                        <Zap className="w-4.5 h-4.5" />
+                      </div>
+                      <span className="text-sm font-bold text-[var(--text-primary)]">{token.name}</span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-2 text-[var(--text-secondary)] text-xs font-semibold">
+                      <Calendar className="w-3.5 h-3.5" />
+                      {token.createdAt}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 text-[var(--text-muted)] text-xs font-medium italic">
+                    {token.lastUsed || <span>Never used</span>}
+                  </td>
+                  <td className="px-6 py-4">
+                    <Badge variant={token.status === 'active' ? 'success' : 'neutral'} className="rounded-md uppercase text-[9px] font-black tracking-widest px-2 shadow-sm">
+                      {token.status}
+                    </Badge>
+                  </td>
+                  <td className="px-6 py-4 text-right">
+                    <button className="p-2 text-[var(--text-muted)] hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all hidden group-hover:inline-flex">
+                        <Trash2 className="w-4 h-4" />
+                    </button>
+                    <div className="group-hover:hidden text-[var(--text-muted)] opacity-20">•••</div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Creation Modal */}
@@ -158,29 +161,29 @@ export default function ApiTokensPage() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={closeAndReset}
-              className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             />
             <motion.div
               initial={{ scale: 0.95, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.95, opacity: 0, y: 20 }}
-              className="relative w-full max-w-md bg-slate-900 border border-white/10 rounded-3xl shadow-2xl p-8 overflow-hidden"
+              className="relative w-full max-w-md bg-[var(--bg-surface)] border border-[var(--border)] rounded-[2.5rem] shadow-2xl p-8 overflow-hidden"
             >
               {!generatedToken ? (
                 <div className="space-y-6">
                   <div className="space-y-2">
-                    <h2 className="text-2xl font-black text-white tracking-tight">New Access Token</h2>
-                    <p className="text-sm text-slate-500 font-medium leading-relaxed">Give your token a descriptive name to remember where it is used.</p>
+                    <h2 className="text-2xl font-black text-[var(--text-primary)] tracking-tight">New Access Token</h2>
+                    <p className="text-sm text-[var(--text-secondary)] font-medium leading-relaxed">Give your token a descriptive name to remember where it is used.</p>
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">Token Description</label>
+                    <label className="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] ml-1">Token Description</label>
                     <input 
                       type="text" 
                       placeholder="e.g. Claude Desktop Connection" 
                       value={newTokenName}
                       onChange={(e) => setNewTokenName(e.target.value)}
-                      className="w-full px-5 py-4 bg-slate-800/50 border border-white/5 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500/20 text-white font-medium"
+                      className="w-full px-5 py-4 bg-[var(--bg-muted)] border border-[var(--border)] rounded-2xl outline-none focus:ring-2 focus:ring-blue-500/20 text-[var(--text-primary)] font-medium placeholder:text-[var(--text-muted)]"
                     />
                   </div>
 
@@ -197,28 +200,28 @@ export default function ApiTokensPage() {
                   </div>
                   
                   <div className="space-y-2">
-                    <h2 className="text-2xl font-black text-white tracking-tight leading-none">Token Generated</h2>
-                    <p className="text-sm text-slate-500 font-medium">Please copy your token now. You won't be able to see it again!</p>
+                    <h2 className="text-2xl font-black text-[var(--text-primary)] tracking-tight leading-none">Token Generated</h2>
+                    <p className="text-sm text-[var(--text-secondary)] font-medium">Please copy your token now. You won't be able to see it again!</p>
                   </div>
 
                   <div className="relative group">
-                    <div className="w-full p-6 bg-black/40 border border-blue-500/30 rounded-2xl font-mono text-sm text-blue-400 break-all pr-12 text-left">
+                    <div className="w-full p-6 bg-[var(--bg-muted)] border border-blue-500/30 rounded-2xl font-mono text-sm text-blue-600 dark:text-blue-400 break-all pr-12 text-left shadow-inner">
                       {generatedToken}
                     </div>
                     <button 
                       onClick={copyToClipboard}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-blue-600/20 hover:bg-blue-600 text-blue-400 hover:text-white rounded-xl transition-all"
+                      className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-blue-600/20 hover:bg-blue-600 text-blue-600 hover:text-white rounded-xl transition-all"
                     >
                       {isCopied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                     </button>
                   </div>
 
                   <div className="pt-4 flex flex-col gap-3">
-                     <p className="text-[10px] text-red-400 font-black uppercase tracking-widest flex items-center justify-center gap-2">
+                     <p className="text-[10px] text-red-500 font-black uppercase tracking-widest flex items-center justify-center gap-2">
                         <AlertCircle className="w-3 h-3" />
                         Unrecoverable Secret
                      </p>
-                     <Button onClick={closeAndReset} variant="outline" className="w-full py-6 rounded-2xl border-white/5 bg-white/5 hover:bg-white/10 font-black uppercase text-xs tracking-widest text-white">
+                     <Button onClick={closeAndReset} variant="outline" className="w-full py-6 rounded-2xl border-[var(--border)] bg-[var(--bg-muted)] hover:bg-[var(--border)] font-black uppercase text-xs tracking-widest text-[var(--text-primary)]">
                         I've Saved the Token
                      </Button>
                   </div>
