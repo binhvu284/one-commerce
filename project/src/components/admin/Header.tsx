@@ -73,14 +73,14 @@ export function Header() {
                     'truncate transition-colors duration-200',
                     isLast
                       ? 'font-bold text-[var(--text-primary)]'
-                      : 'text-[var(--text-muted)] hover:text-[var(--text-primary)] hidden sm:block'
+                      : 'text-[var(--text-muted)] hover:text-[var(--text-primary)] hidden md:block'
                   )}
                 >
                   {crumb.label}
                 </Link>
-                {/* On mobile, show only the last breadcrumb clearly */}
+                {/* On mobile, show only the last breadcrumb clearly or if it's the only one */}
                 {isLast && (
-                   <span className="sm:hidden font-bold text-[var(--text-primary)] truncate">
+                   <span className="md:hidden font-bold text-[var(--text-primary)] truncate max-w-[150px]">
                      {crumb.label}
                    </span>
                 )}

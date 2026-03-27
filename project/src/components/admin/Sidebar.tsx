@@ -80,6 +80,18 @@ export function Sidebar() {
     setIsOpen(false);
   }, [pathname, setIsOpen]);
 
+  // Handle Body Scroll Lock on Mobile
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
+
   const isActive = (href: string) => pathname === href || pathname.startsWith(href + '/');
 
   const sidebarContent = (
