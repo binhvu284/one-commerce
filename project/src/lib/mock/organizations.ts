@@ -1,4 +1,4 @@
-import type { Organization } from '@/lib/types/organization';
+import type { Organization, OrgUser, OrgActivity } from '@/lib/types/organization';
 
 export const mockOrganizations: Organization[] = [
   {
@@ -79,3 +79,21 @@ export const mockOrganizations: Organization[] = [
 export function getOrgBySlug(slug: string): Organization | undefined {
   return mockOrganizations.find(o => o.slug === slug);
 }
+
+export function getOrgById(id: string): Organization | undefined {
+  return mockOrganizations.find(o => o.id === id);
+}
+
+export const mockOrgUsers: OrgUser[] = [
+  { id: 'usr_001', name: 'Nguyen Thi Lan', email: 'lan@luxefashion.vn', role: 'owner', status: 'active', joinedAt: '2024-08-15', lastActive: '2026-03-25' },
+  { id: 'usr_002', name: 'Le Binh', email: 'binh@luxefashion.vn', role: 'admin', status: 'active', joinedAt: '2024-09-01', lastActive: '2026-03-26' },
+  { id: 'usr_003', name: 'Tran Hoa', email: 'hoa@luxefashion.vn', role: 'manager', status: 'active', joinedAt: '2024-10-10', lastActive: '2026-03-24' },
+  { id: 'usr_004', name: 'Pham Minh', email: 'minh@luxefashion.vn', role: 'staff', status: 'inactive', joinedAt: '2025-01-05', lastActive: '2026-02-28' },
+];
+
+export const mockOrgActivity: OrgActivity[] = [
+  { id: 'act_001', type: 'login', description: 'Admin Nguyen Thi Lan logged in', actor: 'Nguyen Thi Lan', timestamp: '2026-03-25T14:20:00Z' },
+  { id: 'act_002', type: 'status_change', description: 'Organization status updated to Active', actor: 'System', timestamp: '2026-03-25T10:00:00Z' },
+  { id: 'act_003', type: 'user_added', description: 'New manager Le Binh added to team', actor: 'Nguyen Thi Lan', timestamp: '2024-09-01T09:15:00Z' },
+  { id: 'act_004', type: 'payment', description: 'Subscription payment of $199 processed', actor: 'Billing System', timestamp: '2024-08-16T00:00:00Z' },
+];
