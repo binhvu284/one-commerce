@@ -18,6 +18,8 @@ import {
   X,
   CreditCard,
   ExternalLink,
+  Briefcase,
+  GitBranch,
 } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { useSidebar } from '@/components/providers/SidebarProvider';
@@ -40,13 +42,23 @@ const navSections: NavSection[] = [
     title: 'Operations',
     items: [
       { id: 'dashboard', label: 'Dashboard', href: '/business/dashboard', icon: <LayoutDashboard className="w-4 h-4" /> },
+      { id: 'people', label: 'People & Access', href: '/business/people', icon: <Users className="w-4 h-4" /> },
       { id: 'orders', label: 'Orders', href: '/business/orders', icon: <ShoppingBag className="w-4 h-4" />, inDev: true },
       { id: 'products', label: 'Products', href: '/business/products', icon: <Package className="w-4 h-4" />, inDev: true },
     ],
   },
   {
+    title: 'Workspaces',
+    items: [
+      { id: 'ws-marketing', label: 'Marketing Team', href: '/business/workspaces/ws-1', icon: <Briefcase className="w-4 h-4" /> },
+      { id: 'ws-dev', label: 'Development', href: '/business/workspaces/ws-2', icon: <Briefcase className="w-4 h-4" /> },
+      { id: 'ws-sales', label: 'Sales & Support', href: '/business/workspaces/ws-3', icon: <Briefcase className="w-4 h-4" /> },
+    ],
+  },
+  {
     title: 'Growth',
     items: [
+      { id: 'affiliate', label: 'Affiliate Tree', href: '/business/affiliate', icon: <GitBranch className="w-4 h-4" /> },
       { id: 'crm', label: 'Customers', href: '/business/customers', icon: <Users className="w-4 h-4" />, inDev: true },
       { id: 'finance', label: 'Finance', href: '/business/finance', icon: <CreditCard className="w-4 h-4" />, inDev: true },
     ],
