@@ -20,6 +20,8 @@ import {
   User,
   X,
   Search,
+  Command,
+  ChevronsUpDown,
 } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { useSidebar } from '@/components/providers/SidebarProvider';
@@ -87,42 +89,52 @@ export function Sidebar() {
   const isActive = (href: string) => pathname === href || pathname.startsWith(href + '/');
 
   const sidebarContent = (
-    <>
-      {/* Header */}
-      <div className="flex items-center justify-between px-4 h-[60px] flex-shrink-0 border-b border-white/5">
-        <Link href="/admin/dashboard" className="flex items-center gap-2.5">
-          <div className="flex-shrink-0 w-8 h-8 rounded-xl bg-gradient-to-tr from-[var(--accent)] to-indigo-400 flex items-center justify-center shadow-lg shadow-indigo-500/20 ring-1 ring-white/10">
-            <Zap className="w-4 h-4 text-white" />
+    <div className="flex flex-col h-full bg-[#0f172a] text-slate-300">
+      {/* Brand & Org Switcher */}
+      <div className="p-4 flex-shrink-0">
+        <div className="flex items-center gap-3 px-1 mb-6">
+          <div className="w-10 h-10 rounded-2xl bg-indigo-500 flex items-center justify-center shadow-lg shadow-indigo-500/20 ring-1 ring-white/20 overflow-hidden">
+            <Zap className="w-5 h-5 text-white" />
           </div>
-          <AnimatePresence mode="wait">
-            {!isCollapsed && (
-              <motion.div
-                initial={{ opacity: 0, x: -8 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -8 }}
-                transition={{ duration: 0.15 }}
-                className="overflow-hidden"
-              >
-                <span className="text-white font-bold text-sm tracking-tight whitespace-nowrap">
-                  OneCommerce
-                </span>
-                <span className="block text-[10px] text-white/40 leading-none whitespace-nowrap uppercase tracking-wider font-semibold">
-                  Admin Console
-                </span>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </Link>
-        <button
-          onClick={() => setIsOpen(false)}
-          className="lg:hidden p-2 -mr-2 text-white/40 hover:text-white transition-colors"
-        >
-          <X className="w-5 h-5" />
-        </button>
+          {!isCollapsed && (
+            <motion.div
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="flex-1 min-w-0"
+            >
+              <h2 className="text-white font-black text-sm uppercase tracking-wider leading-none">OneCommerce</h2>
+              <p className="text-[10px] text-slate-500 font-bold mt-1 uppercase tracking-widest">Platform</p>
+            </motion.div>
+          )}
+        </div>
+
+        {/* Improved Org Switcher (Modern Function) */}
+        {!isCollapsed ? (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="flex items-center justify-between gap-3 p-2 rounded-xl bg-slate-800/40 border border-white/5 hover:bg-slate-800/60 transition-colors cursor-pointer group"
+          >
+            <div className="w-7 h-7 rounded-lg bg-indigo-600/30 border border-indigo-500/20 flex items-center justify-center">
+              <span className="text-[10px] font-black text-indigo-400">BH</span>
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-[11px] font-bold text-white truncate">BeautyHub VN</p>
+              <p className="text-[9px] text-slate-500 font-medium">Enterprise Plan</p>
+            </div>
+            <ChevronsUpDown className="w-3.5 h-3.5 text-slate-600 group-hover:text-slate-400 transition-colors" />
+          </motion.div>
+        ) : (
+          <div className="flex justify-center">
+            <div className="w-9 h-9 rounded-xl bg-slate-800/50 border border-white/5 flex items-center justify-center hover:bg-slate-800 transition-colors cursor-pointer ring-offset-2 ring-offset-[#0f172a] hover:ring-2 ring-indigo-500/50">
+               <span className="text-[10px] font-black text-indigo-400">BH</span>
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* Nav Content */}
-      <div className="flex-1 overflow-y-auto px-2 py-4 space-y-6 scrollbar-hide">
+      {/* Navigation */}
+      <div className="flex-1 overflow-y-auto px-3 py-2 space-y-7 scrollbar-hide">
         {navSections.map((section) => (
           <div key={section.title}>
             <AnimatePresence mode="wait">
@@ -130,21 +142,20 @@ export function Sidebar() {
                 <motion.p
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="text-[10px] uppercase font-bold px-3 mb-2 tracking-[0.15em] text-white/30"
+                  className="text-[10px] uppercase font-black px-4 mb-3 tracking-[0.2em] text-slate-600"
                 >
                   {section.title}
                 </motion.p>
               )}
             </AnimatePresence>
 
-            <div className="space-y-1">
+            <div className="space-y-1.5">
               {section.items.map((item) => {
                 const active = isActive(item.href);
                 return (
                   <div
                     key={item.id}
-                    className="relative px-1"
+                    className="relative group"
                     onMouseEnter={() => setHoveredItem(item.id)}
                     onMouseLeave={() => setHoveredItem(null)}
                   >
@@ -152,58 +163,51 @@ export function Sidebar() {
                       href={item.inDev ? '#' : item.href}
                       onClick={item.inDev ? (e) => e.preventDefault() : undefined}
                       className={cn(
-                        'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all duration-200 group relative overflow-hidden',
+                        'flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13px] font-semibold transition-all duration-300 relative',
                         active
-                          ? 'bg-gradient-to-r from-white/[0.08] to-transparent text-white ring-1 ring-white/10'
-                          : 'text-white/50 hover:text-white hover:bg-white/5',
+                          ? 'bg-gradient-to-r from-indigo-500/10 via-indigo-500/5 to-transparent text-white ring-1 ring-white/10'
+                          : 'hover:bg-white/5 text-slate-400 hover:text-white',
                         item.inDev && 'opacity-60 cursor-not-allowed'
                       )}
                     >
                       {active && (
                         <motion.div
-                          layoutId="sidebar-active"
-                          className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 rounded-full bg-[var(--accent)]"
-                          transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                          layoutId="sidebar-active-glow"
+                          className="absolute inset-0 bg-indigo-500/5 blur-xl rounded-full"
                         />
                       )}
-
+                      
                       <span className={cn(
-                        'flex-shrink-0 transition-transform duration-200',
-                        active ? 'text-[var(--accent)] scale-110' : 'group-hover:scale-110 group-hover:text-white'
+                        'flex-shrink-0 transition-all duration-300',
+                        active ? 'text-indigo-400 scale-110' : 'group-hover:text-white group-hover:scale-110'
                       )}>
                         {item.icon}
                       </span>
 
-                      <AnimatePresence mode="wait">
-                        {!isCollapsed && (
-                          <motion.span
-                            initial={{ opacity: 0, x: -4 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -4 }}
-                            transition={{ duration: 0.12 }}
-                            className="flex-1 whitespace-nowrap text-[13px] font-medium"
-                          >
-                            {item.label}
-                          </motion.span>
-                        )}
-                      </AnimatePresence>
+                      {!isCollapsed && (
+                        <motion.span
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          className="flex-1 truncate"
+                        >
+                          {item.label}
+                        </motion.span>
+                      )}
 
                       {!isCollapsed && item.inDev && (
-                        <span className="text-[8px] px-1.5 py-0.5 rounded bg-white/5 text-white/40 font-bold uppercase tracking-wider flex-shrink-0">
-                          Dev
-                        </span>
+                        <span className="text-[8px] bg-slate-800 text-slate-500 px-1.5 py-0.5 rounded font-black tracking-widest uppercase">Dev</span>
                       )}
                     </Link>
 
+                    {/* Tooltip for collapsed state */}
                     {isCollapsed && hoveredItem === item.id && (
-                      <div className="absolute left-full ml-3 top-1/2 -translate-y-1/2 z-[100] pointer-events-none">
+                      <div className="fixed left-[72px] z-50">
                         <motion.div
                           initial={{ opacity: 0, x: -10 }}
                           animate={{ opacity: 1, x: 0 }}
-                          className="bg-slate-900 text-white text-[11px] font-medium px-2.5 py-1.5 rounded-lg whitespace-nowrap shadow-2xl ring-1 ring-white/10 flex items-center gap-2"
+                          className="bg-slate-900 text-white text-[11px] font-bold px-3 py-2 rounded-xl shadow-2xl border border-white/10 flex items-center gap-2 whitespace-nowrap"
                         >
                           {item.label}
-                          {item.inDev && <Construction className="w-2.5 h-2.5 text-amber-500" />}
                         </motion.div>
                       </div>
                     )}
@@ -215,49 +219,57 @@ export function Sidebar() {
         ))}
       </div>
 
-      {/* Footer Profile */}
-      <div className="flex-shrink-0 p-4 border-t border-white/5 bg-white/[0.02]">
-        <div className={cn(
-          'flex items-center gap-3 p-2 rounded-xl hover:bg-white/5 transition-all cursor-pointer group',
-          isCollapsed ? 'justify-center' : 'items-center'
-        )}>
-          <div className="flex-shrink-0 relative">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center ring-2 ring-white/10 group-hover:ring-[var(--accent)] transition-all overflow-hidden shadow-lg">
-              <User className="w-4 h-4 text-white" />
-            </div>
-            <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-[#0f172a]" />
+      {/* Footer (Quick Stats / Profile) */}
+      <div className="flex-shrink-0 p-4 space-y-4">
+        {!isCollapsed && (
+          <div className="p-3 rounded-2xl bg-gradient-to-br from-indigo-500/10 to-transparent border border-indigo-500/20">
+             <div className="flex items-center justify-between mb-2">
+                <p className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest">Storage</p>
+                <p className="text-[10px] font-bold text-slate-400">85%</p>
+             </div>
+             <div className="h-1 w-full bg-slate-800 rounded-full overflow-hidden">
+                <motion.div 
+                  initial={{ width: 0 }}
+                  animate={{ width: '85%' }}
+                  className="h-full bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.5)]"
+                />
+             </div>
           </div>
-          
-          <AnimatePresence mode="wait">
-            {!isCollapsed && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="flex-1 min-w-0"
-              >
-                <div className="flex items-center justify-between gap-1">
-                  <p className="text-[12px] font-bold text-white truncate">Super Admin</p>
-                  <motion.button
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    className="p-1 text-white/20 hover:text-white transition-colors"
-                  >
-                    <LogOut className="w-3.5 h-3.5" />
-                  </motion.button>
+        )}
+
+        <div className={cn(
+          "flex items-center gap-3 p-2 rounded-2xl transition-all duration-300 group cursor-pointer hover:bg-white/5",
+          isCollapsed && "justify-center"
+        )}>
+          <div className="relative flex-shrink-0">
+             <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-600 p-[1px]">
+                <div className="w-full h-full rounded-[11px] bg-[#0f172a] flex items-center justify-center overflow-hidden">
+                   <User className="w-4.5 h-4.5 text-white" />
                 </div>
-                <p className="text-[10px] text-white/40 truncate font-medium">admin@onecommerce.io</p>
-              </motion.div>
-            )}
-          </AnimatePresence>
+             </div>
+             <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 ring-4 ring-[#0f172a]" />
+          </div>
+
+          {!isCollapsed && (
+            <div className="flex-1 min-w-0">
+              <p className="text-[12px] font-bold text-white truncate">Super Admin</p>
+              <p className="text-[10px] text-slate-500 truncate font-semibold">admin@onecommerce.io</p>
+            </div>
+          )}
+          
+          {!isCollapsed && (
+            <button className="p-1.5 text-slate-600 hover:text-white hover:bg-white/10 rounded-lg transition-all">
+              <LogOut className="w-4 h-4" />
+            </button>
+          )}
         </div>
       </div>
-    </>
+    </div>
   );
 
   return (
     <>
-      {/* Mobile Sidebar Overlay */}
+      {/* Mobile Drawer Popup */}
       <AnimatePresence>
         {isOpen && (
           <>
@@ -266,47 +278,57 @@ export function Sidebar() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsOpen(false)}
-              className="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 lg:hidden"
+              className="fixed inset-0 bg-black/80 backdrop-blur-md z-[100] lg:hidden"
             />
             <motion.aside
-              initial={{ x: '-100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '-100%' }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed left-0 top-0 bottom-0 w-[280px] bg-[#0f172a] z-50 lg:hidden flex flex-col shadow-2xl"
+              initial={{ x: '-100%', opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: '-100%', opacity: 0 }}
+              transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+              className="fixed left-4 top-4 bottom-4 w-[280px] z-[101] lg:hidden overflow-hidden rounded-3xl shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-white/5"
             >
-              {sidebarContent}
+              <div className="h-full relative overflow-hidden">
+                {sidebarContent}
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="absolute top-4 right-4 p-2 text-slate-500 hover:text-white transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
             </motion.aside>
           </>
         )}
       </AnimatePresence>
 
-      {/* Desktop Sidebar */}
-      <motion.aside
-        animate={{ width: isCollapsed ? 68 : 260 }}
-        transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-        className="relative hidden lg:flex flex-col h-screen flex-shrink-0 overflow-hidden z-20"
-        style={{ 
-          background: '#0f172a', 
-          borderRight: '1px solid rgba(255,255,255,0.06)' 
-        }}
-      >
-        {sidebarContent}
+      {/* Desktop Persistent Sidebar */}
+      <div className="relative hidden lg:block flex-shrink-0 z-40">
+        <motion.aside
+          animate={{ width: isCollapsed ? 76 : 260 }}
+          transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+          className={cn(
+            "h-screen overflow-hidden border-r border-white/5 bg-[#0f172a]",
+            isCollapsed && "items-center"
+          )}
+        >
+          {sidebarContent}
+        </motion.aside>
 
-        {/* Collapse toggle button */}
+        {/* Toggle Button - Now outside of the aside but absolute relative to the aside's parent */}
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
           className={cn(
-            'absolute -right-3 top-[72px] z-10',
-            'w-6 h-6 rounded-full border flex items-center justify-center',
-            'bg-[#1e293b] border-white/10 shadow-xl',
-            'text-white/40 hover:text-white hover:border-[var(--accent)]',
-            'transition-all duration-200 hover:scale-110 cursor-pointer'
+            'absolute -right-4 top-[72px] z-50',
+            'w-8 h-8 rounded-xl border flex items-center justify-center',
+            'bg-[#1e293b] border-white/10 shadow-2xl',
+            'text-slate-400 hover:text-white hover:border-indigo-500 text-[10px]',
+            'transition-all duration-300 hover:scale-110 cursor-pointer active:scale-95'
           )}
+          title={isCollapsed ? "Expand (Ctrl+B)" : "Collapse (Ctrl+B)"}
         >
-          {isCollapsed ? <ChevronRight className="w-3 h-3" /> : <ChevronLeft className="w-3 h-3" />}
+          {isCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
         </button>
-      </motion.aside>
+      </div>
     </>
   );
 }
