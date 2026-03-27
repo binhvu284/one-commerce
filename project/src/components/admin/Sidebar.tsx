@@ -7,21 +7,18 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard,
   Building2,
-  Users,
-  BarChart3,
-  DollarSign,
-  Settings,
-  Shield,
   ChevronLeft,
   ChevronRight,
   Zap,
-  Construction,
   LogOut,
   User,
   X,
-  Search,
-  Command,
   ChevronsUpDown,
+  Key,
+  Cpu,
+  Database,
+  BarChart3,
+  FileText,
 } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { useSidebar } from '@/components/providers/SidebarProvider';
@@ -31,7 +28,6 @@ interface NavItem {
   label: string;
   href: string;
   icon: React.ReactNode;
-  inDev?: boolean;
 }
 
 interface NavSection {
@@ -41,25 +37,25 @@ interface NavSection {
 
 const navSections: NavSection[] = [
   {
-    title: 'Main',
+    title: 'Management',
     items: [
       { id: 'dashboard', label: 'Dashboard', href: '/admin/dashboard', icon: <LayoutDashboard className="w-4 h-4" /> },
       { id: 'organizations', label: 'Organizations', href: '/admin/organizations', icon: <Building2 className="w-4 h-4" /> },
-      { id: 'customers', label: 'Customers', href: '/admin/customers', icon: <Users className="w-4 h-4" />, inDev: true },
+      { id: 'analytics', label: 'Analytics', href: '/admin/analytics', icon: <BarChart3 className="w-4 h-4" /> },
     ],
   },
   {
-    title: 'Analytics',
+    title: 'Infrastructure',
     items: [
-      { id: 'reports', label: 'Reports', href: '/admin/reports', icon: <BarChart3 className="w-4 h-4" />, inDev: true },
-      { id: 'revenue', label: 'Revenue', href: '/admin/revenue', icon: <DollarSign className="w-4 h-4" />, inDev: true },
+      { id: 'api-tokens', label: 'API Tokens', href: '/admin/api-tokens', icon: <Key className="w-4 h-4" /> },
+      { id: 'mcp-servers', label: 'MCP Servers', href: '/admin/mcp', icon: <Cpu className="w-4 h-4" /> },
+      { id: 'database', label: 'Database', href: '/admin/database', icon: <Database className="w-4 h-4" /> },
     ],
   },
   {
-    title: 'System',
+    title: 'Support',
     items: [
-      { id: 'settings', label: 'Settings', href: '/admin/settings', icon: <Settings className="w-4 h-4" />, inDev: true },
-      { id: 'security', label: 'Security', href: '/admin/security', icon: <Shield className="w-4 h-4" />, inDev: true },
+      { id: 'docs', label: 'Documentation', href: '/admin/docs', icon: <FileText className="w-4 h-4" /> },
     ],
   },
 ];
@@ -69,7 +65,6 @@ export function Sidebar() {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const pathname = usePathname();
 
-  // Keyboard shortcut Cmd/Ctrl + B
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'b') {
@@ -81,7 +76,6 @@ export function Sidebar() {
     return () => window.removeEventListener('keydown', handler);
   }, [isCollapsed, setIsCollapsed]);
 
-  // Close mobile sidebar on route change
   useEffect(() => {
     setIsOpen(false);
   }, [pathname, setIsOpen]);
@@ -90,7 +84,7 @@ export function Sidebar() {
 
   const sidebarContent = (
     <div className="flex flex-col h-full bg-sidebar text-slate-300">
-      {/* Brand & Org Switcher */}
+      {/* Brand */}
       <div className="p-4 flex-shrink-0">
         <div className="flex items-center gap-3 px-1 mb-6">
           <div className="w-10 h-10 rounded-2xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/20 ring-1 ring-white/20 overflow-hidden">
@@ -103,31 +97,31 @@ export function Sidebar() {
               className="flex-1 min-w-0"
             >
               <h2 className="text-white font-black text-sm uppercase tracking-wider leading-none">OneCommerce</h2>
-              <p className="text-[10px] text-slate-500 font-bold mt-1 uppercase tracking-widest">Platform</p>
+              <p className="text-[10px] text-slate-500 font-bold mt-1 uppercase tracking-widest">Super Admin</p>
             </motion.div>
           )}
         </div>
 
-        {/* Improved Org Switcher (Modern Function) */}
+        {/* Improved Org Switcher (Simplified for Admin) */}
         {!isCollapsed ? (
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="flex items-center justify-between gap-3 p-2 rounded-xl bg-slate-800/40 border border-white/5 hover:bg-slate-800/60 transition-colors cursor-pointer group"
           >
-            <div className="w-7 h-7 rounded-lg bg-blue-600/30 border border-blue-500/20 flex items-center justify-center">
-              <span className="text-[10px] font-black text-blue-400">BH</span>
+            <div className="w-7 h-7 rounded-lg bg-indigo-600 flex items-center justify-center">
+              <span className="text-[10px] font-black text-white">OC</span>
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-[11px] font-bold text-white truncate">BeautyHub VN</p>
-              <p className="text-[9px] text-slate-500 font-medium">Enterprise Plan</p>
+              <p className="text-[11px] font-bold text-white truncate">Main System</p>
+              <p className="text-[9px] text-slate-500 font-medium">Global Controller</p>
             </div>
             <ChevronsUpDown className="w-3.5 h-3.5 text-slate-600 group-hover:text-slate-400 transition-colors" />
           </motion.div>
         ) : (
           <div className="flex justify-center">
             <div className="w-9 h-9 rounded-xl bg-slate-800/50 border border-white/5 flex items-center justify-center hover:bg-slate-800 transition-colors cursor-pointer ring-offset-2 ring-offset-[#051e34] dark:ring-offset-[#020d20] hover:ring-2 ring-blue-500/50">
-               <span className="text-[10px] font-black text-blue-400">BH</span>
+               <span className="text-[10px] font-black text-indigo-400">OC</span>
             </div>
           </div>
         )}
@@ -160,14 +154,12 @@ export function Sidebar() {
                     onMouseLeave={() => setHoveredItem(null)}
                   >
                     <Link
-                      href={item.inDev ? '#' : item.href}
-                      onClick={item.inDev ? (e) => e.preventDefault() : undefined}
+                      href={item.href}
                       className={cn(
                         'flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13px] font-semibold transition-all duration-300 relative',
                         active
                           ? 'bg-gradient-to-r from-blue-500/10 via-blue-500/5 to-transparent text-white ring-1 ring-white/10'
-                          : 'hover:bg-white/5 text-slate-400 hover:text-white',
-                        item.inDev && 'opacity-60 cursor-not-allowed'
+                          : 'hover:bg-white/5 text-slate-400 hover:text-white'
                       )}
                     >
                       {active && (
@@ -193,13 +185,8 @@ export function Sidebar() {
                           {item.label}
                         </motion.span>
                       )}
-
-                      {!isCollapsed && item.inDev && (
-                        <span className="text-[8px] bg-slate-800 text-slate-500 px-1.5 py-0.5 rounded font-black tracking-widest uppercase">Dev</span>
-                      )}
                     </Link>
 
-                    {/* Tooltip for collapsed state */}
                     {isCollapsed && hoveredItem === item.id && (
                       <div className="fixed left-[72px] z-50">
                         <motion.div
@@ -219,24 +206,8 @@ export function Sidebar() {
         ))}
       </div>
 
-      {/* Footer (Quick Stats / Profile) */}
-      <div className="flex-shrink-0 p-4 space-y-4">
-        {!isCollapsed && (
-          <div className="p-3 rounded-2xl bg-gradient-to-br from-blue-500/10 to-transparent border border-blue-500/20">
-             <div className="flex items-center justify-between mb-2">
-                <p className="text-[10px] font-bold text-blue-400 uppercase tracking-widest">Storage</p>
-                <p className="text-[10px] font-bold text-slate-400">85%</p>
-             </div>
-             <div className="h-1 w-full bg-slate-800 rounded-full overflow-hidden">
-                <motion.div 
-                   initial={{ width: 0 }}
-                   animate={{ width: '85%' }}
-                   className="h-full bg-blue-600 shadow-[0_0_8px_rgba(37,99,235,0.4)]"
-                />
-             </div>
-          </div>
-        )}
-
+      {/* Footer Profile */}
+      <div className="flex-shrink-0 p-4">
         <div className={cn(
           "flex items-center gap-3 p-2 rounded-2xl transition-all duration-300 group cursor-pointer hover:bg-white/5",
           isCollapsed && "justify-center"
@@ -247,7 +218,7 @@ export function Sidebar() {
                    <User className="w-4.5 h-4.5 text-white" />
                 </div>
              </div>
-             <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 ring-4 ring-[#051e34] dark:ring-offset-[#020d20]" />
+             <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 ring-4 ring-[#051e34]" />
           </div>
 
           {!isCollapsed && (
@@ -261,7 +232,6 @@ export function Sidebar() {
             <Link 
               href="/"
               className="p-1.5 text-slate-600 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all"
-              title="Logout / Switch Context"
             >
               <LogOut className="w-4 h-4" />
             </Link>
@@ -273,7 +243,6 @@ export function Sidebar() {
 
   return (
     <>
-      {/* Mobile Drawer Popup */}
       <AnimatePresence>
         {isOpen && (
           <>
@@ -305,19 +274,13 @@ export function Sidebar() {
         )}
       </AnimatePresence>
 
-      {/* Desktop Persistent Sidebar */}
       <div className="relative hidden lg:block flex-shrink-0 z-40">
         <motion.aside
           animate={{ width: isCollapsed ? 76 : 260 }}
           transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-          className={cn(
-            "h-screen overflow-hidden border-r border-white/5 bg-sidebar relative",
-            isCollapsed && "items-center"
-          )}
+          className="h-screen overflow-hidden border-r border-white/5 bg-sidebar relative"
         >
           {sidebarContent}
-
-          {/* Toggle Button - Now inside the sidebar */}
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
             className={cn(
@@ -328,7 +291,6 @@ export function Sidebar() {
               'transition-all duration-300 hover:scale-105 cursor-pointer active:scale-95',
               isCollapsed && "right-1/2 translate-x-1/2"
             )}
-            title={isCollapsed ? "Expand (Ctrl+B)" : "Collapse (Ctrl+B)"}
           >
             {isCollapsed ? <ChevronRight className="w-3.5 h-3.5" /> : <ChevronLeft className="w-3.5 h-3.5" />}
           </button>
