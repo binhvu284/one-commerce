@@ -89,11 +89,11 @@ export function Sidebar() {
   const isActive = (href: string) => pathname === href || pathname.startsWith(href + '/');
 
   const sidebarContent = (
-    <div className="flex flex-col h-full bg-[#0f172a] text-slate-300">
+    <div className="flex flex-col h-full bg-sidebar text-slate-300">
       {/* Brand & Org Switcher */}
       <div className="p-4 flex-shrink-0">
         <div className="flex items-center gap-3 px-1 mb-6">
-          <div className="w-10 h-10 rounded-2xl bg-indigo-500 flex items-center justify-center shadow-lg shadow-indigo-500/20 ring-1 ring-white/20 overflow-hidden">
+          <div className="w-10 h-10 rounded-2xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/20 ring-1 ring-white/20 overflow-hidden">
             <Zap className="w-5 h-5 text-white" />
           </div>
           {!isCollapsed && (
@@ -115,8 +115,8 @@ export function Sidebar() {
             animate={{ opacity: 1 }}
             className="flex items-center justify-between gap-3 p-2 rounded-xl bg-slate-800/40 border border-white/5 hover:bg-slate-800/60 transition-colors cursor-pointer group"
           >
-            <div className="w-7 h-7 rounded-lg bg-indigo-600/30 border border-indigo-500/20 flex items-center justify-center">
-              <span className="text-[10px] font-black text-indigo-400">BH</span>
+            <div className="w-7 h-7 rounded-lg bg-blue-600/30 border border-blue-500/20 flex items-center justify-center">
+              <span className="text-[10px] font-black text-blue-400">BH</span>
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-[11px] font-bold text-white truncate">BeautyHub VN</p>
@@ -126,8 +126,8 @@ export function Sidebar() {
           </motion.div>
         ) : (
           <div className="flex justify-center">
-            <div className="w-9 h-9 rounded-xl bg-slate-800/50 border border-white/5 flex items-center justify-center hover:bg-slate-800 transition-colors cursor-pointer ring-offset-2 ring-offset-[#0f172a] hover:ring-2 ring-indigo-500/50">
-               <span className="text-[10px] font-black text-indigo-400">BH</span>
+            <div className="w-9 h-9 rounded-xl bg-slate-800/50 border border-white/5 flex items-center justify-center hover:bg-slate-800 transition-colors cursor-pointer ring-offset-2 ring-offset-[#051e34] dark:ring-offset-[#020d20] hover:ring-2 ring-blue-500/50">
+               <span className="text-[10px] font-black text-blue-400">BH</span>
             </div>
           </div>
         )}
@@ -165,7 +165,7 @@ export function Sidebar() {
                       className={cn(
                         'flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13px] font-semibold transition-all duration-300 relative',
                         active
-                          ? 'bg-gradient-to-r from-indigo-500/10 via-indigo-500/5 to-transparent text-white ring-1 ring-white/10'
+                          ? 'bg-gradient-to-r from-blue-500/10 via-blue-500/5 to-transparent text-white ring-1 ring-white/10'
                           : 'hover:bg-white/5 text-slate-400 hover:text-white',
                         item.inDev && 'opacity-60 cursor-not-allowed'
                       )}
@@ -179,7 +179,7 @@ export function Sidebar() {
                       
                       <span className={cn(
                         'flex-shrink-0 transition-all duration-300',
-                        active ? 'text-indigo-400 scale-110' : 'group-hover:text-white group-hover:scale-110'
+                        active ? 'text-blue-400 scale-110' : 'group-hover:text-white group-hover:scale-110'
                       )}>
                         {item.icon}
                       </span>
@@ -222,16 +222,16 @@ export function Sidebar() {
       {/* Footer (Quick Stats / Profile) */}
       <div className="flex-shrink-0 p-4 space-y-4">
         {!isCollapsed && (
-          <div className="p-3 rounded-2xl bg-gradient-to-br from-indigo-500/10 to-transparent border border-indigo-500/20">
+          <div className="p-3 rounded-2xl bg-gradient-to-br from-blue-500/10 to-transparent border border-blue-500/20">
              <div className="flex items-center justify-between mb-2">
-                <p className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest">Storage</p>
+                <p className="text-[10px] font-bold text-blue-400 uppercase tracking-widest">Storage</p>
                 <p className="text-[10px] font-bold text-slate-400">85%</p>
              </div>
              <div className="h-1 w-full bg-slate-800 rounded-full overflow-hidden">
                 <motion.div 
-                  initial={{ width: 0 }}
-                  animate={{ width: '85%' }}
-                  className="h-full bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.5)]"
+                   initial={{ width: 0 }}
+                   animate={{ width: '85%' }}
+                   className="h-full bg-blue-600 shadow-[0_0_8px_rgba(37,99,235,0.4)]"
                 />
              </div>
           </div>
@@ -242,12 +242,12 @@ export function Sidebar() {
           isCollapsed && "justify-center"
         )}>
           <div className="relative flex-shrink-0">
-             <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-600 p-[1px]">
-                <div className="w-full h-full rounded-[11px] bg-[#0f172a] flex items-center justify-center overflow-hidden">
+             <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-sky-600 p-[1px]">
+                <div className="w-full h-full rounded-[11px] bg-sidebar flex items-center justify-center overflow-hidden">
                    <User className="w-4.5 h-4.5 text-white" />
                 </div>
              </div>
-             <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 ring-4 ring-[#0f172a]" />
+             <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 ring-4 ring-[#051e34] dark:ring-offset-[#020d20]" />
           </div>
 
           {!isCollapsed && (
@@ -311,7 +311,7 @@ export function Sidebar() {
           animate={{ width: isCollapsed ? 76 : 260 }}
           transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
           className={cn(
-            "h-screen overflow-hidden border-r border-white/5 bg-[#0f172a] relative",
+            "h-screen overflow-hidden border-r border-white/5 bg-sidebar relative",
             isCollapsed && "items-center"
           )}
         >
@@ -324,7 +324,7 @@ export function Sidebar() {
               'absolute right-2 top-6 z-50',
               'w-7 h-7 rounded-lg border flex items-center justify-center',
               'bg-[#1e293b]/50 border-white/5 shadow-lg backdrop-blur-sm',
-              'text-slate-400 hover:text-white hover:border-indigo-500/50 text-[10px]',
+              'text-slate-400 hover:text-white hover:border-blue-500/50 text-[10px]',
               'transition-all duration-300 hover:scale-105 cursor-pointer active:scale-95',
               isCollapsed && "right-1/2 translate-x-1/2"
             )}

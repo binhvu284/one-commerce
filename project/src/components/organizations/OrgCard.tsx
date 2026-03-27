@@ -94,7 +94,7 @@ export function OrgCard({ org, onStatusChange }: OrgCardProps) {
         {/* Footer */}
         <div className="mt-3 pt-3 border-t border-[var(--border)] flex items-center justify-between">
           <div className="flex items-center gap-1.5">
-            <div className="w-5 h-5 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center">
+            <div className="w-5 h-5 rounded-full bg-gradient-to-br from-blue-400 to-sky-500 flex items-center justify-center">
               <span className="text-[8px] text-white font-bold">{org.owner.name.charAt(0)}</span>
             </div>
             <span className="text-xs text-[var(--text-muted)] truncate max-w-[100px]">{org.owner.name}</span>

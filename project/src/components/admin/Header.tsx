@@ -153,9 +153,9 @@ export function Header() {
                 </div>
                 <div className="divide-y divide-[var(--border)] max-h-[360px] overflow-y-auto">
                   {mockNotifications.map(n => (
-                    <div key={n.id} className={cn('px-5 py-4 hover:bg-[var(--bg-muted)] transition-colors cursor-pointer group relative', !n.read && 'bg-indigo-500/5')}>
-                      {!n.read && <div className="absolute left-0 top-0 bottom-0 w-1 bg-indigo-500" />}
-                      <p className="text-sm font-semibold text-[var(--text-primary)] group-hover:text-indigo-500 transition-colors">{n.title}</p>
+                    <div key={n.id} className={cn('px-5 py-4 hover:bg-[var(--bg-muted)] transition-colors cursor-pointer group relative', !n.read && 'bg-blue-500/5')}>
+                      {!n.read && <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-500" />}
+                      <p className="text-sm font-semibold text-[var(--text-primary)] group-hover:text-blue-500 transition-colors">{n.title}</p>
                       <p className="text-[11px] text-[var(--text-muted)] mt-1 flex items-center gap-1.5 font-medium">
                         <span className="w-1 h-1 rounded-full bg-[var(--text-muted)]" />
                         {n.time}
@@ -164,7 +164,7 @@ export function Header() {
                   ))}
                 </div>
                 <div className="px-5 py-3.5 border-t border-[var(--border)] bg-[var(--bg-muted)]/30">
-                  <button className="text-xs text-indigo-500 hover:text-indigo-600 font-bold transition-colors w-full text-center">
+                  <button className="text-xs text-blue-500 hover:text-blue-600 font-bold transition-colors w-full text-center">
                     Mark all as read
                   </button>
                 </div>
@@ -189,7 +189,7 @@ export function Header() {
             className="ml-1 flex items-center gap-2.5 p-1 pr-3 rounded-xl hover:bg-red-500/10 hover:text-red-500 transition-colors cursor-pointer group"
             title="Switch Context / Logout"
           >
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center ring-2 ring-[var(--border)] group-hover:ring-red-500 transition-all shadow-md overflow-hidden">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-500 to-sky-600 flex items-center justify-center ring-2 ring-[var(--border)] group-hover:ring-red-500 transition-all shadow-md overflow-hidden">
               <span className="text-white text-xs font-black">SA</span>
             </div>
             <div className="hidden lg:block min-w-0">

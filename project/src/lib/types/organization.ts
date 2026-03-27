@@ -1,6 +1,34 @@
 export type OrgStatus = 'active' | 'inactive' | 'pending' | 'suspended';
 export type OrgPlan = 'starter' | 'growth' | 'enterprise';
 
+export interface ThemeConfig {
+  primaryColor: string;
+  secondaryColor: string;
+  backgroundColor: string;
+  textColor: string;
+  fontFamily: 'Inter' | 'Roboto' | 'Outfit' | 'Plus Jakarta Sans';
+  headerStyle: 'minimal' | 'search-focused' | 'classic';
+  borderRadius: 'none' | 'small' | 'medium' | 'large' | 'full';
+}
+
+export interface SectionLayout {
+  id: string;
+  type: 'hero' | 'flash-sale' | 'categories' | 'featured-products' | 'banner-grid' | 'promo-banner';
+  enabled: boolean;
+  order: number;
+}
+
+export interface StoreSettings {
+  published: boolean;
+  theme: ThemeConfig;
+  layout: SectionLayout[];
+  announcement?: {
+    text: string;
+    enabled: boolean;
+    link?: string;
+  };
+}
+
 export interface Organization {
   id: string;
   name: string;
@@ -24,6 +52,7 @@ export interface Organization {
     email: string;
     avatar?: string;
   };
+  storeSettings?: StoreSettings;
 }
 
 export interface OrgUser {

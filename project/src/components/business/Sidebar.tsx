@@ -82,11 +82,11 @@ export function Sidebar() {
   const isActive = (href: string) => pathname === href || pathname.startsWith(href + '/');
 
   const sidebarContent = (
-    <div className="flex flex-col h-full bg-[#1e1b4b] text-indigo-100">
+    <div className="flex flex-col h-full bg-sidebar text-blue-100">
       {/* Brand */}
       <div className="p-4 flex-shrink-0">
         <div className="flex items-center gap-3 px-1 mb-8">
-          <div className="w-10 h-10 rounded-2xl bg-violet-500 flex items-center justify-center shadow-lg shadow-violet-500/20 ring-1 ring-white/20 overflow-hidden">
+          <div className="w-10 h-10 rounded-2xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/20 ring-1 ring-white/20 overflow-hidden">
             <Zap className="w-5 h-5 text-white fill-white" />
           </div>
           {!isCollapsed && (
@@ -103,12 +103,12 @@ export function Sidebar() {
 
         {/* View Store (Modern Function) */}
         {!isCollapsed && (
-          <Link href="/customer" target="_blank" className="flex items-center justify-between gap-3 p-2.5 rounded-xl bg-violet-600/20 border border-violet-500/30 hover:bg-violet-600/40 transition-all cursor-pointer group mb-6">
+          <Link href="/customer" target="_blank" className="flex items-center justify-between gap-3 p-2.5 rounded-xl bg-blue-600/20 border border-blue-500/30 hover:bg-blue-600/40 transition-all cursor-pointer group mb-6">
              <div className="flex items-center gap-2 min-w-0">
-                <ShoppingBag className="w-4 h-4 text-violet-400 group-hover:scale-110 transition-transform" />
+                <ShoppingBag className="w-4 h-4 text-blue-400 group-hover:scale-110 transition-transform" />
                 <span className="text-xs font-bold text-white truncate">Open Storefront</span>
              </div>
-             <ExternalLink className="w-3.5 h-3.5 text-violet-500 group-hover:text-white transition-colors" />
+             <ExternalLink className="w-3.5 h-3.5 text-blue-500 group-hover:text-white transition-colors" />
           </Link>
         )}
       </div>
@@ -122,7 +122,7 @@ export function Sidebar() {
                 <motion.p
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="text-[10px] uppercase font-black px-4 mb-3 tracking-[0.2em] text-violet-500"
+                  className="text-[10px] uppercase font-black px-4 mb-3 tracking-[0.2em] text-blue-500"
                 >
                   {section.title}
                 </motion.p>
@@ -145,21 +145,21 @@ export function Sidebar() {
                       className={cn(
                         'flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13px] font-semibold transition-all duration-300 relative',
                         active
-                          ? 'bg-violet-500/20 text-white ring-1 ring-violet-400/30'
-                          : 'hover:bg-white/5 text-indigo-300 hover:text-white',
+                          ? 'bg-blue-500/20 text-white ring-1 ring-blue-400/30'
+                          : 'hover:bg-white/5 text-blue-300 hover:text-white',
                         item.inDev && 'opacity-60 cursor-not-allowed'
                       )}
                     >
                       {active && (
                         <motion.div
                           layoutId="sidebar-active-dot"
-                          className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 rounded-full bg-violet-400 shadow-[0_0_10px_rgba(167,139,250,0.5)]"
+                          className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 rounded-full bg-blue-400 shadow-[0_0_10px_rgba(96,165,250,0.5)]"
                         />
                       )}
                       
                       <span className={cn(
                         'flex-shrink-0 transition-all duration-300',
-                        active ? 'text-violet-400 scale-110' : 'group-hover:text-white group-hover:scale-110'
+                        active ? 'text-blue-400 scale-110' : 'group-hover:text-white group-hover:scale-110'
                       )}>
                         {item.icon}
                       </span>
@@ -184,7 +184,7 @@ export function Sidebar() {
                         <motion.div
                           initial={{ opacity: 0, x: -10 }}
                           animate={{ opacity: 1, x: 0 }}
-                          className="bg-indigo-950 text-white text-[11px] font-bold px-3 py-2 rounded-xl shadow-2xl border border-white/10 flex items-center gap-2 whitespace-nowrap"
+                          className="bg-blue-950 text-white text-[11px] font-bold px-3 py-2 rounded-xl shadow-2xl border border-white/10 flex items-center gap-2 whitespace-nowrap"
                         >
                           {item.label}
                         </motion.div>
@@ -205,12 +205,12 @@ export function Sidebar() {
           isCollapsed && "justify-center"
         )}>
           <div className="relative flex-shrink-0">
-             <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-violet-500 to-indigo-500 p-[1px]">
-                <div className="w-full h-full rounded-[11px] bg-indigo-950 flex items-center justify-center overflow-hidden">
+             <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-500 to-sky-500 p-[1px]">
+                <div className="w-full h-full rounded-[11px] bg-sidebar flex items-center justify-center overflow-hidden">
                    <User className="w-4.5 h-4.5 text-white" />
                 </div>
              </div>
-             <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 ring-4 ring-[#1e1b4b]" />
+             <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 ring-4 ring-[#051e34] dark:ring-offset-[#020d20]" />
           </div>
 
           {!isCollapsed && (
