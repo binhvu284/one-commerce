@@ -311,27 +311,28 @@ export function Sidebar() {
           animate={{ width: isCollapsed ? 76 : 260 }}
           transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
           className={cn(
-            "h-screen overflow-hidden border-r border-white/5 bg-[#0f172a]",
+            "h-screen overflow-hidden border-r border-white/5 bg-[#0f172a] relative",
             isCollapsed && "items-center"
           )}
         >
           {sidebarContent}
-        </motion.aside>
 
-        {/* Toggle Button - Now outside of the aside but absolute relative to the aside's parent */}
-        <button
-          onClick={() => setIsCollapsed(!isCollapsed)}
-          className={cn(
-            'absolute -right-4 top-[72px] z-50',
-            'w-8 h-8 rounded-xl border flex items-center justify-center',
-            'bg-[#1e293b] border-white/10 shadow-2xl',
-            'text-slate-400 hover:text-white hover:border-indigo-500 text-[10px]',
-            'transition-all duration-300 hover:scale-110 cursor-pointer active:scale-95'
-          )}
-          title={isCollapsed ? "Expand (Ctrl+B)" : "Collapse (Ctrl+B)"}
-        >
-          {isCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
-        </button>
+          {/* Toggle Button - Now inside the sidebar */}
+          <button
+            onClick={() => setIsCollapsed(!isCollapsed)}
+            className={cn(
+              'absolute right-2 top-6 z-50',
+              'w-7 h-7 rounded-lg border flex items-center justify-center',
+              'bg-[#1e293b]/50 border-white/5 shadow-lg backdrop-blur-sm',
+              'text-slate-400 hover:text-white hover:border-indigo-500/50 text-[10px]',
+              'transition-all duration-300 hover:scale-105 cursor-pointer active:scale-95',
+              isCollapsed && "right-1/2 translate-x-1/2"
+            )}
+            title={isCollapsed ? "Expand (Ctrl+B)" : "Collapse (Ctrl+B)"}
+          >
+            {isCollapsed ? <ChevronRight className="w-3.5 h-3.5" /> : <ChevronLeft className="w-3.5 h-3.5" />}
+          </button>
+        </motion.aside>
       </div>
     </>
   );
