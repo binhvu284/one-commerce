@@ -134,7 +134,7 @@ export default function ApiTokensPage() {
                   {token.lastUsed || <span className="text-blue-400/50 italic">Never used</span>}
                 </td>
                 <td className="px-6 py-4">
-                  <Badge variant={token.status === 'active' ? 'default' : 'secondary'} className="rounded-md uppercase text-[9px] font-black tracking-widest px-2">
+                  <Badge variant={token.status === 'active' ? 'success' : 'neutral'} className="rounded-md uppercase text-[9px] font-black tracking-widest px-2">
                     {token.status}
                   </Badge>
                 </td>

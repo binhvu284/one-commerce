@@ -155,7 +155,7 @@ export default function McpPage() {
 
             {/* Hover overlay functionality */}
             <div className="absolute top-6 right-16">
-               <Badge variant={server.status === 'online' ? 'default' : 'secondary'} className="bg-transparent border-white/10 text-[8px] font-black uppercase ring-0">PRO</Badge>
+               <Badge variant={server.status === 'online' ? 'success' : 'neutral'} className="bg-transparent border-white/10 text-[8px] font-black uppercase ring-0">PRO</Badge>
             </div>
           </motion.div>
         ))}
