@@ -62,7 +62,12 @@ const generateFlowElements = (data: AffiliateNode[]) => {
         target: node.id,
         animated: true,
         style: { stroke: '#6366f1', strokeWidth: 3, opacity: 0.4 },
-        markerEnd: { type: MarkerType.ArrowClosed, color: '#6366f1', size: 20 },
+        markerEnd: { 
+          type: MarkerType.ArrowClosed, 
+          color: '#6366f1', 
+          width: 20, 
+          height: 20 
+        },
       });
     }
 

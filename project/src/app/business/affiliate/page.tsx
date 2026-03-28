@@ -107,7 +107,7 @@ export default function AffiliatePage() {
                       <p className="text-[11px] text-blue-100 font-medium truncate">{MOCK_REFERRER.email}</p>
                     </div>
                     <div className="text-[8px] font-black bg-white/20 px-2 py-1 rounded-full uppercase tracking-widest leading-none">
-                      {MOCK_REFERRER.role}
+                      {MOCK_REFERRER?.role || 'SYSTEM'}
                     </div>
                   </div>
                 </div>
@@ -277,7 +277,7 @@ function MemberListItem({ member }: { member: any }) {
       >
         <div className="flex items-center gap-4">
           <div className="w-11 h-11 rounded-2xl bg-white dark:bg-white/10 flex items-center justify-center font-black shadow-sm group-hover:text-blue-500 transition-colors">
-            {member.name.charAt(0)}
+            {member?.name?.charAt(0) || '?'}
           </div>
           <div>
             <p className="font-black text-slate-900 dark:text-white uppercase tracking-tight">{member.name}</p>
@@ -308,7 +308,7 @@ function MemberListItem({ member }: { member: any }) {
                 <div key={child.id} className="p-3 rounded-2xl bg-slate-50 dark:bg-white/2 flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-lg bg-white dark:bg-white/10 flex items-center justify-center text-[10px] font-black">
-                      {child.name.charAt(0)}
+                      {child?.name?.charAt(0) || '?'}
                     </div>
                     <div>
                       <p className="text-[11px] font-black text-slate-900 dark:text-white">{child.name}</p>

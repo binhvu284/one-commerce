@@ -13,8 +13,11 @@ const roleConfig: Record<string, { label: string; variant: any }> = {
 };
 
 export function AffiliateNode({ data }: { data: any }) {
-  const { name, avatar, role, totalRevenue, subordinateCount, status } = data;
-  const config = roleConfig[role as BusinessRole];
+  const { name, avatar, role, totalRevenue, subordinateCount, status } = data || {};
+  
+  // Normalize role and provide safe fallback to prevent "undefined" access
+  const normalizedRole = (role || 'STAFF').toString().toUpperCase();
+  const config = roleConfig[normalizedRole] || roleConfig.STAFF;
 
   return (
     <div className={cn(
@@ -31,7 +34,7 @@ export function AffiliateNode({ data }: { data: any }) {
               <img src={avatar} alt={name} className="w-full h-full object-cover rounded-[14px]" />
             ) : (
               <div className="w-full h-full flex items-center justify-center font-black text-indigo-700">
-                {name.charAt(0)}
+                {name?.charAt(0) || '?'}
               </div>
             )}
           </div>
@@ -43,7 +46,7 @@ export function AffiliateNode({ data }: { data: any }) {
 
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5 mb-0.5">
-            <span className="text-xs font-black text-[var(--text-primary)] truncate">{name}</span>
+            <span className="text-xs font-black text-[var(--text-primary)] truncate">{name || 'Unknown'}</span>
             <Shield className="w-3 h-3 text-indigo-500 opacity-50" />
           </div>
           <Badge variant={config.variant} size="sm" className="px-1.5 py-0 text-[9px] font-black uppercase">
@@ -58,14 +61,18 @@ export function AffiliateNode({ data }: { data: any }) {
             <TrendingUp className="w-2.5 h-2.5" />
             Revenue
           </p>
-          <p className="text-xs font-black text-emerald-600">${totalRevenue.toLocaleString()}</p>
+          <p className="text-xs font-black text-emerald-600">
+            ${typeof totalRevenue === 'number' ? totalRevenue.toLocaleString() : '0'}
+          </p>
         </div>
         <div className="space-y-0.5">
           <p className="text-[9px] font-black uppercase tracking-widest text-[var(--text-muted)] flex items-center gap-1">
             <Users className="w-2.5 h-2.5" />
             Network
           </p>
-          <p className="text-xs font-black text-[var(--text-primary)]">{subordinateCount} subs</p>
+          <p className="text-xs font-black text-[var(--text-primary)]">
+            {subordinateCount || 0} subs
+          </p>
         </div>
       </div>
 

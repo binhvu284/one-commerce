@@ -1,4 +1,4 @@
-export type BusinessRole = 'owner' | 'admin' | 'manager' | 'staff';
+export type BusinessRole = 'OWNER' | 'ADMIN' | 'STAFF';
 
 export interface Permission {
   id: string;
