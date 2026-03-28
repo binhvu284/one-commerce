@@ -14,9 +14,6 @@ export default function ProfilePage() {
       <div className="relative">
          <div className="h-48 rounded-[2.5rem] bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 shadow-xl overflow-hidden">
             <div className="absolute inset-0 bg-white/5 backdrop-blur-3xl" />
-            <div className="absolute bottom-0 right-0 p-8 opacity-20">
-               <User className="w-64 h-64 -mb-32 -mr-32" />
-            </div>
          </div>
          
          <div className="px-8 -mt-12 flex flex-col md:flex-row md:items-end gap-6 relative z-10">

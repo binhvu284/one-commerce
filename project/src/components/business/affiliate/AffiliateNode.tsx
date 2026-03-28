@@ -6,11 +6,10 @@ import { BusinessRole } from '@/lib/types/business';
 import { Shield, Users, TrendingUp } from 'lucide-react';
 import { cn } from '@/lib/cn';
 
-const roleConfig: Record<BusinessRole, { label: string; variant: any }> = {
-  owner: { label: 'Owner', variant: 'purple' },
-  admin: { label: 'Admin', variant: 'info' },
-  manager: { label: 'Manager', variant: 'success' },
-  staff: { label: 'Staff', variant: 'neutral' },
+const roleConfig: Record<string, { label: string; variant: any }> = {
+  OWNER: { label: 'Owner', variant: 'purple' },
+  ADMIN: { label: 'Admin', variant: 'info' },
+  STAFF: { label: 'Staff', variant: 'neutral' },
 };
 
 export function AffiliateNode({ data }: { data: any }) {

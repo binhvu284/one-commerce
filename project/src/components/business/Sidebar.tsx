@@ -49,9 +49,9 @@ interface NavSection {
 
 export function Sidebar() {
   const { isCollapsed, setIsCollapsed, isOpen, setIsOpen } = useSidebar();
-  const { role, isAdmin, isOwner, isManager } = useBusinessRole();
+  const { role, isAdmin, isOwner } = useBusinessRole();
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
-  const [expandedSections, setExpandedSections] = useState<string[]>(['personal', 'operation', 'business', 'workspaces']);
+  const [expandedSections, setExpandedSections] = useState<string[]>(['personal', 'operation', 'business']);
   const pathname = usePathname();
 
   // Reorganized Navigation Sections based on User Request
@@ -70,30 +70,22 @@ export function Sidebar() {
     {
       title: 'Operation',
       id: 'operation',
-      visible: isManager,
+      visible: isAdmin, // Only Admin can see Operation
       items: [
         { id: 'organization', label: 'My Organization', href: '/business/organization', icon: <Building className="w-4 h-4" /> },
-        { id: 'people', label: 'People & Access', href: '/business/people', icon: <Users className="w-4 h-4" />, visible: isAdmin },
+        { id: 'people', label: 'People & Access', href: '/business/people', icon: <Users className="w-4 h-4" />, visible: isOwner },
+        { id: 'workspaces', label: 'My Workspace', href: '/business/workspaces', icon: <LayoutGrid className="w-4 h-4" /> },
       ].filter(item => item.visible !== false),
     },
     {
       title: 'Business',
       id: 'business',
-      visible: isManager,
+      visible: true,
       items: [
         { id: 'products', label: 'Products', href: '/business/products', icon: <Package className="w-4 h-4" />, inDev: true },
         { id: 'orders', label: 'Orders', href: '/business/orders', icon: <ShoppingBag className="w-4 h-4" />, inDev: true },
         { id: 'customers', label: 'Customers', href: '/business/customers', icon: <Users className="w-4 h-4" />, inDev: true },
       ],
-    },
-    {
-      title: 'My Workspace',
-      id: 'workspaces',
-      visible: true,
-      items: [
-        { id: 'workspace-main', label: 'Main Workspace', href: '/business/workspaces', icon: <LayoutGrid className="w-4 h-4" /> },
-        { id: 'workspace-sub', label: 'BeautyHub VN', href: '#', icon: <Briefcase className="w-4 h-4" />, inDev: true },
-      ]
     }
   ].filter(section => section.visible);
 

@@ -7,9 +7,9 @@ import { cn } from '@/lib/cn';
 import { motion } from 'framer-motion';
 
 const settingsNav = [
-  { id: 'account', label: 'Account Dashboard', href: '/business/settings/account', icon: <User className="w-4 h-4" /> },
-  { id: 'organization', label: 'Organization Profil', href: '/business/settings/organization', icon: <Building className="w-4 h-4" /> },
-  { id: 'payment', label: 'Payment & Billing', href: '/business/settings/payment', icon: <CreditCard className="w-4 h-4" />, inDev: true },
+  { id: 'general', label: 'General Settings', href: '/business/settings/general', icon: <Globe className="w-4 h-4" />, inDev: true },
+  { id: 'account', label: 'Account Identity', href: '/business/settings/account', icon: <User className="w-4 h-4" /> },
+  { id: 'billing', label: 'Plan & Billing', href: '/business/settings/billing', icon: <CreditCard className="w-4 h-4" />, inDev: true },
   { id: 'security', label: 'Security & Auth', href: '/business/settings/security', icon: <Shield className="w-4 h-4" />, inDev: true },
   { id: 'notifications', label: 'Notification Hub', href: '/business/settings/notifications', icon: <Bell className="w-4 h-4" />, inDev: true },
 ];

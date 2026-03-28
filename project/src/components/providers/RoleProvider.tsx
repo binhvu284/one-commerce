@@ -3,14 +3,13 @@
 import React, { createContext, useContext, useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 
-export type BusinessRole = 'OWNER' | 'ADMIN' | 'MANAGER' | 'STAFF';
+export type BusinessRole = 'OWNER' | 'ADMIN' | 'STAFF';
 
 interface RoleContextType {
   role: BusinessRole;
   setRole: (role: BusinessRole) => void;
   isOwner: boolean;
   isAdmin: boolean;
-  isManager: boolean;
   isStaff: boolean;
 }
 
@@ -22,7 +21,7 @@ function RoleProviderContent({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const roleParam = searchParams.get('role')?.toUpperCase() as BusinessRole;
-    if (roleParam && ['OWNER', 'ADMIN', 'MANAGER', 'STAFF'].includes(roleParam)) {
+    if (roleParam && ['OWNER', 'ADMIN', 'STAFF'].includes(roleParam)) {
       setRole(roleParam);
     }
   }, [searchParams]);
@@ -32,7 +31,6 @@ function RoleProviderContent({ children }: { children: React.ReactNode }) {
     setRole,
     isOwner: role === 'OWNER',
     isAdmin: role === 'ADMIN' || role === 'OWNER',
-    isManager: role === 'MANAGER' || role === 'ADMIN' || role === 'OWNER',
     isStaff: role === 'STAFF',
   };
 
