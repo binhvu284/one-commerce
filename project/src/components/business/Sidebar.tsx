@@ -25,9 +25,12 @@ import {
   FileText,
   ChevronDown,
   LayoutGrid,
+  Wallet,
+  Share2
 } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { useSidebar } from '@/components/providers/SidebarProvider';
+import { useBusinessRole, BusinessRole } from '@/components/providers/RoleProvider';
 
 interface NavItem {
   id: string;
@@ -43,41 +46,54 @@ interface NavSection {
   id: string;
 }
 
-const navSections: NavSection[] = [
-  {
-    title: 'Organization Setup',
-    id: 'org',
-    items: [
-      { id: 'organization', label: 'My Organization', href: '/business/settings/organization', icon: <Building className="w-4 h-4" /> },
-      { id: 'people', label: 'People & Access', href: '/business/people', icon: <Users className="w-4 h-4" /> },
-      { id: 'workspaces', label: 'Workspace', href: '/business/workspaces', icon: <LayoutGrid className="w-4 h-4" /> },
-    ],
-  },
-  {
-    title: 'Business Management',
-    id: 'biz',
-    items: [
-      { id: 'products', label: 'Products', href: '/business/products', icon: <Package className="w-4 h-4" />, inDev: true },
-      { id: 'orders', label: 'Orders', href: '/business/orders', icon: <ShoppingBag className="w-4 h-4" />, inDev: true },
-      { id: 'customers', label: 'Customers', href: '/business/customers', icon: <Users className="w-4 h-4" />, inDev: true },
-    ],
-  },
-];
-
-const topItems: NavItem[] = [
-  { id: 'dashboard', label: 'Dashboard', href: '/business/dashboard', icon: <LayoutDashboard className="w-4 h-4" /> },
-  { id: 'inbox', label: 'Inbox', href: '/business/inbox', icon: <Mail className="w-4 h-4" /> },
-];
-
-const bottomItems: NavItem[] = [
-  { id: 'docs', label: 'Documentation', href: '/business/docs', icon: <FileText className="w-4 h-4" /> },
-];
-
 export function Sidebar() {
   const { isCollapsed, setIsCollapsed, isOpen, setIsOpen } = useSidebar();
+  const { role, setRole, isAdmin, isOwner, isManager } = useBusinessRole();
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
-  const [expandedSections, setExpandedSections] = useState<string[]>(['org', 'biz']);
+  const [expandedSections, setExpandedSections] = useState<string[]>(['org', 'biz', 'personal']);
   const pathname = usePathname();
+
+  // Dynamic Navigation based on Roles
+  const navSections = [
+    {
+      title: 'Organization Setup',
+      id: 'org',
+      visible: isManager, // Owner, Admin, Manager can see Org Setup
+      items: [
+        { id: 'organization', label: 'My Organization', href: '/business/settings/organization', icon: <Building className="w-4 h-4" />, visible: isManager },
+        { id: 'people', label: 'People & Access', href: '/business/people', icon: <Users className="w-4 h-4" />, visible: isAdmin },
+        { id: 'workspaces', label: 'Workspace', href: '/business/workspaces', icon: <LayoutGrid className="w-4 h-4" />, visible: isManager },
+      ].filter(item => item.visible),
+    },
+    {
+      title: 'Business Management',
+      id: 'biz',
+      visible: isManager, // Owner, Admin, Manager can see Biz Management
+      items: [
+        { id: 'products', label: 'Products', href: '/business/products', icon: <Package className="w-4 h-4" />, inDev: true },
+        { id: 'orders', label: 'Orders', href: '/business/orders', icon: <ShoppingBag className="w-4 h-4" />, inDev: true },
+        { id: 'customers', label: 'Customers', href: '/business/customers', icon: <Users className="w-4 h-4" />, inDev: true },
+      ],
+    },
+    {
+      title: 'Personal Network',
+      id: 'personal',
+      visible: true,
+      items: [
+        { id: 'affiliate', label: 'My Member', href: '/business/affiliate', icon: <Share2 className="w-4 h-4" /> },
+        { id: 'wallet', label: 'My Wallet', href: '/business/wallet', icon: <Wallet className="w-4 h-4" /> },
+      ],
+    }
+  ].filter(section => section.visible);
+
+  const topItems: NavItem[] = [
+    { id: 'dashboard', label: 'Dashboard', href: '/business/dashboard', icon: <LayoutDashboard className="w-4 h-4" /> },
+    { id: 'inbox', label: 'Inbox', href: '/business/inbox', icon: <Mail className="w-4 h-4" /> },
+  ];
+
+  const bottomItems: NavItem[] = [
+    { id: 'docs', label: 'Documentation', href: '/business/docs', icon: <FileText className="w-4 h-4" /> },
+  ];
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -167,7 +183,7 @@ export function Sidebar() {
   };
 
   const sidebarContent = (
-    <div className="flex flex-col h-full bg-sidebar text-blue-100">
+    <div className="flex flex-col h-full bg-sidebar text-blue-100 selection:bg-blue-500/30">
       {/* Brand */}
       <div className="p-4 flex-shrink-0">
         <div className="flex items-center gap-3 px-1 mb-6">
@@ -194,40 +210,42 @@ export function Sidebar() {
           {topItems.map(renderItem)}
         </div>
 
-        {/* Categories / Sections */}
-        {navSections.map((section) => (
-          <div key={section.id} className="space-y-1">
-            <div className="px-3 flex items-center justify-between group">
-              {!isCollapsed && (
-                <button 
-                  onClick={() => toggleSection(section.id)}
-                  className="flex items-center justify-between w-full text-[10px] uppercase font-black tracking-[0.2em] text-blue-500/60 hover:text-blue-400 transition-colors py-2"
-                >
-                  {section.title}
-                  <ChevronDown className={cn(
-                    "w-3 h-3 transition-transform duration-300",
-                    !expandedSections.includes(section.id) && "-rotate-90"
-                  )} />
-                </button>
-              )}
-              {isCollapsed && <div className="h-px w-full bg-white/5 my-4" />}
-            </div>
+        {/* Categories / Sections Container */}
+        <div className="space-y-6">
+          {navSections.map((section) => (
+            <div key={section.id} className="space-y-1">
+              <div className="px-3 flex items-center justify-between group">
+                {!isCollapsed && (
+                  <button 
+                    onClick={() => toggleSection(section.id)}
+                    className="flex items-center justify-between w-full text-[10px] uppercase font-black tracking-[0.2em] text-blue-500/60 hover:text-blue-400 transition-colors py-2"
+                  >
+                    {section.title}
+                    <ChevronDown className={cn(
+                      "w-3 h-3 transition-transform duration-300",
+                      !expandedSections.includes(section.id) && "-rotate-90"
+                    )} />
+                  </button>
+                )}
+                {isCollapsed && <div className="h-px w-full bg-white/5 my-4" />}
+              </div>
 
-            <AnimatePresence initial={false}>
-              {(expandedSections.includes(section.id) || isCollapsed) && (
-                <motion.div
-                  initial={isCollapsed ? { opacity: 1 } : { height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-                  className="space-y-1 overflow-hidden"
-                >
-                  {section.items.map(renderItem)}
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        ))}
+              <AnimatePresence initial={false}>
+                {(expandedSections.includes(section.id) || isCollapsed) && (
+                  <motion.div
+                    initial={isCollapsed ? { opacity: 1 } : { height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+                    className="space-y-1 overflow-hidden"
+                  >
+                    {section.items.map(renderItem)}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          ))}
+        </div>
         
         {/* Bottom Section */}
         <div className="pt-4 border-t border-white/5 space-y-1">
@@ -235,8 +253,31 @@ export function Sidebar() {
         </div>
       </div>
 
-      {/* Footer Profile */}
-      <div className="flex-shrink-0 p-4 border-t border-white/5 bg-black/[0.1]">
+      {/* Footer Profile & Role Switcher */}
+      <div className="flex-shrink-0 p-4 border-t border-white/5 bg-black/[0.1] space-y-4">
+        {/* Role Switcher (Dev only) */}
+        {!isCollapsed && (
+          <div className="px-2 py-3 rounded-2xl bg-white/5 border border-white/5 space-y-2">
+            <p className="text-[9px] font-black text-blue-500 uppercase tracking-widest px-1">Dev: Switch Role</p>
+            <div className="grid grid-cols-2 gap-1.5">
+              {(['OWNER', 'ADMIN', 'MANAGER', 'STAFF'] as BusinessRole[]).map((r) => (
+                <button
+                  key={r}
+                  onClick={() => setRole(r)}
+                  className={cn(
+                    "text-[8px] font-black py-1.5 px-2 rounded-lg transition-all border",
+                    role === r 
+                      ? "bg-blue-600 border-blue-500 text-white shadow-lg shadow-blue-500/20" 
+                      : "bg-white/5 border-white/10 text-blue-300/60 hover:text-blue-300"
+                  )}
+                >
+                  {r}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
         <div className={cn(
           "flex items-center gap-3 p-2 rounded-2xl transition-all duration-300 group cursor-pointer hover:bg-white/5",
           isCollapsed && "justify-center"
@@ -252,8 +293,8 @@ export function Sidebar() {
 
           {!isCollapsed && (
             <div className="flex-1 min-w-0">
-              <p className="text-[12px] font-bold text-white truncate leading-tight">Business User</p>
-              <p className="text-[10px] text-indigo-400 truncate font-semibold leading-tight">Growth Workspace</p>
+              <p className="text-[12px] font-bold text-white truncate leading-tight uppercase tracking-tight">{role}</p>
+              <p className="text-[10px] text-indigo-400 truncate font-semibold leading-tight">OneCommerce Org</p>
             </div>
           )}
           

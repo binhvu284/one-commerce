@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { Modal } from '@/components/ui/Modal';
 import { Badge } from '@/components/ui/Badge';
 import { BusinessUser, BusinessRole, Permission } from '@/lib/types/business';
-import { mockPermissions } from '@/lib/mock/business';
+import { mockPermissions, mockBusinessUsers } from '@/lib/mock/business';
 import { Shield, Check, Info } from 'lucide-react';
 import { cn } from '@/lib/cn';
 
@@ -91,12 +91,35 @@ export function RoleModal({ user, open, onClose, onSave }: RoleModalProps) {
           </div>
         </section>
 
+        {/* Organizational Hierarchy (Assign Parent) */}
+        <section>
+          <h3 className="text-xs font-black uppercase tracking-widest text-[var(--text-secondary)] mb-4 flex items-center gap-2">
+            <GitBranch className="w-3.5 h-3.5" />
+            Organizational Placement
+          </h3>
+          <div className="space-y-4 p-5 rounded-2xl bg-[var(--bg-muted)]/20 border border-[var(--border)]">
+             <div className="space-y-2">
+                <label className="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)]">Referred By (Direct Parent)</label>
+                <select 
+                  className="w-full h-11 bg-[var(--bg-surface)] border border-[var(--border)] rounded-xl px-4 text-sm font-bold outline-none focus:border-indigo-500 transition-all appearance-none cursor-pointer"
+                  defaultValue={user.id === '1' ? '' : '1'} // Mock owner as default referrer
+                >
+                   <option value="">Direct to Organization (No Parent)</option>
+                   {mockBusinessUsers.filter(u => u.id !== user.id).map(u => (
+                     <option key={u.id} value={u.id}>{u.name} ({u.role})</option>
+                   ))}
+                </select>
+                <p className="text-[10px] text-[var(--text-secondary)] italic">Determines who receives F1 commissions from this user's activities.</p>
+             </div>
+          </div>
+        </section>
+
         {/* Granular Permissions */}
         <section>
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-xs font-black uppercase tracking-widest text-[var(--text-secondary)] flex items-center gap-2">
               <Info className="w-3.5 h-3.5" />
-              Granular Access
+              Granular Access Control
             </h3>
             <span className="text-[10px] font-bold text-indigo-500 bg-indigo-50 dark:bg-indigo-950/30 px-2 py-0.5 rounded-full">
               {enabledPermissions.length} Enabled
@@ -144,3 +167,6 @@ export function RoleModal({ user, open, onClose, onSave }: RoleModalProps) {
     </Modal>
   );
 }
+
+// Fixed missing icon from imports
+import { GitBranch } from 'lucide-react';

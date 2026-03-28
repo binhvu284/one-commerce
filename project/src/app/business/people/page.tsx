@@ -6,19 +6,40 @@ import { RoleModal } from '@/components/business/people/RoleModal';
 import { AffiliateTree } from '@/components/business/affiliate/AffiliateTree';
 import { BusinessUser, BusinessRole } from '@/lib/types/business';
 import { mockBusinessUsers } from '@/lib/mock/business';
-import { Users, ShieldAlert, ArrowUpRight, GitBranch, List } from 'lucide-react';
+import { Users, ShieldAlert, ArrowUpRight, GitBranch, List, Zap } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/cn';
+import { useBusinessRole } from '@/components/providers/RoleProvider';
 
 type TabType = 'members' | 'affiliate';
 
 export default function PeoplePage() {
+  const { role, isAdmin, isOwner } = useBusinessRole();
   const [activeTab, setActiveTab] = useState<TabType>('members');
   const [users, setUsers] = useState<BusinessUser[]>(mockBusinessUsers);
   const [selectedUser, setSelectedUser] = useState<BusinessUser | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  if (!isAdmin) {
+    return (
+      <div className="h-[70-vh] flex flex-col items-center justify-center space-y-4 text-center">
+        <div className="w-20 h-20 rounded-full bg-red-500/10 flex items-center justify-center text-red-500">
+          <ShieldAlert className="w-10 h-10" />
+        </div>
+        <div className="space-y-2">
+          <h2 className="text-2xl font-black italic tracking-tight uppercase">Access Denied</h2>
+          <p className="text-slate-500 font-medium max-w-xs">Only Organization Owners and Admins can manage team members and access control.</p>
+        </div>
+      </div>
+    );
+  }
+
   const handleEditRole = (user: BusinessUser) => {
+    // Owner cannot be edited by anyone
+    if (user.role === 'owner') return;
+    // Admin can only be edited by Owner
+    if (user.role === 'admin' && !isOwner) return;
+
     setSelectedUser(user);
     setIsModalOpen(true);
   };
