@@ -201,7 +201,12 @@ function PlaygroundContent() {
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-1 bg-white dark:bg-slate-950 border border-slate-200 dark:border-white/5 rounded-[2.5rem] overflow-hidden min-h-[600px] flex flex-col shadow-xl origin-top">
+      <div className={cn(
+        "flex-1 overflow-hidden min-h-[600px] flex flex-col origin-top",
+        activeTab === 'chat' 
+          ? "bg-transparent shadow-none border-none rounded-none" 
+          : "bg-white dark:bg-slate-950 border border-slate-200 dark:border-white/5 rounded-[2.5rem] shadow-xl"
+      )}>
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}
