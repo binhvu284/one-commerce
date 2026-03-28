@@ -102,24 +102,24 @@ export function ChatModule() {
 
   return (
     <div className={cn(
-        "flex flex-1 overflow-hidden transition-all duration-500 rounded-3xl",
+        "flex flex-1 overflow-hidden transition-all duration-500 rounded-3xl border border-slate-200 dark:border-white/5 shadow-2xl bg-white dark:bg-slate-950",
         showCanvas ? "flex-row" : "flex-col"
     )}>
       {/* Sidebar: Chat Area */}
       <div className={cn(
-        "flex flex-col bg-slate-800/20 border-r border-white/5 transition-all duration-500",
+        "flex flex-col bg-slate-50/50 dark:bg-slate-800/20 border-r border-slate-200 dark:border-white/5 transition-all duration-500",
         showCanvas ? "w-1/3" : "w-full h-full"
       )}>
         {/* Chat Header */}
-        <div className="p-4 border-b border-white/5 flex items-center justify-between">
+        <div className="p-4 border-b border-slate-200 dark:border-white/5 flex items-center justify-between bg-white dark:bg-transparent">
             <div className="relative">
                 <button 
                     onClick={() => setIsModelMenuOpen(!isModelMenuOpen)}
-                    className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900 border border-white/5 text-[10px] font-black text-white uppercase tracking-widest hover:bg-slate-800 transition-all"
+                    className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-white/5 text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-widest hover:bg-slate-200 dark:hover:bg-slate-800 transition-all shadow-sm"
                 >
                     <Sparkles className="w-3 h-3 text-amber-500" />
                     {selectedModel.name}
-                    <ChevronDown className="w-3 h-3 text-slate-600" />
+                    <ChevronDown className="w-3 h-3 text-slate-400 dark:text-slate-600" />
                 </button>
                 
                 <AnimatePresence>
@@ -128,7 +128,7 @@ export function ChatModule() {
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: 10 }}
-                            className="absolute top-full left-0 mt-2 w-56 bg-slate-900 border border-white/10 rounded-2xl shadow-2xl z-50 p-2 overflow-hidden"
+                            className="absolute top-full left-0 mt-2 w-56 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-2xl shadow-2xl z-50 p-2 overflow-hidden"
                         >
                             {MODELS.map(model => (
                                 <button
@@ -137,10 +137,10 @@ export function ChatModule() {
                                         setSelectedModel(model);
                                         setIsModelMenuOpen(false);
                                     }}
-                                    className="w-full p-3 text-left rounded-xl hover:bg-white/5 transition-all flex flex-col gap-0.5"
+                                    className="w-full p-3 text-left rounded-xl hover:bg-slate-100 dark:hover:bg-white/5 transition-all flex flex-col gap-0.5"
                                 >
-                                    <span className="text-[11px] font-black text-white uppercase tracking-wider">{model.name}</span>
-                                    <span className="text-[9px] font-bold text-slate-500 uppercase">{model.provider}</span>
+                                    <span className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-wider">{model.name}</span>
+                                    <span className="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase">{model.provider}</span>
                                 </button>
                             ))}
                         </motion.div>
@@ -151,8 +151,8 @@ export function ChatModule() {
             <button 
                 onClick={() => setShowCanvas(!showCanvas)}
                 className={cn(
-                    "p-2 rounded-xl border transition-all",
-                    showCanvas ? "bg-indigo-600 border-indigo-500 text-white" : "bg-slate-900 border-white/5 text-slate-600 hover:text-white"
+                    "p-2 rounded-xl border transition-all shadow-sm",
+                    showCanvas ? "bg-indigo-600 border-indigo-500 text-white" : "bg-white dark:bg-slate-900 border-slate-200 dark:border-white/5 text-slate-400 dark:text-slate-600 hover:text-indigo-600 dark:hover:text-white"
                 )}
             >
                 <PanelRight className="w-4 h-4" />
@@ -160,7 +160,7 @@ export function ChatModule() {
         </div>
 
         {/* Message List */}
-        <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 space-y-6 scrollbar-hide">
+        <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 space-y-6 scrollbar-hide bg-white dark:bg-slate-950/20">
             {messages.map((msg) => (
                 <div key={msg.id} className={cn(
                     "flex flex-col gap-2 max-w-[85%]",
@@ -168,21 +168,21 @@ export function ChatModule() {
                 )}>
                     <div className="flex items-center gap-2 mb-1 px-1">
                         {msg.role === 'assistant' ? (
-                            <div className="w-5 h-5 rounded-lg bg-indigo-500 flex items-center justify-center text-white">
+                            <div className="w-5 h-5 rounded-lg bg-indigo-500 flex items-center justify-center text-white shadow-lg shadow-indigo-500/20">
                                 <Bot className="w-3 h-3" />
                             </div>
                         ) : (
-                            <div className="w-5 h-5 rounded-lg bg-slate-700 flex items-center justify-center text-white">
+                            <div className="w-5 h-5 rounded-lg bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-white border border-slate-200 dark:border-white/5">
                                 <User className="w-3 h-3" />
                             </div>
                         )}
-                        <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">{msg.role}</span>
+                        <span className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{msg.role}</span>
                     </div>
                     <div className={cn(
-                        "p-4 rounded-3xl text-sm font-medium leading-relaxed",
+                        "p-4 rounded-3xl text-sm font-medium leading-relaxed shadow-sm",
                         msg.role === 'user' 
                           ? "bg-indigo-600 text-white rounded-tr-none shadow-lg shadow-indigo-600/10" 
-                          : "bg-slate-900/60 border border-white/5 text-slate-300 rounded-tl-none"
+                          : "bg-slate-100/50 dark:bg-slate-900/60 border border-slate-200 dark:border-white/5 text-slate-700 dark:text-slate-300 rounded-tl-none"
                     )}>
                         {msg.content}
                         {msg.content === '' && isStreaming && (
@@ -201,9 +201,9 @@ export function ChatModule() {
         </div>
 
         {/* Input Area */}
-        <div className="p-4 bg-slate-900/40 border-t border-white/5">
-            <div className="relative flex items-end gap-3 bg-slate-900 border border-white/10 rounded-3xl p-3 focus-within:border-indigo-500/50 transition-all shadow-xl">
-                <button className="p-2 text-slate-600 hover:text-white transition-colors">
+        <div className="p-4 bg-white dark:bg-slate-900/40 border-t border-slate-200 dark:border-white/5 shadow-2xl">
+            <div className="relative flex items-end gap-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-3xl p-3 focus-within:border-indigo-500/50 focus-within:ring-4 focus-within:ring-indigo-500/5 dark:focus-within:ring-indigo-500/10 transition-all shadow-inner">
+                <button className="p-2 text-slate-400 dark:text-slate-600 hover:text-indigo-600 dark:hover:text-white transition-colors">
                     <Paperclip className="w-5 h-5" />
                 </button>
                 <textarea 
@@ -211,24 +211,24 @@ export function ChatModule() {
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), handleSend())}
                     placeholder="Enter command or message..."
-                    className="flex-1 bg-transparent border-none outline-none resize-none text-sm py-2 max-h-32 text-white placeholder:text-slate-700 font-medium"
+                    className="flex-1 bg-transparent border-none outline-none resize-none text-sm py-2 max-h-32 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-700 font-medium"
                     rows={1}
                 />
                 <button 
                    onClick={handleSend}
                    disabled={!input.trim() || isStreaming}
                    className={cn(
-                     "p-3 rounded-2xl transition-all",
-                     input.trim() && !isStreaming ? "bg-indigo-600 text-white" : "bg-slate-800 text-slate-600"
+                     "p-3 rounded-2xl transition-all shadow-md",
+                     input.trim() && !isStreaming ? "bg-indigo-600 text-white scale-100 active:scale-95" : "bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-600"
                    )}
                 >
-                    {isStreaming ? <StopCircle className="w-5 h-5" /> : <Send className="w-5 h-5" />}
+                    {isStreaming ? <StopCircle className="w-5 h-5 animate-pulse" /> : <Send className="w-5 h-5" />}
                 </button>
             </div>
             <div className="flex items-center justify-center gap-4 mt-3">
-                 <p className="text-[9px] font-bold text-slate-700 uppercase tracking-widest">Shift + Enter for new line</p>
-                 <span className="w-1 h-1 rounded-full bg-slate-800" />
-                 <p className="text-[9px] font-bold text-slate-700 uppercase tracking-widest">Admin Testing Environment</p>
+                 <p className="text-[9px] font-bold text-slate-400 dark:text-slate-700 uppercase tracking-widest">Shift + Enter for new line</p>
+                 <span className="w-1 h-1 rounded-full bg-slate-200 dark:bg-slate-800" />
+                 <p className="text-[9px] font-bold text-slate-400 dark:text-slate-700 uppercase tracking-widest">Admin Testing Lab</p>
             </div>
         </div>
       </div>
@@ -241,57 +241,57 @@ export function ChatModule() {
             animate={{ width: '66.666%', opacity: 1 }}
             exit={{ width: 0, opacity: 0 }}
             transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
-            className="flex flex-col bg-slate-950 overflow-hidden relative"
+            className="flex flex-col bg-slate-100 dark:bg-slate-950 overflow-hidden relative"
           >
              {/* Canvas Header */}
-             <div className="p-4 border-b border-white/5 flex items-center justify-between bg-slate-900/50 backdrop-blur-md sticky top-0 z-10">
+             <div className="p-4 border-b border-slate-200 dark:border-white/5 flex items-center justify-between bg-white/80 dark:bg-slate-900/50 backdrop-blur-md sticky top-0 z-10">
                 <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-500">
+                    <div className="w-8 h-8 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-500 border border-indigo-500/10">
                         <Sparkles className="w-4 h-4" />
                     </div>
                     <div>
-                        <h4 className="text-sm font-black text-white">Project Artifact</h4>
-                        <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Dynamic View v1.0</p>
+                        <h4 className="text-sm font-black text-slate-900 dark:text-white tracking-tight">Project Artifact</h4>
+                        <p className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-widest">Dynamic View v1.0</p>
                     </div>
                 </div>
                 <div className="flex items-center gap-2">
-                    <button className="px-4 py-1.5 rounded-lg bg-white/5 border border-white/5 text-[10px] font-bold text-slate-400 hover:text-white transition-all uppercase">Code</button>
-                    <button className="px-4 py-1.5 rounded-lg bg-indigo-600 border border-indigo-500 text-[10px] font-bold text-white transition-all uppercase">Preview</button>
+                    <button className="px-4 py-1.5 rounded-lg bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/5 text-[10px] font-bold text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-white transition-all uppercase">Code</button>
+                    <button className="px-4 py-1.5 rounded-lg bg-indigo-600 border border-indigo-500 text-[10px] font-bold text-white transition-all uppercase shadow-lg shadow-indigo-500/20">Preview</button>
                 </div>
              </div>
 
              {/* Canvas Content */}
-             <div className="flex-1 p-10 overflow-auto">
+             <div className="flex-1 p-10 overflow-auto scrollbar-hide">
                 <div className="max-w-4xl mx-auto space-y-8 pb-20">
-                    <div className="p-8 rounded-[2.5rem] bg-slate-900 border border-white/5 shadow-2xl relative overflow-hidden group">
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-600/10 blur-[60px] rounded-full group-hover:bg-indigo-600/20 transition-all" />
+                    <div className="p-8 rounded-[2.5rem] bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 shadow-2xl relative overflow-hidden group">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-600/5 blur-[60px] rounded-full group-hover:bg-indigo-600/10 transition-all" />
                         
                         <div className="space-y-6 relative">
-                            <h2 className="text-3xl font-black text-white tracking-tight">AI Generated Workflow</h2>
-                            <p className="text-slate-500 font-medium">This is a simulation of the artifacts you asked me to generate. In reality, this canvas would render code components, task charts, or system logs based on the assistant's response.</p>
+                            <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">AI Generated workflow</h2>
+                            <p className="text-slate-500 dark:text-slate-500 font-medium leading-relaxed">This is a simulation of the artifacts you asked me to generate. In reality, this canvas would render code components, task charts, or system logs based on the assistant's response.</p>
                             
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div className="p-6 rounded-3xl bg-white/5 border border-white/5 space-y-3">
-                                    <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-500"><CheckCircle2 className="w-5 h-5" /></div>
-                                    <h5 className="font-black text-white text-sm">Task Automation</h5>
-                                    <p className="text-[11px] text-slate-600 font-bold leading-relaxed">System successfully initialized the cross-region sync agent.</p>
+                                <div className="p-6 rounded-3xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/5 space-y-3 shadow-inner">
+                                    <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-500"><CheckCircle2 className="w-5 h-5" /></div>
+                                    <h5 className="font-black text-slate-800 dark:text-white text-sm uppercase tracking-tight">Task Automation</h5>
+                                    <p className="text-[11px] text-slate-500 dark:text-slate-600 font-bold leading-relaxed lowercase">System successfully initialized the cross-region sync agent.</p>
                                 </div>
-                                <div className="p-6 rounded-3xl bg-white/5 border border-white/5 space-y-3">
-                                    <div className="w-10 h-10 rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-500"><Activity className="w-5 h-5" /></div>
-                                    <h5 className="font-black text-white text-sm">Performance Metrics</h5>
-                                    <p className="text-[11px] text-slate-600 font-bold leading-relaxed">Inference time: 450ms. Token cost: $0.002.</p>
+                                <div className="p-6 rounded-3xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/5 space-y-3 shadow-inner">
+                                    <div className="w-10 h-10 rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-600 dark:text-blue-500"><Activity className="w-5 h-5" /></div>
+                                    <h5 className="font-black text-slate-800 dark:text-white text-sm uppercase tracking-tight">Performance Metrics</h5>
+                                    <p className="text-[11px] text-slate-500 dark:text-slate-600 font-bold leading-relaxed lowercase">Inference time: 450ms. Token cost: $0.002.</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div className="bg-slate-900 overflow-hidden rounded-[2.5rem] border border-white/5 shadow-2xl">
-                        <div className="p-4 border-b border-white/5 bg-slate-800/20 flex items-center justify-between">
-                            <span className="text-[10px] font-black text-slate-600 uppercase tracking-widest">Example Generated Component</span>
+                    <div className="bg-white dark:bg-slate-900 overflow-hidden rounded-[2.5rem] border border-slate-200 dark:border-white/5 shadow-2xl">
+                        <div className="p-4 border-b border-slate-100 dark:border-white/5 bg-slate-50/50 dark:bg-slate-800/20 flex items-center justify-between">
+                            <span className="text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest">Example Generated Component</span>
                         </div>
                         <div className="p-10 flex flex-col items-center justify-center text-center space-y-4">
-                             <div className="w-20 h-20 bg-indigo-600 rounded-3xl animate-spin-slow shadow-[0_0_30px_rgba(79,70,229,0.3)] shadow-indigo-600/20" />
-                             <p className="text-white font-black text-lg">Interactive Artifact</p>
+                             <div className="w-20 h-20 bg-indigo-600 rounded-3xl animate-spin-slow shadow-[0_0_40px_rgba(79,70,229,0.3)]" />
+                             <p className="text-slate-900 dark:text-white font-black text-lg tracking-tight">Interactive Artifact</p>
                         </div>
                     </div>
                 </div>

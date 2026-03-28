@@ -93,8 +93,8 @@ export function OrgTable({ orgs, onStatusChange }: OrgTableProps) {
 
   return (
     <>
-      <div className="bg-[var(--bg-surface)] rounded-xl border border-[var(--border)] shadow-token-sm overflow-hidden">
-        <div className="overflow-x-auto">
+      <div className="bg-[var(--bg-surface)] rounded-xl border border-[var(--border)] shadow-token-sm">
+        <div className="overflow-x-auto rounded-xl">
           <table className="w-full text-sm">
             <thead className="border-b border-[var(--border)] bg-[var(--bg-muted)]">
               <tr>

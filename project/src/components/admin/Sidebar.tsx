@@ -23,6 +23,7 @@ import {
   Settings2,
   FlaskConical,
   Activity,
+  ChevronDown,
 } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { useSidebar } from '@/components/providers/SidebarProvider';
@@ -45,7 +46,6 @@ const navSections: NavSection[] = [
     items: [
       { id: 'dashboard', label: 'Dashboard', href: '/admin/dashboard', icon: <LayoutDashboard className="w-4 h-4" /> },
       { id: 'organizations', label: 'Organizations', href: '/admin/organizations', icon: <Building2 className="w-4 h-4" /> },
-      { id: 'analytics', label: 'Analytics', href: '/admin/analytics', icon: <BarChart3 className="w-4 h-4" /> },
     ],
   },
   {
@@ -75,7 +75,14 @@ const navSections: NavSection[] = [
 export function Sidebar() {
   const { isCollapsed, setIsCollapsed, isOpen, setIsOpen } = useSidebar();
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+  const [expandedSections, setExpandedSections] = useState<string[]>(['AI Center', 'Management', 'Infrastructure']);
   const pathname = usePathname();
+
+  const toggleSection = (title: string) => {
+    setExpandedSections(prev => 
+      prev.includes(title) ? prev.filter(t => t !== title) : [...prev, title]
+    );
+  };
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -152,82 +159,103 @@ export function Sidebar() {
       </div>
 
       {/* Navigation */}
-      <div className="flex-1 overflow-y-auto px-3 py-2 space-y-7 scrollbar-hide">
-        {navSections.map((section) => (
-          <div key={section.title}>
-            <AnimatePresence mode="wait">
-              {!isCollapsed && (
-                <motion.p
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="text-[10px] uppercase font-black px-4 mb-3 tracking-[0.2em] text-slate-600"
-                >
-                  {section.title}
-                </motion.p>
-              )}
-            </AnimatePresence>
-
-            <div className="space-y-1.5">
-              {section.items.map((item) => {
-                const active = isActive(item.href);
-                return (
-                  <div
-                    key={item.id}
-                    className="relative group"
-                    onMouseEnter={() => setHoveredItem(item.id)}
-                    onMouseLeave={() => setHoveredItem(null)}
+      <div className="flex-1 overflow-y-auto px-3 py-2 space-y-6 scrollbar-hide">
+        {navSections.map((section) => {
+          const isExpanded = expandedSections.includes(section.title);
+          return (
+            <div key={section.title} className="space-y-1">
+              <AnimatePresence mode="wait">
+                {!isCollapsed && (
+                  <button
+                    onClick={() => toggleSection(section.title)}
+                    className="flex items-center justify-between w-full px-4 mb-2 group/title"
                   >
-                    <Link
-                      href={item.href}
-                      className={cn(
-                        'flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13px] font-semibold transition-all duration-300 relative',
-                        active
-                          ? 'bg-gradient-to-r from-blue-500/10 via-blue-500/5 to-transparent text-white ring-1 ring-white/10'
-                          : 'hover:bg-white/5 text-slate-400 hover:text-white'
-                      )}
+                    <motion.p
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="text-[10px] uppercase font-black tracking-[0.2em] text-slate-500 group-hover/title:text-indigo-400 transition-colors"
                     >
-                      {active && (
-                        <motion.div
-                          layoutId="sidebar-active-glow"
-                          className="absolute inset-0 bg-indigo-500/5 blur-xl rounded-full"
-                        />
-                      )}
-                      
-                      <span className={cn(
-                        'flex-shrink-0 transition-all duration-300',
-                        active ? 'text-blue-400 scale-110' : 'group-hover:text-white group-hover:scale-110'
-                      )}>
-                        {item.icon}
-                      </span>
+                      {section.title}
+                    </motion.p>
+                    <ChevronDown className={cn(
+                      "w-3 h-3 text-slate-600 transition-transform duration-300",
+                      isExpanded ? "rotate-0" : "-rotate-90"
+                    )} />
+                  </button>
+                )}
+              </AnimatePresence>
 
-                      {!isCollapsed && (
-                        <motion.span
-                          initial={{ opacity: 0, x: -10 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          className="flex-1 truncate"
+              <AnimatePresence initial={false}>
+                {(isExpanded || isCollapsed) && (
+                  <motion.div
+                    initial={isCollapsed ? { opacity: 1, height: 'auto' } : { opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="space-y-1.5 overflow-hidden"
+                  >
+                    {section.items.map((item) => {
+                      const active = isActive(item.href);
+                      return (
+                        <div
+                          key={item.id}
+                          className="relative group"
+                          onMouseEnter={() => setHoveredItem(item.id)}
+                          onMouseLeave={() => setHoveredItem(null)}
                         >
-                          {item.label}
-                        </motion.span>
-                      )}
-                    </Link>
+                          <Link
+                            href={item.href}
+                            className={cn(
+                              'flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13px] font-semibold transition-all duration-300 relative',
+                              active
+                                ? 'bg-indigo-500/10 dark:bg-blue-500/10 text-indigo-600 dark:text-blue-400 ring-1 ring-indigo-500/20'
+                                : 'hover:bg-slate-100 dark:hover:bg-white/5 text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-white'
+                            )}
+                          >
+                            {active && (
+                              <motion.div
+                                layoutId="sidebar-active-glow"
+                                className="absolute inset-0 bg-indigo-500/5 dark:bg-blue-500/5 blur-xl rounded-full"
+                              />
+                            )}
+                            
+                            <span className={cn(
+                              'flex-shrink-0 transition-all duration-300',
+                              active ? 'scale-110' : 'group-hover:scale-110'
+                            )}>
+                              {item.icon}
+                            </span>
 
-                    {isCollapsed && hoveredItem === item.id && (
-                      <div className="fixed left-[72px] z-50">
-                        <motion.div
-                          initial={{ opacity: 0, x: -10 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          className="bg-slate-900 text-white text-[11px] font-bold px-3 py-2 rounded-xl shadow-2xl border border-white/10 flex items-center gap-2 whitespace-nowrap"
-                        >
-                          {item.label}
-                        </motion.div>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
+                            {!isCollapsed && (
+                              <motion.span
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                className="flex-1 truncate"
+                              >
+                                {item.label}
+                              </motion.span>
+                            )}
+                          </Link>
+
+                          {isCollapsed && hoveredItem === item.id && (
+                            <div className="fixed left-[72px] z-50">
+                              <motion.div
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                className="bg-white dark:bg-slate-900 shadow-xl border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white text-[11px] font-bold px-3 py-2 rounded-xl flex items-center gap-2 whitespace-nowrap"
+                              >
+                                {item.label}
+                              </motion.div>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Footer Profile */}
