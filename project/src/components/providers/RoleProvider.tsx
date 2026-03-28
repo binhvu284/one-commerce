@@ -1,6 +1,7 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 export type BusinessRole = 'OWNER' | 'ADMIN' | 'MANAGER' | 'STAFF';
 
@@ -15,9 +16,16 @@ interface RoleContextType {
 
 const RoleContext = createContext<RoleContextType | undefined>(undefined);
 
-export function RoleProvider({ children }: { children: React.ReactNode }) {
-  // Default to OWNER for initial dev, but in real app would fetch from Supabase
+function RoleProviderContent({ children }: { children: React.ReactNode }) {
+  const searchParams = useSearchParams();
   const [role, setRole] = useState<BusinessRole>('OWNER');
+
+  useEffect(() => {
+    const roleParam = searchParams.get('role')?.toUpperCase() as BusinessRole;
+    if (roleParam && ['OWNER', 'ADMIN', 'MANAGER', 'STAFF'].includes(roleParam)) {
+      setRole(roleParam);
+    }
+  }, [searchParams]);
 
   const value = {
     role,
@@ -32,6 +40,16 @@ export function RoleProvider({ children }: { children: React.ReactNode }) {
     <RoleContext.Provider value={value}>
       {children}
     </RoleContext.Provider>
+  );
+}
+
+export function RoleProvider({ children }: { children: React.ReactNode }) {
+  return (
+    <Suspense fallback={null}>
+      <RoleProviderContent>
+        {children}
+      </RoleProviderContent>
+    </Suspense>
   );
 }
 

@@ -25,6 +25,12 @@ const roles = [
     color: 'from-emerald-500 to-teal-600',
     shadow: 'shadow-emerald-500/20',
     features: ['Storefront Settings', 'Business Analytics', 'Team Management'],
+    subRoles: [
+      { label: 'Owner', role: 'OWNER', color: 'bg-emerald-500' },
+      { label: 'Admin', role: 'ADMIN', color: 'bg-blue-500' },
+      { label: 'Manager', role: 'MANAGER', color: 'bg-purple-500' },
+      { label: 'Staff', role: 'STAFF', color: 'bg-slate-500' },
+    ]
   },
   {
     id: 'customer',
@@ -86,10 +92,10 @@ export default function LandingPage() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 + idx * 0.1 }}
+              className="h-full"
             >
-              <Link
-                href={role.href}
-                className="group relative block h-full p-8 rounded-[2rem] bg-white/[0.03] border border-white/10 hover:border-white/20 transition-all duration-500 hover:-translate-y-2 hover:bg-white/[0.05]"
+              <div
+                className="group relative flex flex-col h-full p-8 rounded-[2.5rem] bg-white/[0.03] border border-white/10 hover:border-white/20 transition-all duration-500 hover:-translate-y-2 hover:bg-white/[0.05] shadow-2xl overflow-hidden"
               >
                 {/* Role Icon */}
                 <div className={cn(
@@ -118,19 +124,41 @@ export default function LandingPage() {
                   ))}
                 </div>
 
-                <div className="flex items-center justify-between mt-auto pt-6 border-t border-white/5">
-                  <span className="text-sm font-black uppercase tracking-widest text-white/20 group-hover:text-white transition-colors">Enter Workspace</span>
-                  <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all">
-                    <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-                  </div>
+                <div className="mt-auto space-y-4">
+                  {role.subRoles ? (
+                    <div className="space-y-3 pt-6 border-t border-white/10">
+                       <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2">Select Access Role:</p>
+                       <div className="grid grid-cols-2 gap-2">
+                          {role.subRoles.map(sr => (
+                            <Link 
+                               key={sr.role}
+                               href={`${role.href}?role=${sr.role}`}
+                               className="px-3 py-2.5 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/20 text-[10px] font-black uppercase tracking-widest text-center transition-all hover:scale-[1.02] active:scale-95 text-slate-400 hover:text-white"
+                            >
+                               {sr.label}
+                            </Link>
+                          ))}
+                       </div>
+                    </div>
+                  ) : (
+                    <Link 
+                      href={role.href}
+                      className="flex items-center justify-between pt-6 border-t border-white/5 group/link"
+                    >
+                      <span className="text-sm font-black uppercase tracking-widest text-white/20 group-hover:text-white transition-colors">Enter Workspace</span>
+                      <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center group-hover/link:bg-white group-hover/link:text-black transition-all">
+                        <ArrowRight className="w-5 h-5 transition-transform group-hover/link:translate-x-1" />
+                      </div>
+                    </Link>
+                  )}
                 </div>
 
                 {/* Hover Glow */}
                 <div className={cn(
-                  "absolute inset-0 rounded-[2rem] opacity-0 group-hover:opacity-20 transition-opacity blur-2xl -z-10",
+                  "absolute inset-0 rounded-[2rem] opacity-0 group-hover:opacity-20 transition-opacity blur-3xl -z-10",
                   role.color
                 )} />
-              </Link>
+              </div>
             </motion.div>
           ))}
         </div>

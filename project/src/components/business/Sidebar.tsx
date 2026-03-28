@@ -253,31 +253,8 @@ export function Sidebar() {
         </div>
       </div>
 
-      {/* Footer Profile & Role Switcher */}
-      <div className="flex-shrink-0 p-4 border-t border-white/5 bg-black/[0.1] space-y-4">
-        {/* Role Switcher (Dev only) */}
-        {!isCollapsed && (
-          <div className="px-2 py-3 rounded-2xl bg-white/5 border border-white/5 space-y-2">
-            <p className="text-[9px] font-black text-blue-500 uppercase tracking-widest px-1">Dev: Switch Role</p>
-            <div className="grid grid-cols-2 gap-1.5">
-              {(['OWNER', 'ADMIN', 'MANAGER', 'STAFF'] as BusinessRole[]).map((r) => (
-                <button
-                  key={r}
-                  onClick={() => setRole(r)}
-                  className={cn(
-                    "text-[8px] font-black py-1.5 px-2 rounded-lg transition-all border",
-                    role === r 
-                      ? "bg-blue-600 border-blue-500 text-white shadow-lg shadow-blue-500/20" 
-                      : "bg-white/5 border-white/10 text-blue-300/60 hover:text-blue-300"
-                  )}
-                >
-                  {r}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
+      {/* Footer Profile */}
+      <div className="flex-shrink-0 p-4 border-t border-white/5 bg-black/[0.1]">
         <div className={cn(
           "flex items-center gap-3 p-2 rounded-2xl transition-all duration-300 group cursor-pointer hover:bg-white/5",
           isCollapsed && "justify-center"
