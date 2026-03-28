@@ -1,9 +1,23 @@
 'use client';
 
-import { useState, Suspense } from 'react';
+import { useState, Suspense, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname, useSearchParams } from 'next/navigation';
-import { Search, Bell, Sun, Moon, ChevronRight, X, Menu } from 'lucide-react';
+import { usePathname, useSearchParams, useRouter } from 'next/navigation';
+import { 
+  Search, 
+  Bell, 
+  Sun, 
+  Moon, 
+  ChevronRight, 
+  X, 
+  Menu, 
+  User, 
+  Settings, 
+  LogOut, 
+  ChevronDown,
+  ShieldCheck,
+  Briefcase
+} from 'lucide-react';
 import { useTheme } from '@/components/providers/ThemeProvider';
 import { useSidebar } from '@/components/providers/SidebarProvider';
 import { cn } from '@/lib/cn';
@@ -18,6 +32,10 @@ const breadcrumbMap: Record<string, string> = {
   '/admin/api-tokens': 'API Tokens',
   '/admin/mcp': 'MCP Servers',
   '/admin/database': 'Database',
+  '/business/dashboard': 'Dashboard',
+  '/business/people': 'People & Access',
+  '/business/wallet': 'My Wallet',
+  '/business/affiliate': 'My Member',
 };
 
 function getBreadcrumbs(pathname: string, searchParams?: URLSearchParams) {
@@ -29,7 +47,8 @@ function getBreadcrumbs(pathname: string, searchParams?: URLSearchParams) {
     current += '/' + part;
     if (part === 'ai-center') continue;
     
-    const label = breadcrumbMap[current] ?? (part.charAt(0).toUpperCase() + part.slice(1));
+    // Attempt mapping
+    let label = breadcrumbMap[current] ?? (part.charAt(0).toUpperCase() + part.slice(1).replace(/-/g, ' '));
     crumbs.push({ label, href: current });
   }
 
@@ -58,20 +77,33 @@ export function Header() {
   const { theme, toggleTheme } = useTheme();
   const { toggleMobile } = useSidebar();
   const [notifOpen, setNotifOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
   const [searchFocused, setSearchFocused] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
+  const profileRef = useRef<HTMLDivElement>(null);
 
   const unreadCount = mockNotifications.filter(n => !n.read).length;
+  const isAdmin = pathname.startsWith('/admin');
+  const baseRoute = isAdmin ? '/admin' : '/business';
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
+        setProfileOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   return (
-    <header
-      className="flex-shrink-0 flex items-center justify-between px-4 md:px-6 h-[60px] border-b border-[var(--border)] bg-[var(--bg-surface)] backdrop-blur-md bg-opacity-80 sticky top-0 z-30"
-    >
+    <header className="flex-shrink-0 flex items-center justify-between px-4 md:px-6 h-[64px] border-b border-[var(--border)] bg-[var(--bg-surface)] backdrop-blur-md bg-opacity-80 sticky top-0 z-30">
       {/* Left: Menu Toggle (Mobile) + Breadcrumb */}
       <div className="flex items-center gap-3 min-w-0">
         <button
           onClick={toggleMobile}
           className="lg:hidden p-2 -ml-2 text-[var(--text-secondary)] hover:bg-[var(--bg-muted)] rounded-lg transition-colors"
-          aria-label="Toggle menu"
         >
           <Menu className="w-5 h-5" />
         </button>
@@ -82,117 +114,123 @@ export function Header() {
       </div>
 
       {/* Right: Actions */}
-      <div className="flex items-center gap-1 md:gap-2">
+      <div className="flex items-center gap-2">
         {/* Search */}
         <div className="relative hidden md:flex items-center">
-          <div
-            className={cn(
-              'flex items-center gap-2 h-9 px-3 rounded-xl border transition-all duration-300',
-              'text-[var(--text-muted)] bg-[var(--bg-muted)]',
-              searchFocused
-                ? 'border-[var(--accent)] ring-4 ring-[var(--accent)]/10 w-64'
-                : 'border-[var(--border)] w-44 hover:border-slate-300 dark:hover:border-slate-600'
-            )}
-          >
-            <Search className="w-4 h-4 flex-shrink-0" />
+          <div className={cn(
+            'flex items-center gap-2 h-9 px-3 rounded-xl border transition-all duration-300',
+            'text-[var(--text-muted)] bg-[var(--bg-muted)]',
+            searchFocused ? 'border-[var(--accent)] ring-4 ring-[var(--accent)]/10 w-64' : 'border-[var(--border)] w-44'
+          )}>
+            <Search className="w-4 h-4" />
             <input
               type="text"
-              placeholder="Search anything..."
-              className="flex-1 bg-transparent text-sm outline-none text-[var(--text-primary)] placeholder:text-[var(--text-muted)] min-w-0"
+              placeholder="Search..."
+              className="flex-1 bg-transparent text-xs outline-none text-[var(--text-primary)]"
               onFocus={() => setSearchFocused(true)}
               onBlur={() => setSearchFocused(false)}
             />
-            {!searchFocused && (
-              <div className="flex items-center gap-1 text-[10px] bg-[var(--bg-surface)] border border-[var(--border)] px-1.5 py-0.5 rounded-lg text-[var(--text-muted)] font-medium flex-shrink-0 shadow-sm">
-                <span>⌘</span>
-                <span>K</span>
-              </div>
-            )}
           </div>
         </div>
 
-        {/* Mobile Search Icon */}
-        <button className="md:hidden p-2 text-[var(--text-secondary)] hover:bg-[var(--bg-muted)] rounded-lg transition-colors">
-          <Search className="w-5 h-5" />
-        </button>
+        <div className="flex items-center border-l border-[var(--border)] ml-1 pl-2 gap-2">
+          {/* Theme Toggle */}
+          <button onClick={toggleTheme} className="w-9 h-9 rounded-xl flex items-center justify-center text-[var(--text-secondary)] hover:bg-[var(--bg-muted)] transition-all">
+            {theme === 'light' ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
+          </button>
 
-        <div className="flex items-center border-l border-[var(--border)] ml-1 pl-1 md:ml-2 md:pl-2 gap-1 md:gap-2">
-          {/* Notification Bell */}
+          {/* Notifications */}
           <div className="relative">
-            <button
-              id="header-notifications-btn"
-              onClick={() => setNotifOpen(v => !v)}
-              className={cn(
-                "relative w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200 cursor-pointer",
-                notifOpen ? "bg-[var(--bg-muted)] text-[var(--text-primary)]" : "text-[var(--text-secondary)] hover:bg-[var(--bg-muted)] hover:text-[var(--text-primary)]"
-              )}
-              aria-label="Notifications"
+             <button onClick={() => setNotifOpen(!notifOpen)} className="w-9 h-9 rounded-xl flex items-center justify-center text-[var(--text-secondary)] hover:bg-[var(--bg-muted)] relative">
+                <Bell className="w-4 h-4" />
+                {unreadCount > 0 && <span className="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-red-500 ring-2 ring-[var(--bg-surface)]" />}
+             </button>
+             {notifOpen && (
+               <div className="absolute right-0 top-full mt-2 w-80 bg-[var(--bg-surface)] border border-[var(--border)] rounded-2xl shadow-2xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+                  <div className="px-5 py-4 border-b border-[var(--border)] bg-[var(--bg-muted)]/50">
+                    <h3 className="text-sm font-bold">Notifications</h3>
+                  </div>
+                  <div className="max-h-80 overflow-y-auto divide-y divide-[var(--border)]">
+                    {mockNotifications.map(n => (
+                      <div key={n.id} className="p-4 hover:bg-[var(--bg-muted)] cursor-pointer">
+                        <p className="text-sm font-bold">{n.title}</p>
+                        <p className="text-[10px] text-[var(--text-muted)] mt-1">{n.time}</p>
+                      </div>
+                    ))}
+                  </div>
+               </div>
+             )}
+          </div>
+
+          {/* User Profile Dropdown */}
+          <div className="relative" ref={profileRef}>
+            <button 
+              onClick={() => setProfileOpen(!profileOpen)}
+              className="group flex items-center gap-2 p-1 pl-1 pr-2 rounded-xl border border-transparent hover:border-[var(--border)] hover:bg-[var(--bg-muted)]/50 transition-all cursor-pointer"
             >
-              <Bell className="w-4.5 h-4.5" />
-              {unreadCount > 0 && (
-                <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-red-500 ring-2 ring-[var(--bg-surface)]" />
-              )}
+              <div className={cn(
+                "w-8 h-8 rounded-lg flex items-center justify-center text-white text-[10px] font-black shadow-lg",
+                isAdmin ? "bg-indigo-600" : "bg-emerald-600"
+              )}>
+                {isAdmin ? 'SA' : 'BU'}
+              </div>
+              <div className="hidden sm:block text-left">
+                 <p className="text-[11px] font-bold text-[var(--text-primary)] leading-none mb-0.5">{isAdmin ? 'Super Admin' : 'Business User'}</p>
+                 <div className="flex items-center gap-1">
+                    <span className={cn(
+                      "text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-full ring-1",
+                      isAdmin ? "bg-indigo-500/10 text-indigo-500 ring-indigo-500/30" : "bg-emerald-500/10 text-emerald-500 ring-emerald-500/30"
+                    )}>
+                       {isAdmin ? 'Admin Root' : 'Owner'}
+                    </span>
+                 </div>
+              </div>
+              <ChevronDown className={cn("w-3.5 h-3.5 text-[var(--text-muted)] transition-transform duration-300", profileOpen && "rotate-180")} />
             </button>
 
-            {notifOpen && (
-              <div className="absolute right-0 top-full mt-2 w-80 bg-[var(--bg-surface)] border border-[var(--border)] rounded-2xl shadow-token-xl z-50 overflow-hidden animate-in fade-in zoom-in duration-200 origin-top-right">
-                <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border)] bg-[var(--bg-muted)]/50">
-                  <h3 className="text-sm font-bold text-[var(--text-primary)]">Notifications</h3>
-                  {unreadCount > 0 && (
-                    <span className="text-[10px] bg-red-500/10 text-red-500 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">{unreadCount} unread</span>
-                  )}
-                </div>
-                <div className="divide-y divide-[var(--border)] max-h-[360px] overflow-y-auto">
-                  {mockNotifications.map(n => (
-                    <div key={n.id} className={cn('px-5 py-4 hover:bg-[var(--bg-muted)] transition-colors cursor-pointer group relative', !n.read && 'bg-blue-500/5')}>
-                      {!n.read && <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-500" />}
-                      <p className="text-sm font-semibold text-[var(--text-primary)] group-hover:text-blue-500 transition-colors">{n.title}</p>
-                      <p className="text-[11px] text-[var(--text-muted)] mt-1 flex items-center gap-1.5 font-medium">
-                        <span className="w-1 h-1 rounded-full bg-[var(--text-muted)]" />
-                        {n.time}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-                <div className="px-5 py-3.5 border-t border-[var(--border)] bg-[var(--bg-muted)]/30">
-                  <button className="text-xs text-blue-500 hover:text-blue-600 font-bold transition-colors w-full text-center">
-                    Mark all as read
-                  </button>
-                </div>
+            {profileOpen && (
+              <div className="absolute right-0 top-full mt-2 w-56 bg-[var(--bg-surface)] border border-[var(--border)] rounded-2xl shadow-2xl z-50 overflow-hidden py-2 animate-in fade-in slide-in-from-top-2 duration-200">
+                 <div className="px-4 py-2 border-b border-[var(--border)] mb-2">
+                    <p className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest">Account</p>
+                    <p className="text-xs font-bold text-[var(--text-primary)] truncate">binh.le@onecommerce.vn</p>
+                 </div>
+                 
+                 <Link 
+                   href={`${baseRoute}/profile`}
+                   onClick={() => setProfileOpen(false)}
+                   className="flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-[var(--text-secondary)] hover:text-blue-500 hover:bg-blue-500/5 transition-all"
+                 >
+                    <User className="w-4 h-4" />
+                    My Profile
+                 </Link>
+                 
+                 <Link 
+                   href={`${baseRoute}/settings`}
+                   onClick={() => setProfileOpen(false)}
+                   className="flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-[var(--text-secondary)] hover:text-blue-500 hover:bg-blue-500/5 transition-all"
+                 >
+                    <Settings className="w-4 h-4" />
+                    Account Settings
+                 </Link>
+
+                 <div className="h-px bg-[var(--border)] my-2" />
+
+                 <Link 
+                   href="/"
+                   className="flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-red-500 hover:bg-red-500/5 transition-all"
+                 >
+                    <LogOut className="w-4 h-4" />
+                    Sign Out
+                 </Link>
               </div>
             )}
           </div>
-
-          {/* Theme Toggle */}
-          <button
-            id="header-theme-toggle"
-            onClick={toggleTheme}
-            className="w-9 h-9 rounded-xl flex items-center justify-center text-[var(--text-secondary)] hover:bg-[var(--bg-muted)] hover:text-[var(--text-primary)] transition-all duration-200 cursor-pointer"
-            aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-            title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-          >
-            {theme === 'light' ? <Moon className="w-4.5 h-4.5" /> : <Sun className="w-4.5 h-4.5" />}
-          </button>
-
-          {/* User Profile */}
-          <Link 
-            href="/"
-            className="ml-1 flex items-center gap-2.5 p-1 pr-3 rounded-xl hover:bg-red-500/10 hover:text-red-500 transition-colors cursor-pointer group"
-            title="Switch Context / Logout"
-          >
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-500 to-sky-600 flex items-center justify-center ring-2 ring-[var(--border)] group-hover:ring-red-500 transition-all shadow-md overflow-hidden">
-              <span className="text-white text-xs font-black">SA</span>
-            </div>
-            <div className="hidden lg:block min-w-0">
-               <p className="text-[11px] font-bold text-[var(--text-primary)] group-hover:text-red-500 truncate leading-none mb-0.5 transition-colors">Super Admin</p>
-               <p className="text-[9px] text-[var(--text-muted)] group-hover:text-red-400 font-medium truncate leading-none transition-colors underline decoration-dotted">Switch Role</p>
-            </div>
-          </Link>
         </div>
       </div>
     </header>
   );
 }
+
 function BreadcrumbsWrapper() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -216,11 +254,6 @@ function BreadcrumbsWrapper() {
             >
               {crumb.label}
             </Link>
-            {isLast && (
-               <span className="md:hidden font-bold text-[var(--text-primary)] truncate max-w-[150px]">
-                 {crumb.label}
-               </span>
-            )}
           </div>
         );
       })}

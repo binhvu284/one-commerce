@@ -17,8 +17,6 @@ import {
   User,
   X,
   CreditCard,
-  ExternalLink,
-  Briefcase,
   GitBranch,
   Mail,
   Building,
@@ -30,7 +28,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { useSidebar } from '@/components/providers/SidebarProvider';
-import { useBusinessRole, BusinessRole } from '@/components/providers/RoleProvider';
+import { useBusinessRole } from '@/components/providers/RoleProvider';
 
 interface NavItem {
   id: string;
@@ -38,58 +36,57 @@ interface NavItem {
   href: string;
   icon: ReactNode;
   inDev?: boolean;
+  visible?: boolean;
 }
 
 interface NavSection {
   title: string;
   items: NavItem[];
   id: string;
+  visible?: boolean;
 }
 
 export function Sidebar() {
   const { isCollapsed, setIsCollapsed, isOpen, setIsOpen } = useSidebar();
-  const { role, setRole, isAdmin, isOwner, isManager } = useBusinessRole();
+  const { role, isAdmin, isOwner, isManager } = useBusinessRole();
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
-  const [expandedSections, setExpandedSections] = useState<string[]>(['org', 'biz', 'personal']);
+  const [expandedSections, setExpandedSections] = useState<string[]>(['personal', 'operation', 'business']);
   const pathname = usePathname();
 
-  // Dynamic Navigation based on Roles
-  const navSections = [
+  // Reorganized Navigation Sections
+  const navSections: NavSection[] = [
     {
-      title: 'Organization Setup',
-      id: 'org',
-      visible: isManager, // Owner, Admin, Manager can see Org Setup
+      title: 'Personal',
+      id: 'personal',
+      visible: true,
       items: [
-        { id: 'organization', label: 'My Organization', href: '/business/settings/organization', icon: <Building className="w-4 h-4" />, visible: isManager },
-        { id: 'people', label: 'People & Access', href: '/business/people', icon: <Users className="w-4 h-4" />, visible: isAdmin },
-        { id: 'workspaces', label: 'Workspace', href: '/business/workspaces', icon: <LayoutGrid className="w-4 h-4" />, visible: isManager },
-      ].filter(item => item.visible),
+        { id: 'dashboard', label: 'Dashboard', href: '/business/dashboard', icon: <LayoutDashboard className="w-4 h-4" /> },
+        { id: 'inbox', label: 'Inbox', href: '/business/inbox', icon: <Mail className="w-4 h-4" /> },
+        { id: 'affiliate', label: 'My Member', href: '/business/affiliate', icon: <Share2 className="w-4 h-4" /> },
+        { id: 'wallet', label: 'My Wallet', href: '/business/wallet', icon: <Wallet className="w-4 h-4" /> },
+      ],
     },
     {
-      title: 'Business Management',
-      id: 'biz',
-      visible: isManager, // Owner, Admin, Manager can see Biz Management
+      title: 'Operation',
+      id: 'operation',
+      visible: isManager,
+      items: [
+        { id: 'organization', label: 'My Organization', href: '/business/settings/organization', icon: <Building className="w-4 h-4" /> },
+        { id: 'people', label: 'People & Access', href: '/business/people', icon: <Users className="w-4 h-4" />, visible: isAdmin },
+        { id: 'workspaces', label: 'Workspace', href: '/business/workspaces', icon: <LayoutGrid className="w-4 h-4" /> },
+      ].filter(item => item.visible !== false),
+    },
+    {
+      title: 'Business',
+      id: 'business',
+      visible: isManager,
       items: [
         { id: 'products', label: 'Products', href: '/business/products', icon: <Package className="w-4 h-4" />, inDev: true },
         { id: 'orders', label: 'Orders', href: '/business/orders', icon: <ShoppingBag className="w-4 h-4" />, inDev: true },
         { id: 'customers', label: 'Customers', href: '/business/customers', icon: <Users className="w-4 h-4" />, inDev: true },
       ],
-    },
-    {
-      title: 'Personal Network',
-      id: 'personal',
-      visible: true,
-      items: [
-        { id: 'affiliate', label: 'My Member', href: '/business/affiliate', icon: <Share2 className="w-4 h-4" /> },
-        { id: 'wallet', label: 'My Wallet', href: '/business/wallet', icon: <Wallet className="w-4 h-4" /> },
-      ],
     }
   ].filter(section => section.visible);
-
-  const topItems: NavItem[] = [
-    { id: 'dashboard', label: 'Dashboard', href: '/business/dashboard', icon: <LayoutDashboard className="w-4 h-4" /> },
-    { id: 'inbox', label: 'Inbox', href: '/business/inbox', icon: <Mail className="w-4 h-4" /> },
-  ];
 
   const bottomItems: NavItem[] = [
     { id: 'docs', label: 'Documentation', href: '/business/docs', icon: <FileText className="w-4 h-4" /> },
@@ -205,11 +202,6 @@ export function Sidebar() {
 
       {/* Navigation Scroll Area */}
       <div className="flex-1 overflow-y-auto px-3 py-2 space-y-6 scrollbar-hide">
-        {/* Top Items (No Section) */}
-        <div className="space-y-1">
-          {topItems.map(renderItem)}
-        </div>
-
         {/* Categories / Sections Container */}
         <div className="space-y-6">
           {navSections.map((section) => (
@@ -246,44 +238,13 @@ export function Sidebar() {
             </div>
           ))}
         </div>
-        
-        {/* Bottom Section */}
-        <div className="pt-4 border-t border-white/5 space-y-1">
-          {bottomItems.map(renderItem)}
-        </div>
       </div>
 
-      {/* Footer Profile */}
-      <div className="flex-shrink-0 p-4 border-t border-white/5 bg-black/[0.1]">
-        <div className={cn(
-          "flex items-center gap-3 p-2 rounded-2xl transition-all duration-300 group cursor-pointer hover:bg-white/5",
-          isCollapsed && "justify-center"
-        )}>
-          <div className="relative flex-shrink-0">
-             <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-500 to-sky-500 p-[1px]">
-                <div className="w-full h-full rounded-[11px] bg-sidebar flex items-center justify-center overflow-hidden">
-                   <User className="w-4.5 h-4.5 text-white" />
-                </div>
-             </div>
-             <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 ring-4 ring-[#051e34]" />
+      {/* Bottom Documentation Section */}
+      <div className="flex-shrink-0 p-4 border-t border-white/5 bg-black/[0.05]">
+          <div className="space-y-1">
+             {bottomItems.map(renderItem)}
           </div>
-
-          {!isCollapsed && (
-            <div className="flex-1 min-w-0">
-              <p className="text-[12px] font-bold text-white truncate leading-tight uppercase tracking-tight">{role}</p>
-              <p className="text-[10px] text-indigo-400 truncate font-semibold leading-tight">OneCommerce Org</p>
-            </div>
-          )}
-          
-          {!isCollapsed && (
-            <Link 
-              href="/"
-              className="p-1.5 text-indigo-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all"
-            >
-              <LogOut className="w-4 h-4" />
-            </Link>
-          )}
-        </div>
       </div>
     </div>
   );
@@ -323,7 +284,7 @@ export function Sidebar() {
       </AnimatePresence>
 
       {/* Desktop Persistent Sidebar */}
-      <div className="relative hidden lg:block flex-shrink-0 z-40 h-full">
+      <div className="relative hidden lg:block flex-shrink-0 z-40 h-screen sticky top-0">
         <motion.aside
           animate={{ width: isCollapsed ? 76 : 260 }}
           transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
