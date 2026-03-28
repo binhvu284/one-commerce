@@ -1,6 +1,5 @@
 'use client';
 
-import { UserList } from '@/components/admin/UserList';
 import { Button } from '@/components/ui/Button';
 import { User, Shield, Key } from 'lucide-react';
 
