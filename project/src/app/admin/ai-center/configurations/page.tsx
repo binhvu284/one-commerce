@@ -14,9 +14,8 @@ import {
   Search,
   Zap,
   Mic2,
-  RefreshCw,
-  Globe,
-  Copy,
+  Bot,
+  Copy
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
@@ -206,61 +205,78 @@ export default function AIConfigurationsPage() {
         </div>
       </header>
 
-      {/* Provider Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {filteredProviders.map((provider) => (
-          <motion.div
-            key={provider.id}
-            layoutId={provider.id}
-            onClick={() => setSelectedProvider(provider)}
-            className={cn(
-               "group relative bg-white dark:bg-slate-800/20 border border-slate-200 dark:border-white/5 rounded-3xl p-6 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 hover:border-slate-300 dark:hover:border-white/10 transition-all active:scale-[0.98] shadow-sm hover:shadow-md",
-               selectedProvider?.id === provider.id && "ring-2 ring-indigo-500 border-transparent bg-slate-50 dark:bg-slate-800/60"
-            )}
-          >
-            <div className="flex items-start justify-between mb-4">
-               <div className={cn(
-                 "w-12 h-12 rounded-2xl flex items-center justify-center border shadow-lg transition-transform group-hover:scale-110",
-                 provider.color === 'emerald' ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-500" :
-                 provider.color === 'orange' ? "bg-orange-500/10 border-orange-500/20 text-orange-600 dark:text-orange-500" :
-                 provider.color === 'blue' ? "bg-blue-500/10 border-blue-500/20 text-blue-600 dark:text-blue-500" :
-                 provider.color === 'indigo' ? "bg-indigo-500/10 border-indigo-500/20 text-indigo-600 dark:text-indigo-500" :
-                 "bg-slate-500/10 border-slate-200 dark:border-slate-500/20 text-slate-600 dark:text-slate-400"
-               )}>
-                  {provider.logo}
-               </div>
-               <Badge variant="neutral" className="rounded-lg uppercase text-[8px] font-black tracking-widest px-2 py-0.5 border-slate-200 dark:border-white/5 bg-slate-100 dark:bg-slate-700/50 text-slate-600 dark:text-slate-300">
-                  {provider.type}
-               </Badge>
-            </div>
+      {/* Grouped Provider Sections */}
+      <div className="space-y-12">
+        {['llm', 'voice', 'specialized'].map((type) => {
+          const providers = filteredProviders.filter(p => p.type === type);
+          if (providers.length === 0) return null;
 
-            <div className="space-y-1">
-               <h3 className="text-base font-black text-slate-900 dark:text-white">{provider.name}</h3>
-               <p className="text-[11px] text-slate-500 font-bold leading-relaxed">{provider.description}</p>
-            </div>
+          return (
+            <div key={type} className="space-y-6">
+              <div className="flex items-center gap-3">
+                 <div className="h-px flex-1 bg-slate-200 dark:bg-white/5" />
+                 <h3 className="text-xs font-black text-slate-400 dark:text-slate-600 uppercase tracking-[0.3em] flex items-center gap-2">
+                    {type === 'llm' ? <Bot className="w-3.5 h-3.5" /> : type === 'voice' ? <Mic2 className="w-3.5 h-3.5" /> : <Zap className="w-3.5 h-3.5" />}
+                    {type === 'llm' ? 'LLM Models' : type === 'voice' ? 'Voice & Audio' : 'Specialized Agents'}
+                 </h3>
+                 <div className="h-px flex-1 bg-slate-200 dark:bg-white/5" />
+              </div>
 
-            <div className="mt-6 pt-4 border-t border-slate-100 dark:border-white/5 flex items-center justify-between">
-               <div className="flex items-center gap-2">
-                  <div className={cn(
-                    "w-1.5 h-1.5 rounded-full",
-                    isConfigured(provider.id) ? "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" : "bg-slate-300 dark:bg-slate-700"
-                  )} />
-                  <span className={cn(
-                    "text-[10px] font-black uppercase tracking-widest",
-                    isConfigured(provider.id) ? "text-emerald-600 dark:text-emerald-500" : "text-slate-400 dark:text-slate-600"
-                  )}>
-                    {isConfigured(provider.id) ? 'Configured' : 'Not Configured'}
-                  </span>
-               </div>
-               <div className={cn(
-                  "p-2 transition-colors",
-                  isConfigured(provider.id) ? "text-emerald-600 dark:text-emerald-500" : "text-slate-400 dark:text-slate-600 group-hover:text-indigo-400"
-               )}>
-                  <Settings2 className="w-4 h-4" />
-               </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                {providers.map((provider) => (
+                  <motion.div
+                    key={provider.id}
+                    layoutId={provider.id}
+                    onClick={() => setSelectedProvider(provider)}
+                    className={cn(
+                       "group relative bg-white dark:bg-slate-800/20 border border-slate-200 dark:border-white/5 rounded-3xl p-6 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 hover:border-slate-300 dark:hover:border-white/10 transition-all active:scale-[0.98] shadow-sm hover:shadow-md",
+                       selectedProvider?.id === provider.id && "ring-2 ring-indigo-500 border-transparent bg-slate-50 dark:bg-slate-800/60"
+                    )}
+                  >
+                    <div className="flex items-start justify-between mb-4">
+                       <div className={cn(
+                         "w-12 h-12 rounded-2xl flex items-center justify-center border shadow-lg transition-transform group-hover:scale-110",
+                         provider.color === 'emerald' ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-500" :
+                         provider.color === 'orange' ? "bg-orange-500/10 border-orange-500/20 text-orange-600 dark:text-orange-500" :
+                         provider.color === 'blue' ? "bg-blue-500/10 border-blue-500/20 text-blue-600 dark:text-blue-500" :
+                         provider.color === 'indigo' ? "bg-indigo-500/10 border-indigo-500/20 text-indigo-600 dark:text-indigo-500" :
+                         "bg-slate-500/10 border-slate-200 dark:border-slate-500/20 text-slate-600 dark:text-slate-400"
+                       )}>
+                          {provider.logo}
+                       </div>
+                    </div>
+
+                    <div className="space-y-1">
+                       <h3 className="text-base font-black text-slate-900 dark:text-white">{provider.name}</h3>
+                       <p className="text-[11px] text-slate-500 font-bold leading-relaxed">{provider.description}</p>
+                    </div>
+
+                    <div className="mt-6 pt-4 border-t border-slate-100 dark:border-white/5 flex items-center justify-between">
+                       <div className="flex items-center gap-2">
+                          <div className={cn(
+                            "w-1.5 h-1.5 rounded-full",
+                            isConfigured(provider.id) ? "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" : "bg-slate-300 dark:bg-slate-700"
+                          )} />
+                          <span className={cn(
+                            "text-[10px] font-black uppercase tracking-widest",
+                            isConfigured(provider.id) ? "text-emerald-600 dark:text-emerald-500" : "text-slate-400 dark:text-slate-600"
+                          )}>
+                            {isConfigured(provider.id) ? 'Ready' : 'Setup Required'}
+                          </span>
+                       </div>
+                       <div className={cn(
+                          "p-2 transition-colors",
+                          isConfigured(provider.id) ? "text-emerald-600 dark:text-emerald-500" : "text-slate-400 dark:text-slate-600 group-hover:text-indigo-400"
+                       )}>
+                          <Settings2 className="w-4 h-4" />
+                       </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
             </div>
-          </motion.div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Config Panel (Modal/Sheet) */}

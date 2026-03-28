@@ -143,8 +143,95 @@ export default function AIAnalyticsPage() {
           </div>
         </div>
       </div>
+
+      {/* AI Feature Roadmap */}
+      <div className="bg-white dark:bg-slate-800/20 border border-slate-200 dark:border-white/5 rounded-[2.5rem] p-8 space-y-8 shadow-sm">
+        <div className="flex items-center justify-between">
+            <div className="space-y-1">
+                <h3 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight">AI Infrastructure Roadmap</h3>
+                <p className="text-xs text-slate-500 font-bold uppercase tracking-widest leading-normal">Development Progress & Deployment Status</p>
+            </div>
+            <div className="px-4 py-1.5 rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/10 text-[9px] font-black tracking-widest uppercase">
+                Internal v1.5.0
+            </div>
+        </div>
+
+        <div className="overflow-x-auto">
+            <table className="w-full text-left border-separate border-spacing-y-0">
+                <thead>
+                    <tr className="border-b border-slate-100 dark:border-white/5">
+                        <th className="pb-4 pt-2 text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest px-4">Feature Name</th>
+                        <th className="pb-4 pt-2 text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest px-4">Deployment Status</th>
+                        <th className="pb-4 pt-2 text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest px-4">Target Audience</th>
+                        <th className="pb-4 pt-2 text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest px-4">Description</th>
+                    </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-50 dark:divide-white/5">
+                    <RoadmapRow 
+                        name="Advanced AI Chat" 
+                        status="Published" 
+                        audience="Admin, Business" 
+                        description="Multi-model support with Canvas artifacts & Context-aware memory." 
+                    />
+                    <RoadmapRow 
+                        name="Voice Lab (Real-time)" 
+                        status="Testing" 
+                        audience="Admin" 
+                        description="Direct integration with ElevenLabs & Vapi for low-latency voice AI." 
+                    />
+                    <RoadmapRow 
+                        name="Customer Simulator" 
+                        status="Testing" 
+                        audience="Business, Admin" 
+                        description="Simulation environment to test AI agent performance with fake customers." 
+                    />
+                    <RoadmapRow 
+                        name="Prompt Lab" 
+                        status="Developing" 
+                        audience="Admin" 
+                        description="Central repository for prompt engineering, versioning, and direct A/B testing." 
+                    />
+                    <RoadmapRow 
+                        name="Agentic Task Flow" 
+                        status="Developing" 
+                        audience="Admin" 
+                        description="Build complex autonomous workflows using CrewAI and LangGraph logic." 
+                    />
+                </tbody>
+            </table>
+        </div>
+      </div>
     </div>
   );
+}
+
+function RoadmapRow({ name, status, audience, description }: { name: string, status: 'Published' | 'Testing' | 'Developing', audience: string, description: string }) {
+    return (
+        <tr className="group hover:bg-slate-50 dark:hover:bg-white/2 transition-colors">
+            <td className="py-6 px-4">
+                <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 rounded-full bg-indigo-500 shadow-[0_0_8px_rgba(79,70,229,0.5)]" />
+                    <span className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight">{name}</span>
+                </div>
+            </td>
+            <td className="py-6 px-4">
+                <div className={cn(
+                    "inline-flex items-center px-2.5 py-1 rounded-lg text-[9px] font-black tracking-widest uppercase border",
+                    status === 'Published' ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-500 border-emerald-500/10" :
+                    status === 'Testing' ? "bg-amber-500/10 text-amber-600 dark:text-amber-500 border-amber-500/10" :
+                    "bg-blue-500/10 text-blue-600 dark:text-blue-500 border-blue-500/10"
+                )}>
+                    {status}
+                </div>
+            </td>
+            <td className="py-6 px-4">
+                <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">{audience}</span>
+            </td>
+            <td className="py-6 px-4">
+                <p className="text-[11px] text-slate-400 dark:text-slate-600 font-bold leading-relaxed max-w-sm lowercase">{description}</p>
+            </td>
+        </tr>
+    );
 }
 
 function StatCard({ label, value, trend, trendUp, icon }: { label: string, value: string, trend: string, trendUp: boolean, icon: React.ReactNode }) {
