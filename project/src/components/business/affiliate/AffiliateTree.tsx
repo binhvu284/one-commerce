@@ -27,57 +27,56 @@ const generateFlowElements = (data: AffiliateNode[]) => {
   const nodes: any[] = [];
   const edges: any[] = [];
 
-  const LEVEL_HEIGHT = 400;
-  const LEVEL_SPACING = [0, 2400, 600, 200, 100, 50]; // Spacing between brothers at each level
-
+  const LEVEL_HEIGHT = 420; // Increased spacing for vertical depth
   const childrenMap = new Map<string | null, AffiliateNode[]>();
+  
   data.forEach(node => {
     const parentId = node.parentId;
     if (!childrenMap.has(parentId)) childrenMap.set(parentId, []);
     childrenMap.get(parentId)!.push(node);
   });
 
-  const positionNode = (nodeId: string | null, parentX: number = 0, currentLevel: number = 0) => {
+  // Simple recursive layout algorithm
+  const getSubtreeWidth = (nodeId: string | null): number => {
     const children = childrenMap.get(nodeId) || [];
-    const count = children.length;
-    const spacing = LEVEL_SPACING[currentLevel + 1] || 100;
+    if (children.length === 0) return 300; // Base width for a single node
+    return children.reduce((acc, child) => acc + getSubtreeWidth(child.id), 0);
+  };
 
-    children.forEach((child, index) => {
-      // Center children around parentX
-      const x = parentX + (index - (count - 1) / 2) * spacing;
-      const y = currentLevel * LEVEL_HEIGHT;
+  const positionNode = (node: AffiliateNode, startX: number, currentLevel: number) => {
+    const subtreeWidth = getSubtreeWidth(node.id);
+    const x = startX + subtreeWidth / 2;
+    const y = currentLevel * LEVEL_HEIGHT;
 
-      nodes.push({
-        id: child.id,
-        type: 'affiliate',
-        position: { x, y },
-        data: child,
+    nodes.push({
+      id: node.id,
+      type: 'affiliate',
+      position: { x, y },
+      data: { ...node, level: currentLevel },
+    });
+
+    if (node.parentId) {
+      edges.push({
+        id: `e-${node.parentId}-${node.id}`,
+        source: node.parentId,
+        target: node.id,
+        animated: true,
+        style: { stroke: '#6366f1', strokeWidth: 3, opacity: 0.4 },
+        markerEnd: { type: MarkerType.ArrowClosed, color: '#6366f1', size: 20 },
       });
+    }
 
-      if (nodeId) {
-        edges.push({
-          id: `e-${nodeId}-${child.id}`,
-          source: nodeId,
-          target: child.id,
-          animated: true,
-          style: { stroke: '#6366f1', strokeWidth: 2, opacity: 0.6 },
-          markerEnd: { type: MarkerType.ArrowClosed, color: '#6366f1' },
-        });
-      }
-
-      positionNode(child.id, x, currentLevel + 1);
+    let currentX = startX;
+    const children = childrenMap.get(node.id) || [];
+    children.forEach((child) => {
+      positionNode(child, currentX, currentLevel + 1);
+      currentX += getSubtreeWidth(child.id);
     });
   };
 
   const root = data.find(n => n.parentId === null);
   if (root) {
-    nodes.push({
-      id: root.id,
-      type: 'affiliate',
-      position: { x: 0, y: 0 },
-      data: root,
-    });
-    positionNode(root.id, 0, 1);
+    positionNode(root, -getSubtreeWidth(root.id) / 2, 0);
   }
 
   return { nodes, edges };
