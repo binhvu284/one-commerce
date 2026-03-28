@@ -16,7 +16,7 @@ interface RoleModalProps {
 }
 
 export function RoleModal({ user, open, onClose, onSave }: RoleModalProps) {
-  const [selectedRole, setSelectedRole] = useState<BusinessRole>('staff');
+  const [selectedRole, setSelectedRole] = useState<BusinessRole>('STAFF');
   const [enabledPermissions, setEnabledPermissions] = useState<string[]>([]);
 
   useEffect(() => {
@@ -29,10 +29,9 @@ export function RoleModal({ user, open, onClose, onSave }: RoleModalProps) {
   if (!user) return null;
 
   const roles: { id: BusinessRole; title: string; desc: string }[] = [
-    { id: 'owner', title: 'Owner', desc: 'Full access to everything including billing and deletion.' },
-    { id: 'admin', title: 'Admin', desc: 'Can manage most settings and users, but can\'t delete organization.' },
-    { id: 'manager', title: 'Manager', desc: 'Can manage products, orders and view basic reports.' },
-    { id: 'staff', title: 'Staff', desc: 'Limited access, mainly for order fulfillment and support.' },
+    { id: 'OWNER', title: 'Owner', desc: 'Full access to everything including billing and deletion.' },
+    { id: 'ADMIN', title: 'Admin', desc: 'Can manage most settings and users, but can\'t delete organization.' },
+    { id: 'STAFF', title: 'Staff', desc: 'Limited access, mainly for order fulfillment and support.' },
   ];
 
   const handleTogglePermission = (id: string) => {

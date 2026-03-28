@@ -59,7 +59,7 @@ export interface OrgUser {
   id: string;
   name: string;
   email: string;
-  role: 'owner' | 'admin' | 'manager' | 'staff';
+  role: 'OWNER' | 'ADMIN' | 'STAFF';
   avatar?: string;
   joinedAt: string;
   lastActive: string;

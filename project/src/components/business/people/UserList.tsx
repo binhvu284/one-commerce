@@ -8,10 +8,9 @@ import { BusinessUser, BusinessRole } from '@/lib/types/business';
 import { motion } from 'framer-motion';
 
 const roleConfig: Record<BusinessRole, { label: string; variant: any; icon: any }> = {
-  owner: { label: 'Owner', variant: 'purple', icon: Shield },
-  admin: { label: 'Admin', variant: 'info', icon: Shield },
-  manager: { label: 'Manager', variant: 'success', icon: Shield },
-  staff: { label: 'Staff', variant: 'neutral', icon: Shield },
+  OWNER: { label: 'Owner', variant: 'purple', icon: Shield },
+  ADMIN: { label: 'Admin', variant: 'info', icon: Shield },
+  STAFF: { label: 'Staff', variant: 'neutral', icon: Shield },
 };
 
 interface UserListProps {

@@ -36,9 +36,9 @@ export default function PeoplePage() {
 
   const handleEditRole = (user: BusinessUser) => {
     // Owner cannot be edited by anyone
-    if (user.role === 'owner') return;
+    if (user.role === 'OWNER') return;
     // Admin can only be edited by Owner
-    if (user.role === 'admin' && !isOwner) return;
+    if (user.role === 'ADMIN' && !isOwner) return;
 
     setSelectedUser(user);
     setIsModalOpen(true);

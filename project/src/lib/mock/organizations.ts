@@ -85,10 +85,10 @@ export function getOrgById(id: string): Organization | undefined {
 }
 
 export const mockOrgUsers: OrgUser[] = [
-  { id: 'usr_001', name: 'Nguyen Thi Lan', email: 'lan@luxefashion.vn', role: 'owner', status: 'active', joinedAt: '2024-08-15', lastActive: '2026-03-25' },
-  { id: 'usr_002', name: 'Le Binh', email: 'binh@luxefashion.vn', role: 'admin', status: 'active', joinedAt: '2024-09-01', lastActive: '2026-03-26' },
-  { id: 'usr_003', name: 'Tran Hoa', email: 'hoa@luxefashion.vn', role: 'manager', status: 'active', joinedAt: '2024-10-10', lastActive: '2026-03-24' },
-  { id: 'usr_004', name: 'Pham Minh', email: 'minh@luxefashion.vn', role: 'staff', status: 'inactive', joinedAt: '2025-01-05', lastActive: '2026-02-28' },
+  { id: 'usr_001', name: 'Nguyen Thi Lan', email: 'lan@luxefashion.vn', role: 'OWNER', status: 'active', joinedAt: '2024-08-15', lastActive: '2026-03-25' },
+  { id: 'usr_002', name: 'Le Binh', email: 'binh@luxefashion.vn', role: 'ADMIN', status: 'active', joinedAt: '2024-09-01', lastActive: '2026-03-26' },
+  { id: 'usr_003', name: 'Tran Hoa', email: 'hoa@luxefashion.vn', role: 'ADMIN', status: 'active', joinedAt: '2024-10-10', lastActive: '2026-03-24' },
+  { id: 'usr_004', name: 'Pham Minh', email: 'minh@luxefashion.vn', role: 'STAFF', status: 'inactive', joinedAt: '2025-01-05', lastActive: '2026-02-28' },
 ];
 
 export const mockOrgActivity: OrgActivity[] = [
