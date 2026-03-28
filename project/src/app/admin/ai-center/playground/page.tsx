@@ -180,32 +180,34 @@ function PlaygroundContent() {
 
   return (
     <div className="flex flex-col gap-8 h-full min-h-[70vh]">
-      <div className="flex items-center justify-between">
-        <button 
-            onClick={() => setActiveTab(null)}
-            className="flex items-center gap-2 px-6 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/5 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-indigo-600 transition-all shadow-sm"
-        >
-            <ChevronRight className="w-4 h-4 rotate-180" />
-            Back to selection
-        </button>
+      {activeTab !== 'chat' && (
+        <div className="flex items-center justify-between">
+          <button 
+              onClick={() => setActiveTab(null)}
+              className="flex items-center gap-2 px-6 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/5 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-indigo-600 transition-all shadow-sm"
+          >
+              <ChevronRight className="w-4 h-4 rotate-180" />
+              Back to selection
+          </button>
 
-        <div className="flex items-center gap-3">
-             <div className="text-right">
-                <p className="text-[10px] font-black text-indigo-500 uppercase tracking-widest leading-none mb-1">Testing</p>
-                <h4 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight">{FEATURES.find(f => f.id === activeTab)?.label}</h4>
-             </div>
-             <div className="w-10 h-10 rounded-xl bg-indigo-500 flex items-center justify-center text-white shadow-lg">
-                {FEATURES.find(f => f.id === activeTab)?.icon}
-             </div>
+          <div className="flex items-center gap-3">
+              <div className="text-right">
+                  <p className="text-[10px] font-black text-indigo-500 uppercase tracking-widest leading-none mb-1">Testing</p>
+                  <h4 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight">{FEATURES.find(f => f.id === activeTab)?.label}</h4>
+              </div>
+              <div className="w-10 h-10 rounded-xl bg-indigo-500 flex items-center justify-center text-white shadow-lg">
+                  {FEATURES.find(f => f.id === activeTab)?.icon}
+              </div>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Main Content Area */}
       <div className={cn(
-        "flex-1 overflow-hidden min-h-[600px] flex flex-col origin-top",
+        "flex-1 overflow-hidden min-h-[600px] flex flex-col origin-top transition-all duration-500",
         activeTab === 'chat' 
-          ? "bg-transparent shadow-none border-none rounded-none" 
-          : "bg-white dark:bg-slate-950 border border-slate-200 dark:border-white/5 rounded-[2.5rem] shadow-xl"
+          ? "bg-transparent -m-4 md:-m-6 lg:-m-8 h-[calc(100vh-60px)]" // Negate parent padding
+          : "max-w-7xl mx-auto w-full bg-white dark:bg-slate-950 border border-slate-200 dark:border-white/5 rounded-[2.5rem] shadow-xl"
       )}>
         <AnimatePresence mode="wait">
           <motion.div
@@ -215,7 +217,7 @@ function PlaygroundContent() {
             exit={{ opacity: 0, y: -20 }}
             className="flex-1 flex flex-col h-full bg-slate-50/30 dark:bg-slate-900/50"
           >
-            {activeTab === 'chat' && <ChatModule />}
+            {activeTab === 'chat' && <ChatModule onBack={() => setActiveTab(null)} />}
             {activeTab === 'voice' && (
                <div className="p-10 flex flex-col items-center justify-center gap-10">
                   <div className="relative">

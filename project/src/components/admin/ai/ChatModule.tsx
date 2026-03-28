@@ -24,7 +24,12 @@ import {
   ChevronLeft,
   X,
   FileText,
-  Image as ImageIcon
+  Image as ImageIcon,
+  MoreVertical,
+  ThumbsUp,
+  ThumbsDown,
+  MessageSquare,
+  ArrowRight
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/cn';
@@ -38,15 +43,14 @@ interface Message {
 }
 
 const MODELS = [
+  { id: 'gemini-1-5-pro', name: 'Gemini 1.5 Pro', provider: 'Google', color: 'text-blue-500' },
   { id: 'gpt-4o', name: 'GPT-4o', provider: 'OpenAI', color: 'text-emerald-500' },
-  { id: 'claude-3-5-sonnet', name: 'Claude 3.5', provider: 'Anthropic', color: 'text-orange-500' },
-  { id: 'gemini-1-5-pro', name: 'Gemini 1.5', provider: 'Google', color: 'text-blue-500' },
-  { id: 'llama-3-70b', name: 'Llama 3.1', provider: 'Meta', color: 'text-indigo-500' },
+  { id: 'claude-3-5-sonnet', name: 'Claude 3.5 Sonnet', provider: 'Anthropic', color: 'text-orange-500' },
 ];
 
-export function ChatModule() {
+export function ChatModule({ onBack }: { onBack?: () => void }) {
   const [messages, setMessages] = useState<Message[]>([
-    { id: '1', role: 'assistant', content: 'Hello Admin! Welcome to the new AI Chat Lab. How can I assist you with your eCommerce infrastructure today?' }
+    { id: '1', role: 'assistant', content: 'Hello Admin! I am the OneCommerce AI Assistant. How can I help you build and scale your operations today?' }
   ]);
   const [input, setInput] = useState('');
   const [isStreaming, setIsStreaming] = useState(false);
@@ -60,15 +64,14 @@ export function ChatModule() {
 
   useEffect(() => {
     if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+      scrollRef.current.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
     }
   }, [messages]);
 
   const handleSend = async () => {
     if (!input.trim() || isStreaming) return;
     const currentInput = input;
-    const currentTool = activeTool;
-    const userMsg: Message = { id: Date.now().toString(), role: 'user', content: currentInput, toolUsed: currentTool || undefined };
+    const userMsg: Message = { id: Date.now().toString(), role: 'user', content: currentInput };
     setMessages(prev => [...prev, userMsg]);
     setInput('');
     setIsStreaming(true);
@@ -84,7 +87,6 @@ export function ChatModule() {
         body: JSON.stringify({
           messages: [...messages, userMsg].map(m => ({ role: m.role, content: m.content })),
           provider_id: selectedModel.id,
-          tools: currentTool ? [currentTool] : []
         })
       });
 
@@ -103,109 +105,112 @@ export function ChatModule() {
         }
       }
     } catch (error) {
-       setMessages(prev => prev.map(m => m.id === assistantId ? { ...m, content: 'Error: Connection failed. Check API config.' } : m));
+       setMessages(prev => prev.map(m => m.id === assistantId ? { ...m, content: 'Error: Connection failed detected. Please check your credentials.' } : m));
     } finally {
       setIsStreaming(false);
-      setActiveTool(null);
     }
   };
 
   return (
-    <div className="flex h-full bg-transparent overflow-hidden relative">
+    <div className="flex w-full h-full bg-slate-50 dark:bg-slate-950 overflow-hidden text-slate-900 dark:text-slate-100 font-sans selection:bg-blue-500/20">
       
-      {/* 1. Left Sidebar: History */}
+      {/* 1. Left Navigation Sidebar: Gemini Integrated Style */}
       <AnimatePresence initial={false}>
         {sidebarOpen && (
           <motion.div 
-            initial={{ width: 0, opacity: 0 }}
-            animate={{ width: 280, opacity: 1 }}
-            exit={{ width: 0, opacity: 0 }}
-            className="flex flex-col border-r border-slate-200 dark:border-white/5 bg-white/50 dark:bg-slate-900/50 backdrop-blur-xl h-full flex-shrink-0 relative overflow-hidden"
+            initial={{ x: -260 }}
+            animate={{ x: 0 }}
+            exit={{ x: -260 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            className="flex flex-col w-[260px] h-full bg-slate-100/30 dark:bg-white/[0.02] border-r border-slate-200 dark:border-white/[0.05] flex-shrink-0 z-20 backdrop-blur-xl"
           >
-             <div className="p-4 flex flex-col h-full">
-                <Button 
-                    variant="outline" 
-                    className="w-full justify-start gap-2 rounded-2xl border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 font-bold uppercase text-[10px] tracking-widest h-11"
-                    onClick={() => setMessages([{ id: Date.now().toString(), role: 'assistant', content: 'New session started. How can I help?' }])}
+             <div className="flex flex-col h-full p-4 pt-10">
+                <button 
+                    onClick={() => setMessages([{ id: Date.now().toString(), role: 'assistant', content: 'New session started. How can I assist?' }])}
+                    className="flex items-center gap-3 px-4 py-3 rounded-full bg-slate-200 dark:bg-white/[0.05] hover:bg-slate-300 dark:hover:bg-white/[0.1] transition-all text-sm font-semibold mb-8 group"
                 >
-                    <Plus className="w-4 h-4 text-emerald-500" />
+                    <Plus className="w-5 h-5 text-blue-500 transition-transform group-hover:rotate-90" />
                     New Chat
-                </Button>
+                </button>
 
-                <div className="mt-8 flex-1 overflow-y-auto space-y-1">
-                   <p className="px-3 text-[9px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest mb-3">Recent History</p>
-                   {['eCommerce Logic Test', 'Prompt Refinement', 'Customer Sim #204', 'API Token Debug'].map((title, i) => (
+                <div className="flex-1 overflow-y-auto space-y-1">
+                   <p className="px-4 text-[11px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-widest mb-4">Recent Conversations</p>
+                   {['eCommerce Agent Workflow', 'Platform Growth Plan', 'API Debug Session', 'Customer Support Simulation'].map((title, i) => (
                       <button 
                         key={i}
                         className={cn(
-                            "w-full px-3 py-2.5 rounded-xl text-left text-xs font-bold transition-all flex items-center gap-3",
-                            i === 0 ? "bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/10" : "text-slate-500 hover:bg-slate-100 dark:hover:bg-white/5"
+                            "w-full px-4 py-2.5 rounded-xl text-left text-sm transition-all flex items-center gap-3",
+                            i === 0 ? "bg-white dark:bg-white/5 font-bold shadow-sm" : "text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-white/50 dark:hover:bg-white/[0.02]"
                         )}
                       >
-                         <History className="w-3.5 h-3.5 opacity-50" />
+                         <MessageSquare className="w-4 h-4 opacity-50 flex-shrink-0" />
                          <span className="truncate">{title}</span>
                       </button>
                    ))}
                 </div>
 
-                <div className="pt-4 border-t border-slate-200 dark:border-white/5">
-                   <div className="p-3 bg-gradient-to-br from-indigo-500/10 to-blue-500/10 rounded-2xl border border-indigo-500/10">
-                      <p className="text-[10px] font-black text-indigo-500 uppercase tracking-widest mb-1">PRO Plan</p>
-                      <p className="text-[9px] text-slate-500 font-bold mb-3">22,401 tokens used today.</p>
-                      <div className="h-1 w-full bg-slate-200 dark:bg-white/5 rounded-full overflow-hidden">
-                         <div className="h-full bg-indigo-500 w-1/3" />
-                      </div>
-                   </div>
+                <div className="mt-auto space-y-1 pt-4 border-t border-slate-200 dark:border-white/[0.05]">
+                    <button className="w-full px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/50 dark:hover:bg-white/[0.02] transition-all flex items-center gap-3 text-slate-500">
+                        <History className="w-4 h-4" />
+                        Activity
+                    </button>
+                    <button className="w-full px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/50 dark:hover:bg-white/[0.02] transition-all flex items-center gap-3 text-slate-500">
+                        <Zap className="w-4 h-4 text-amber-500" />
+                        Upgrade Plan
+                    </button>
                 </div>
              </div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* 2. Main Chat Workspace */}
-      <div className="flex-1 flex flex-col relative min-w-0">
+      {/* 2. Main Content Area */}
+      <div className="flex-1 flex flex-col min-w-0 bg-white dark:bg-slate-950 relative overflow-hidden transition-all duration-500">
          
-         {/* Top Header */}
-         <div className="h-16 flex items-center justify-between px-6 border-b border-slate-200 dark:border-white/5 bg-white/30 dark:bg-slate-950/30 backdrop-blur-md">
-            <div className="flex items-center gap-4">
+         {/* Top Unified Header (Gemini Style) */}
+         <div className="h-14 flex items-center justify-between px-4 border-b border-transparent sticky top-0 bg-white/50 dark:bg-slate-950/50 backdrop-blur-xl z-30">
+            <div className="flex items-center gap-2">
                 <button 
                     onClick={() => setSidebarOpen(!sidebarOpen)}
-                    className="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-white/5 text-slate-400 dark:text-slate-600 transition-all"
+                    className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-white/5 transition-all outline-none"
+                    title={sidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
                 >
-                    <Layout className="w-4 h-4" />
+                    <Layout className="w-5 h-5 text-slate-500" />
                 </button>
-                <div className="relative group">
+                
+                <div className="flex items-center gap-2 bg-slate-100 dark:bg-white/5 px-4 py-1.5 rounded-full border border-transparent hover:border-slate-200 dark:hover:border-white/10 transition-all cursor-pointer group relative">
                     <button 
                         onClick={() => setIsModelMenuOpen(!isModelMenuOpen)}
-                        className="flex items-center gap-2.5 px-3 py-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-white/5 transition-all outline-none"
+                        className="flex items-center gap-2 outline-none"
                     >
-                        <span className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight flex items-center gap-2">
-                            {selectedModel.name}
-                            <ChevronDown className="w-4 h-4 text-slate-400" />
+                        <span className="text-[13px] font-bold text-slate-700 dark:text-slate-200 flex items-center gap-2">
+                           {selectedModel.name}
+                           <ChevronDown className={cn("w-3.5 h-3.5 text-slate-400 dark:text-slate-600 transition-transform", isModelMenuOpen && "rotate-180")} />
                         </span>
                     </button>
+                    
                     {isModelMenuOpen && (
                         <>
                             <div className="fixed inset-0 z-40" onClick={() => setIsModelMenuOpen(false)} />
                             <motion.div 
-                                initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                                animate={{ opacity: 1, y: 0, scale: 1 }}
-                                className="absolute top-full left-0 mt-2 w-64 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-[1.5rem] shadow-2xl z-50 p-2 overflow-hidden"
+                                initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                                animate={{ opacity: 1, scale: 1, y: 0 }}
+                                className="absolute top-full left-0 mt-2 w-72 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-2xl shadow-2xl z-50 p-2 overflow-hidden shadow-indigo-500/5"
                             >
                                 {MODELS.map(m => (
                                     <button 
                                         key={m.id}
                                         onClick={() => { setSelectedModel(m); setIsModelMenuOpen(false); }}
                                         className={cn(
-                                            "w-full p-3 flex flex-col items-start gap-1 rounded-xl transition-all",
-                                            selectedModel.id === m.id ? "bg-indigo-500/10" : "hover:bg-slate-50 dark:hover:bg-white/5"
+                                            "w-full p-3.5 flex flex-col items-start gap-0.5 rounded-xl transition-all",
+                                            selectedModel.id === m.id ? "bg-blue-500/10" : "hover:bg-slate-50 dark:hover:bg-white/5"
                                         )}
                                     >
                                         <div className="flex items-center gap-2">
-                                            <Sparkles className={cn("w-3.5 h-3.5", m.color)} />
-                                            <span className="text-[11px] font-black uppercase tracking-widest text-slate-900 dark:text-white">{m.name}</span>
+                                            <Sparkles className={cn("w-4 h-4", m.id === 'gemini-1-5-pro' ? "text-blue-500" : "text-amber-500")} />
+                                            <span className="text-sm font-bold text-slate-900 dark:text-white">{m.name}</span>
                                         </div>
-                                        <span className="text-[9px] font-bold text-slate-400 dark:text-slate-500 lowercase ml-5">{m.provider} API - High Intelligence</span>
+                                        <span className="text-[10px] text-slate-400 font-medium ml-6">{m.provider} High Performance</span>
                                     </button>
                                 ))}
                             </motion.div>
@@ -214,157 +219,154 @@ export function ChatModule() {
                 </div>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-4">
                 <Button 
                     variant="ghost" 
-                    size="icon" 
-                    className={cn(
-                        "rounded-xl transition-all",
-                        showCanvas ? "bg-indigo-600/10 text-indigo-600" : "text-slate-400"
-                    )}
+                    size="sm"
+                    className="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-blue-500 transition-all rounded-full px-4 h-9"
+                    onClick={onBack}
+                >
+                   Close Session
+                </Button>
+                <button 
                     onClick={() => setShowCanvas(!showCanvas)}
+                    className={cn(
+                        "p-2 rounded-full transition-all duration-300",
+                        showCanvas ? "bg-blue-500 text-white shadow-lg shadow-blue-500/20" : "text-slate-500 hover:bg-slate-100 dark:hover:bg-white/5"
+                    )}
                 >
                     <PanelRight className="w-5 h-5" />
-                </Button>
+                </button>
             </div>
          </div>
 
-         {/* Messages Area */}
+         {/* Messages Area (Centric wide flow) */}
          <div 
             ref={scrollRef}
-            className="flex-1 overflow-y-auto overflow-x-hidden scrollbar-hide flex flex-col items-center bg-slate-50/20 dark:bg-slate-950/20"
+            className="flex-1 overflow-y-auto scrollbar-hide bg-white dark:bg-slate-950 px-4 md:px-0"
          >
-            <div className="w-full max-w-3xl flex flex-col px-6 py-10 space-y-10">
-                {messages.map((msg) => (
+            <div className="max-w-4xl mx-auto w-full flex flex-col py-12 space-y-12">
+                {messages.map((msg, idx) => (
                     <motion.div 
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         key={msg.id} 
                         className={cn(
-                            "flex items-start gap-6 group",
+                            "flex items-start gap-4 md:gap-7 group",
                             msg.role === 'user' ? "flex-row-reverse" : "flex-row"
                         )}
                     >
-                        {/* Avatar */}
+                        {/* Gemini Assistant Star or User Icon */}
                         <div className={cn(
-                            "w-10 h-10 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg border",
+                            "w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center flex-shrink-0 relative",
                             msg.role === 'assistant' 
-                                ? "bg-indigo-600 border-indigo-500 text-white" 
-                                : "bg-white dark:bg-slate-800 border-slate-200 dark:border-white/5 text-slate-500"
+                                ? "bg-transparent text-blue-500" 
+                                : "bg-slate-200 dark:bg-white/[0.05] text-slate-600 dark:text-slate-300 font-bold"
                         )}>
-                            {msg.role === 'assistant' ? <Bot className="w-5 h-5" /> : <User className="w-5 h-5" />}
+                            {msg.role === 'assistant' ? (
+                                <Sparkles className="w-6 h-6 md:w-8 md:h-8" />
+                            ) : (
+                                <div className="text-sm md:text-base">LB</div>
+                            )}
                         </div>
 
-                        {/* Content */}
+                        {/* Content Shell */}
                         <div className={cn(
-                            "flex flex-col gap-3 min-w-0 max-w-[80%]",
+                            "flex flex-col gap-4 min-w-0 flex-1",
                             msg.role === 'user' ? "items-end" : "items-start"
                         )}>
                             <div className={cn(
-                                "p-6 rounded-[2rem] text-sm md:text-base font-medium leading-[1.8] tracking-tight transition-all",
+                                "text-sm md:text-lg leading-[1.7] whitespace-pre-wrap selection:bg-blue-500/20",
                                 msg.role === 'user' 
-                                    ? "bg-slate-100 dark:bg-white/5 text-slate-800 dark:text-slate-200 rounded-tr-none border border-slate-200 dark:border-white/5" 
-                                    : "bg-transparent text-slate-800 dark:text-slate-200 selection:bg-indigo-500/20"
+                                    ? "bg-slate-100 dark:bg-white/[0.03] px-6 py-3.5 rounded-[1.75rem] max-w-[85%] text-slate-800 dark:text-slate-200" 
+                                    : "text-slate-800 dark:text-slate-200 w-full"
                             )}>
                                 {msg.content}
                                 {msg.content === '' && isStreaming && (
-                                    <span className="inline-block w-2 h-5 bg-indigo-500 animate-pulse ml-1 rounded-sm align-middle" />
+                                    <div className="flex gap-2.5 mt-2">
+                                        <div className="w-1.5 h-1.5 bg-blue-500 animate-bounce rounded-full" />
+                                        <div className="w-1.5 h-1.5 bg-blue-500 animate-bounce rounded-full [animation-delay:-0.15s]" />
+                                        <div className="w-1.5 h-1.5 bg-blue-500 animate-bounce rounded-full [animation-delay:-0.3s]" />
+                                    </div>
                                 )}
                             </div>
 
-                            {/* Actions & Tools Info */}
-                            <div className="flex items-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                                {msg.toolUsed && (
-                                    <Badge className="bg-emerald-500/10 text-emerald-500 border-none font-black text-[8px] tracking-[0.2em] uppercase px-2">
-                                        {msg.toolUsed} Used
-                                    </Badge>
-                                )}
-                                <div className="flex items-center gap-2.5">
-                                    <button className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5 text-slate-400 transition-all" title="Copy"><Copy className="w-3.5 h-3.5" /></button>
-                                    <button className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5 text-slate-400 transition-all" title="Regenerate"><RotateCcw className="w-3.5 h-3.5" /></button>
+                            {/* Gemini Reaction Bar (Subtle) */}
+                            {msg.role === 'assistant' && !isStreaming && msg.content && (
+                                <div className="flex items-center gap-5 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-1 group-hover:translate-y-0 translate-x-1">
+                                    <div className="flex items-center gap-1">
+                                        <button className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-white/5 text-slate-400 dark:text-slate-600 transition-colors"><ThumbsUp className="w-4 h-4" /></button>
+                                        <button className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-white/5 text-slate-400 dark:text-slate-600 transition-colors"><ThumbsDown className="w-4 h-4" /></button>
+                                    </div>
+                                    <div className="h-3 w-px bg-slate-200 dark:bg-white/10" />
+                                    <div className="flex items-center gap-1">
+                                       <button className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-white/5 text-slate-400 dark:text-slate-600 transition-colors"><RotateCcw className="w-4 h-4" /></button>
+                                       <button className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-white/5 text-slate-400 dark:text-slate-600 transition-colors"><Copy className="w-4 h-4" /></button>
+                                       <button className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-white/5 text-slate-400 dark:text-slate-600 transition-colors"><MoreVertical className="w-4 h-4" /></button>
+                                    </div>
                                 </div>
-                            </div>
+                            )}
                         </div>
                     </motion.div>
                 ))}
             </div>
             
-            {/* Spacer for bottom input */}
-            <div className="h-44 flex-shrink-0" />
+            <div className="h-44 md:h-56" /> {/* Scroll Margin */}
          </div>
 
-         {/* 3. Floating Bottom Input Bar (Gemini Style) */}
-         <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 md:pb-10 pointer-events-none bg-gradient-to-t from-white via-white/80 to-transparent dark:from-slate-950 dark:via-slate-950/80">
-            <div className="max-w-3xl mx-auto w-full pointer-events-auto">
-                
-                {/* Active Tool Status (Minimal) */}
-                <AnimatePresence>
-                    {activeTool && (
-                        <motion.div 
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: 10 }}
-                            className="flex items-center gap-2 mb-3 ml-4"
-                        >
-                            <div className="flex items-center gap-1.5 px-3 py-1 bg-indigo-600 text-white rounded-full text-[9px] font-black uppercase tracking-widest shadow-lg shadow-indigo-600/20 animate-pulse">
-                                {activeTool === 'web-search' && <Globe className="w-3 h-3" />}
-                                {activeTool === 'deep-research' && <Zap className="w-3 h-3" />}
-                                {activeTool === 'web-search' ? 'Web Research Active' : 'Thinking Mode ON'}
-                                <button onClick={() => setActiveTool(null)} className="ml-1 hover:text-white/70"><X className="w-3 h-3" /></button>
-                            </div>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-
-                <div className="relative group">
-                    <div className={cn(
-                        "bg-white dark:bg-slate-900 border-2 transition-all duration-300 rounded-[2.5rem] p-3 pl-4 md:pl-6 shadow-2xl overflow-hidden",
-                        "border-slate-200 dark:border-white/10 group-focus-within:border-indigo-500/40 group-focus-within:ring-8 group-focus-within:ring-indigo-500/5"
-                    )}>
-                        <div className="flex items-end gap-3 min-h-[56px]">
-                            {/* Tools Cluster */}
-                            <div className="flex items-center gap-1 pb-1 flex-shrink-0 text-slate-400">
-                                <button title="Web Research" onClick={() => setActiveTool('web-search')} className={cn("p-2.5 rounded-full hover:bg-slate-100 dark:hover:bg-white/5 transition-all outline-none", activeTool === 'web-search' && "text-indigo-600")}>
-                                    <Globe className="w-5 h-5 md:w-5.5 md:h-5.5" />
-                                </button>
-                                <button title="Deep Analyze" onClick={() => setActiveTool('deep-research')} className={cn("p-2.5 rounded-full hover:bg-slate-100 dark:hover:bg-white/5 transition-all outline-none", activeTool === 'deep-research' && "text-amber-500")}>
-                                    <Zap className="w-5 h-5 md:w-5.5 md:h-5.5" />
-                                </button>
-                            </div>
-
-                            <textarea 
-                                value={input}
-                                onChange={(e) => setInput(e.target.value)}
-                                onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), handleSend())}
-                                placeholder="Message OneCommerce AI Assistant..."
-                                className="flex-1 bg-transparent border-none outline-none resize-none text-sm md:text-base py-3.5 max-h-60 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-600 font-bold leading-relaxed scrollbar-hide"
-                                rows={1}
-                            />
-
-                            <div className="flex items-center gap-2 pb-1 pr-1 flex-shrink-0">
-                                <button className="p-3 rounded-full hover:bg-slate-100 dark:hover:bg-white/5 text-slate-400 transition-all outline-none">
-                                    <Paperclip className="w-5 h-5" />
-                                </button>
-                                <button 
-                                    onClick={handleSend}
-                                    disabled={!input.trim() || isStreaming}
-                                    className={cn(
-                                        "w-11 h-11 md:w-12 md:h-12 rounded-full transition-all flex items-center justify-center shadow-lg",
-                                        input.trim() && !isStreaming 
-                                            ? "bg-slate-900 dark:bg-white text-white dark:text-slate-950 scale-100 hover:scale-110 active:scale-95 shadow-xl" 
-                                            : "bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-600 scale-100"
-                                    )}
-                                >
-                                    {isStreaming ? <StopCircle className="w-5 h-5 animate-pulse" /> : <Send className="w-5 h-5" />}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+         {/* 3. The New Gemini Pill Input (Truly Floating) */}
+         <div className="fixed bottom-0 left-0 right-0 p-4 md:p-8 flex flex-col items-center pointer-events-none z-40 bg-gradient-to-t from-white via-white/40 to-transparent dark:from-slate-950 dark:via-slate-950/40">
+            <div 
+                className={cn(
+                    "w-full max-w-4xl bg-slate-100 dark:bg-white/[0.04] p-1 rounded-[2.5rem] pointer-events-auto border-2 transition-all shadow-2xl overflow-hidden backdrop-blur-3xl",
+                    "border-transparent focus-within:border-blue-500/20 focus-within:bg-white dark:focus-within:bg-white/[0.07] focus-within:shadow-blue-500/5"
+                )}
+            >
+                <div className="flex items-end gap-1 px-3 py-1">
+                    <button className="p-3.5 text-slate-400 dark:text-slate-600 hover:text-blue-500 transition-all outline-none flex-shrink-0">
+                        <Plus className="w-6 h-6" />
+                    </button>
                     
-                    {/* Disclaimer */}
-                    <p className="text-[10px] text-center mt-4 font-black text-slate-400 dark:text-slate-700 uppercase tracking-[0.2em]">OneCommerce AI Hub can make mistakes. Verify important info.</p>
+                    <textarea 
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), handleSend())}
+                        placeholder={isStreaming ? "AI is processing..." : "Ask OneCommerce AI..."}
+                        className="flex-1 bg-transparent border-none outline-none resize-none text-[15px] md:text-lg min-h-[52px] py-3.5 max-h-[30vh] text-slate-800 dark:text-slate-200 placeholder:text-slate-400 dark:placeholder:text-slate-700 font-medium leading-relaxed scrollbar-hide mb-1"
+                        rows={1}
+                        disabled={isStreaming}
+                    />
+
+                    <div className="flex items-center gap-1.5 p-2 flex-shrink-0 mb-1">
+                        <button className="p-3 text-slate-400 dark:text-slate-600 hover:text-blue-500 transition-all outline-none hidden md:block">
+                            <Mic className="w-5 h-5" />
+                        </button>
+                        <button className="p-3 text-slate-400 dark:text-slate-600 hover:text-blue-500 transition-all outline-none">
+                            <ImageIcon className="w-5 h-5" />
+                        </button>
+                        <motion.button 
+                           whileHover={{ scale: 1.05 }}
+                           whileTap={{ scale: 0.95 }}
+                           onClick={handleSend}
+                           disabled={!input.trim() || isStreaming}
+                           className={cn(
+                             "w-11 h-11 rounded-full flex items-center justify-center transition-all",
+                             input.trim() && !isStreaming 
+                                ? "bg-blue-600 text-white shadow-xl shadow-blue-500/20" 
+                                : "bg-transparent text-slate-300 dark:text-slate-800"
+                           )}
+                        >
+                            {isStreaming ? (
+                               <StopCircle className="w-5 h-5 animate-pulse" />
+                            ) : (
+                               <ArrowRight className="w-6 h-6" />
+                            )}
+                        </motion.button>
+                    </div>
                 </div>
             </div>
+            {/* Minimal Guardrail */}
+            <p className="mt-4 text-[10px] text-slate-400 dark:text-slate-700 font-bold uppercase tracking-[0.2em] text-center">OneCommerce AI Assistant v3.5 // Powered by Core-Alpha Engine</p>
          </div>
       </div>
 
@@ -373,51 +375,33 @@ export function ChatModule() {
         {showCanvas && (
           <motion.div 
             initial={{ width: 0, opacity: 0 }}
-            animate={{ width: '50%', opacity: 1 }}
+            animate={{ width: sidebarOpen ? '40%' : '50%', opacity: 1 }}
             exit={{ width: 0, opacity: 0 }}
-            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="flex flex-col border-l border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-slate-900 overflow-hidden relative"
+            className="flex flex-col border-l border-slate-200 dark:border-white/[0.05] bg-white dark:bg-slate-900 overflow-hidden relative shadow-2xl"
           >
-             <div className="p-4 flex items-center justify-between bg-white dark:bg-slate-950 border-b border-slate-200 dark:border-white/5">
+             <div className="h-14 flex items-center justify-between px-6 bg-slate-50 dark:bg-slate-950 border-b border-slate-200 dark:border-white/[0.05]">
                 <div className="flex items-center gap-3">
-                    <Layout className="w-4 h-4 text-indigo-500" />
-                    <div>
-                        <h4 className="text-[11px] font-black uppercase tracking-tight text-slate-900 dark:text-white">Active Canvas</h4>
-                        <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Workspace v2.0</p>
-                    </div>
+                   <Monitor className="w-4 h-4 text-blue-500" />
+                   <span className="text-[11px] font-black uppercase tracking-tight text-slate-900 dark:text-white">Live Canvas</span>
                 </div>
-                <button 
-                  onClick={() => setShowCanvas(false)}
-                  className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5 text-slate-400"
-                >
-                  <X className="w-4 h-4" />
-                </button>
              </div>
-             <div className="flex-1 p-8 overflow-y-auto">
-                <div className="max-w-2xl mx-auto space-y-10">
-                   {/* Artifact Placeholder */}
-                   <div className="p-8 rounded-[2.5rem] bg-white dark:bg-slate-950 border border-slate-200 dark:border-white/5 shadow-2xl relative overflow-hidden group">
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 blur-[60px] rounded-full" />
-                        <div className="space-y-6 relative text-slate-800 dark:text-slate-200">
-                           <h2 className="text-2xl font-black tracking-tight leading-none italic uppercase">Generated Workflow</h2>
-                           <p className="text-sm font-medium leading-relaxed text-slate-600 dark:text-slate-400">
-                             OneCommerce Canvas provides a safe space to preview code, documentation, and system logic generated by AI.
-                           </p>
-                           <div className="p-6 rounded-3xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-white/5">
-                              <div className="flex items-center gap-3 mb-4">
-                                 <div className="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center font-bold text-[10px]">TS</div>
-                                 <span className="text-xs font-black uppercase tracking-widest">sync-service.ts</span>
-                              </div>
-                              <pre className="text-[10px] font-mono leading-relaxed opacity-60">
-                                {`export async function syncOrder() {\n  const result = await db.orders.sync();\n  return result.status;\n}`}
-                              </pre>
-                           </div>
-                        </div>
-                   </div>
-                   
-                   <div className="flex-1 flex flex-col items-center justify-center py-20 opacity-30 text-center space-y-4">
-                        <Monitor className="w-12 h-12 mb-2" />
-                        <p className="text-[10px] font-black uppercase tracking-widest">Waiting for Artifacts...</p>
+             <div className="flex-1 p-8 overflow-y-auto bg-slate-50 dark:bg-slate-950">
+                <div className="max-w-xl mx-auto space-y-10">
+                   {/* Artifact UI */}
+                   <div className="p-10 rounded-[3rem] bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/[0.05] shadow-xl relative overflow-hidden">
+                      <div className="absolute top-0 left-0 w-24 h-24 bg-blue-500/10 blur-[50px]" />
+                      <div className="relative space-y-8">
+                         <div className="space-y-4">
+                            <h2 className="text-2xl font-black italic tracking-tight text-slate-900 dark:text-white uppercase leading-none">Drafting Logic</h2>
+                            <p className="text-sm font-medium text-slate-500 dark:text-slate-500 leading-relaxed">Generated code and structural outlines appear here for real-time collaboration.</p>
+                         </div>
+                         <div className="p-6 bg-black/[0.02] dark:bg-white/[0.02] rounded-[2rem] border border-black/5 dark:border-white/5">
+                            <div className="w-full h-44 flex flex-col items-center justify-center gap-3 opacity-20">
+                               <Layout className="w-10 h-10" />
+                               <span className="text-[10px] font-black uppercase tracking-widest leading-none">Awaiting Output</span>
+                            </div>
+                         </div>
+                      </div>
                    </div>
                 </div>
              </div>
@@ -426,12 +410,4 @@ export function ChatModule() {
       </AnimatePresence>
     </div>
   );
-}
-
-function Badge({ children, className }: any) {
-    return (
-        <span className={cn("inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2", className)}>
-            {children}
-        </span>
-    );
 }
