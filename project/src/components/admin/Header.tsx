@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { Search, Bell, Sun, Moon, ChevronRight, X, Menu } from 'lucide-react';
@@ -57,12 +57,9 @@ const mockNotifications = [
 export function Header() {
   const { theme, toggleTheme } = useTheme();
   const { toggleMobile } = useSidebar();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
   const [notifOpen, setNotifOpen] = useState(false);
   const [searchFocused, setSearchFocused] = useState(false);
 
-  const breadcrumbs = getBreadcrumbs(pathname, searchParams);
   const unreadCount = mockNotifications.filter(n => !n.read).length;
 
   return (
@@ -79,33 +76,9 @@ export function Header() {
           <Menu className="w-5 h-5" />
         </button>
 
-        <nav className="flex items-center gap-1.5 text-sm min-w-0 overflow-hidden">
-          {breadcrumbs.map((crumb, idx) => {
-            const isLast = idx === breadcrumbs.length - 1;
-            return (
-              <div key={crumb.href} className="flex items-center gap-1.5 min-w-0">
-                {idx > 0 && <ChevronRight className="w-3.5 h-3.5 text-[var(--text-muted)] flex-shrink-0" />}
-                <Link
-                  href={crumb.href}
-                  className={cn(
-                    'truncate transition-colors duration-200',
-                    isLast
-                      ? 'font-bold text-[var(--text-primary)]'
-                      : 'text-[var(--text-muted)] hover:text-[var(--text-primary)] hidden md:block'
-                  )}
-                >
-                  {crumb.label}
-                </Link>
-                {/* On mobile, show only the last breadcrumb clearly or if it's the only one */}
-                {isLast && (
-                   <span className="md:hidden font-bold text-[var(--text-primary)] truncate max-w-[150px]">
-                     {crumb.label}
-                   </span>
-                )}
-              </div>
-            );
-          })}
-        </nav>
+        <Suspense fallback={<div className="h-4 w-32 bg-[var(--bg-muted)] animate-pulse rounded-full opacity-50" />}>
+           <BreadcrumbsWrapper />
+        </Suspense>
       </div>
 
       {/* Right: Actions */}
@@ -218,5 +191,39 @@ export function Header() {
         </div>
       </div>
     </header>
+  );
+}
+function BreadcrumbsWrapper() {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const breadcrumbs = getBreadcrumbs(pathname, searchParams);
+
+  return (
+    <nav className="flex items-center gap-1.5 text-sm min-w-0 overflow-hidden">
+      {breadcrumbs.map((crumb, idx) => {
+        const isLast = idx === breadcrumbs.length - 1;
+        return (
+          <div key={crumb.href} className="flex items-center gap-1.5 min-w-0">
+            {idx > 0 && <ChevronRight className="w-3.5 h-3.5 text-[var(--text-muted)] flex-shrink-0" />}
+            <Link
+              href={crumb.href}
+              className={cn(
+                'truncate transition-colors duration-200',
+                isLast
+                  ? 'font-bold text-[var(--text-primary)]'
+                  : 'text-[var(--text-muted)] hover:text-[var(--text-primary)] hidden md:block'
+              )}
+            >
+              {crumb.label}
+            </Link>
+            {isLast && (
+               <span className="md:hidden font-bold text-[var(--text-primary)] truncate max-w-[150px]">
+                 {crumb.label}
+               </span>
+            )}
+          </div>
+        );
+      })}
+    </nav>
   );
 }
