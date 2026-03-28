@@ -19,6 +19,10 @@ import {
   Database,
   BarChart3,
   FileText,
+  BrainCircuit,
+  Settings2,
+  FlaskConical,
+  Activity,
 } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { useSidebar } from '@/components/providers/SidebarProvider';
@@ -42,6 +46,14 @@ const navSections: NavSection[] = [
       { id: 'dashboard', label: 'Dashboard', href: '/admin/dashboard', icon: <LayoutDashboard className="w-4 h-4" /> },
       { id: 'organizations', label: 'Organizations', href: '/admin/organizations', icon: <Building2 className="w-4 h-4" /> },
       { id: 'analytics', label: 'Analytics', href: '/admin/analytics', icon: <BarChart3 className="w-4 h-4" /> },
+    ],
+  },
+  {
+    title: 'AI Center',
+    items: [
+      { id: 'ai-config', label: 'Configurations', href: '/admin/ai-center/configurations', icon: <Settings2 className="w-4 h-4" /> },
+      { id: 'ai-analytics', label: 'Analytics', href: '/admin/ai-center/analytics', icon: <Activity className="w-4 h-4" /> },
+      { id: 'ai-playground', label: 'Playground', href: '/admin/ai-center/playground', icon: <FlaskConical className="w-4 h-4" /> },
     ],
   },
   {
