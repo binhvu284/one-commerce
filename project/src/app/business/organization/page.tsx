@@ -14,6 +14,7 @@ import {
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { cn } from '@/lib/cn';
+import { useBusinessRole } from '@/components/providers/RoleProvider';
 
 const integrations = [
   { id: 'stripe', name: 'Stripe', description: 'Cards, Apple Pay, Google Pay', status: 'connected' },
@@ -22,14 +23,57 @@ const integrations = [
 ];
 
 export default function MyOrganization() {
+  const { role, isAdmin, isOwner, isStaff } = useBusinessRole();
+
+  const MOCK_OWNER = {
+    name: 'Alex Rivera',
+    email: 'alex@onecommerce.com',
+    avatar: 'https://i.pravatar.cc/150?u=alex',
+    joinedDate: 'Jan 12, 2024'
+  };
+
   return (
     <div className="space-y-8 max-w-4xl mx-auto pb-20">
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-black text-[var(--text-primary)]">Organization Workspace</h1>
-        <p className="text-sm text-[var(--text-secondary)] mt-1">
-          Manage your brand identity, domains, and payment integrations.
-        </p>
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div>
+          <h1 className="text-3xl font-black text-[var(--text-primary)] tracking-tight">Organization Workspace</h1>
+          <p className="text-sm text-[var(--text-secondary)] mt-1 font-medium">
+            Manage your brand identity, domains, and payment integrations.
+          </p>
+        </div>
+        {isStaff && (
+          <div className="flex items-center gap-2 px-4 py-2 bg-amber-500/10 rounded-2xl border border-amber-500/20">
+            <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+            <span className="text-[10px] font-black uppercase tracking-widest text-amber-600">Read-only Access</span>
+          </div>
+        )}
+      </div>
+
+      {/* Owner Information Section */}
+      <div className="p-6 rounded-3xl bg-blue-600 text-white shadow-xl shadow-blue-500/20 relative overflow-hidden group">
+         <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-110 transition-transform">
+            <Building2 className="w-24 h-24 -mr-12 -mt-12" />
+         </div>
+         <div className="relative z-10">
+            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] mb-4 opacity-70">Owner Account Information</h3>
+            <div className="flex items-center gap-5">
+               <div className="w-14 h-14 rounded-2xl bg-white/20 p-0.5 border border-white/20">
+                  <img src={MOCK_OWNER.avatar} alt={MOCK_OWNER.name} className="w-full h-full object-cover rounded-[14px]" />
+               </div>
+               <div className="flex-1">
+                  <div className="flex items-center gap-3">
+                     <h4 className="text-xl font-black">{MOCK_OWNER.name}</h4>
+                     <Badge variant="neutral" className="bg-white/20 text-white border-transparent text-[8px] uppercase font-black px-2">Owner</Badge>
+                  </div>
+                  <p className="text-xs text-blue-100 font-medium mt-1">{MOCK_OWNER.email}</p>
+               </div>
+               <div className="text-right hidden md:block">
+                  <p className="text-[10px] font-black uppercase tracking-widest opacity-60">Created At</p>
+                  <p className="text-xs font-bold">{MOCK_OWNER.joinedDate}</p>
+               </div>
+            </div>
+         </div>
       </div>
 
       {/* Brand Profile */}
@@ -51,7 +95,8 @@ export default function MyOrganization() {
                  <input 
                     type="text" 
                     defaultValue="BeautyHub Vietnam"
-                    className="w-full h-11 px-4 rounded-xl bg-[var(--bg-muted)] border border-[var(--border)] text-sm font-bold text-[var(--text-primary)] focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 outline-none transition-all"
+                    disabled={isStaff}
+                    className="w-full h-11 px-4 rounded-xl bg-[var(--bg-muted)] border border-[var(--border)] text-sm font-bold text-[var(--text-primary)] focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 outline-none transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                  />
               </div>
               <div className="space-y-2">
@@ -63,12 +108,13 @@ export default function MyOrganization() {
                     <input 
                        type="text" 
                        defaultValue="vietnam"
-                       className="flex-1 h-11 px-4 rounded-r-xl bg-[var(--bg-muted)] border border-[var(--border)] text-sm font-bold text-[var(--text-primary)] focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 outline-none transition-all"
+                       disabled={isStaff}
+                       className="flex-1 h-11 px-4 rounded-r-xl bg-[var(--bg-muted)] border border-[var(--border)] text-sm font-bold text-[var(--text-primary)] focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 outline-none transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                     />
                  </div>
               </div>
               <div className="pt-2">
-                 <Button variant="primary" size="sm">Save Branding</Button>
+                 <Button variant="primary" size="sm" disabled={isStaff}>Save Branding</Button>
               </div>
            </div>
         </div>
@@ -86,7 +132,7 @@ export default function MyOrganization() {
                  <p className="text-[11px] text-[var(--text-muted)] font-medium">Control your shop's public web address.</p>
               </div>
            </div>
-           <Button variant="outline" size="sm">Add Custom Domain</Button>
+           {!isStaff && <Button variant="outline" size="sm">Add Custom Domain</Button>}
         </div>
         
         <div className="space-y-3">
@@ -160,6 +206,7 @@ export default function MyOrganization() {
                       variant={i.status === 'connected' ? 'outline' : 'primary'} 
                       size="sm" 
                       className="w-full h-10 text-[11px]"
+                      disabled={isStaff && i.status !== 'connected'}
                    >
                       {i.status === 'connected' ? 'View Dashboard' : 'Connect Account'}
                    </Button>
