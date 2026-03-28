@@ -201,9 +201,9 @@ export function ChatModule() {
         </div>
 
         {/* Input Area */}
-        <div className="p-4 bg-white dark:bg-slate-900/40 border-t border-slate-200 dark:border-white/5 shadow-2xl">
-            <div className="relative flex items-end gap-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-3xl p-3 focus-within:border-indigo-500/50 focus-within:ring-4 focus-within:ring-indigo-500/5 dark:focus-within:ring-indigo-500/10 transition-all shadow-inner">
-                <button className="p-2 text-slate-400 dark:text-slate-600 hover:text-indigo-600 dark:hover:text-white transition-colors">
+        <div className="p-6 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-white/5 shadow-[0_-10px_40px_rgba(0,0,0,0.02)] dark:shadow-none">
+            <div className="relative flex items-end gap-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-[1.5rem] p-4 focus-within:border-indigo-500/50 focus-within:ring-4 focus-within:ring-indigo-500/5 dark:focus-within:ring-indigo-500/10 transition-all shadow-inner">
+                <button className="p-2.5 text-slate-400 dark:text-slate-600 hover:text-indigo-600 dark:hover:text-white transition-colors bg-white dark:bg-white/5 rounded-xl border border-slate-200 dark:border-white/5 shadow-sm">
                     <Paperclip className="w-5 h-5" />
                 </button>
                 <textarea 
@@ -211,24 +211,26 @@ export function ChatModule() {
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), handleSend())}
                     placeholder="Enter command or message..."
-                    className="flex-1 bg-transparent border-none outline-none resize-none text-sm py-2 max-h-32 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-700 font-medium"
+                    className="flex-1 bg-transparent border-none outline-none resize-none text-sm py-2.5 max-h-32 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-700 font-bold leading-relaxed"
                     rows={1}
                 />
                 <button 
                    onClick={handleSend}
                    disabled={!input.trim() || isStreaming}
                    className={cn(
-                     "p-3 rounded-2xl transition-all shadow-md",
-                     input.trim() && !isStreaming ? "bg-indigo-600 text-white scale-100 active:scale-95" : "bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-600"
+                     "p-3 rounded-2xl transition-all shadow-xl",
+                     input.trim() && !isStreaming 
+                        ? "bg-indigo-600 text-white scale-100 active:scale-95 shadow-indigo-600/20" 
+                        : "bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-600"
                    )}
                 >
                     {isStreaming ? <StopCircle className="w-5 h-5 animate-pulse" /> : <Send className="w-5 h-5" />}
                 </button>
             </div>
-            <div className="flex items-center justify-center gap-4 mt-3">
-                 <p className="text-[9px] font-bold text-slate-400 dark:text-slate-700 uppercase tracking-widest">Shift + Enter for new line</p>
-                 <span className="w-1 h-1 rounded-full bg-slate-200 dark:bg-slate-800" />
-                 <p className="text-[9px] font-bold text-slate-400 dark:text-slate-700 uppercase tracking-widest">Admin Testing Lab</p>
+            <div className="flex items-center justify-center gap-6 mt-4">
+                 <p className="text-[10px] font-black text-slate-400 dark:text-slate-700 uppercase tracking-[0.25em]">Shift + Enter for new line</p>
+                 <div className="w-1.5 h-1.5 rounded-full bg-slate-200 dark:bg-slate-800" />
+                 <p className="text-[10px] font-black text-slate-400 dark:text-slate-700 uppercase tracking-[0.25em]">Admin Testing Lab</p>
             </div>
         </div>
       </div>

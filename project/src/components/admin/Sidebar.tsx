@@ -208,7 +208,7 @@ export function Sidebar() {
                               'flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13px] font-semibold transition-all duration-300 relative',
                               active
                                 ? 'bg-indigo-500/10 dark:bg-blue-500/10 text-indigo-600 dark:text-blue-400 ring-1 ring-indigo-500/20'
-                                : 'hover:bg-slate-100 dark:hover:bg-white/5 text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-white'
+                                : 'hover:bg-slate-100 dark:hover:bg-white/5 text-slate-500 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-white'
                             )}
                           >
                             {active && (
@@ -265,18 +265,18 @@ export function Sidebar() {
           isCollapsed && "justify-center"
         )}>
           <div className="relative flex-shrink-0">
-             <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-sky-600 p-[1px]">
-                <div className="w-full h-full rounded-[11px] bg-sidebar flex items-center justify-center overflow-hidden">
-                   <User className="w-4.5 h-4.5 text-white" />
-                </div>
-             </div>
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-sky-600 p-[1px]">
+                 <div className="w-full h-full rounded-[11px] bg-sidebar flex items-center justify-center overflow-hidden">
+                    <User className="w-4.5 h-4.5 text-white" />
+                 </div>
+              </div>
              <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 ring-4 ring-[#051e34]" />
           </div>
 
           {!isCollapsed && (
             <div className="flex-1 min-w-0">
               <p className="text-[12px] font-bold text-white truncate">Super Admin</p>
-              <p className="text-[10px] text-slate-500 truncate font-semibold">admin@onecommerce.io</p>
+              <p className="text-[10px] text-slate-400 truncate font-semibold">admin@onecommerce.io</p>
             </div>
           )}
           

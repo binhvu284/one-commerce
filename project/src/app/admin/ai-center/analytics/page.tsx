@@ -50,11 +50,11 @@ export default function AIAnalyticsPage() {
             <Activity className="w-4 h-4" />
             <span className="text-[10px] font-black uppercase tracking-[0.2em]">Monitoring & Costs</span>
           </div>
-          <h2 className="text-3xl font-black text-white tracking-tight leading-none">AI Analytics</h2>
-          <p className="text-sm text-slate-500 font-medium">Track token consumption and infrastructure spending.</p>
+          <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight leading-none">AI Analytics</h2>
+          <p className="text-sm text-slate-500 font-medium tracking-tight">Track token consumption and infrastructure spending.</p>
         </div>
         
-        <button className="flex items-center gap-2 px-4 py-2 bg-slate-800/50 border border-white/5 rounded-xl text-xs font-bold text-slate-400 hover:text-white transition-all">
+        <button className="flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-white/5 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 hover:text-slate-900 dark:hover:text-white transition-all shadow-sm">
           <Filter className="w-3.5 h-3.5" />
           Last 7 Days
         </button>
@@ -94,50 +94,50 @@ export default function AIAnalyticsPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Cost Trend Chart */}
-        <div className="bg-slate-800/20 border border-white/5 rounded-[2.5rem] p-8 space-y-6">
+        <div className="bg-white dark:bg-slate-800/20 border border-slate-200 dark:border-white/5 rounded-[2.5rem] p-8 space-y-8 shadow-sm">
           <div className="flex items-center justify-between">
-            <h3 className="text-lg font-black text-white">Spending Trend</h3>
-            <span className="text-[10px] font-black text-slate-600 uppercase tracking-widest">USD / Day</span>
+            <h3 className="text-lg font-black text-slate-900 dark:text-white">Spending Trend</h3>
+            <span className="text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest">USD / Day</span>
           </div>
-          <div className="h-[300px] w-full items-end flex">
+          <div className="h-[300px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={COST_DATA}>
                 <defs>
                   <linearGradient id="colorCost" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
+                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.1}/>
                     <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#1e293b" />
-                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#475569', fontSize: 10, fontWeight: 'bold'}} dy={10} />
-                <YAxis axisLine={false} tickLine={false} tick={{fill: '#475569', fontSize: 10, fontWeight: 'bold'}} />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="currentColor" className="text-slate-100 dark:text-slate-800" />
+                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#94a3b8', fontSize: 10, fontWeight: '800'}} dy={10} />
+                <YAxis axisLine={false} tickLine={false} tick={{fill: '#94a3b8', fontSize: 10, fontWeight: '800'}} />
                 <Tooltip 
-                  contentStyle={{backgroundColor: '#0f172a', border: '1px solid #1e293b', borderRadius: '12px'}}
-                  itemStyle={{color: '#fff', fontSize: '12px', fontWeight: 'bold'}}
+                  contentStyle={{backgroundColor: 'white', border: '1px solid #e2e8f0', borderRadius: '16px', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'}}
+                  itemStyle={{color: '#0f172a', fontSize: '11px', fontWeight: '800', textTransform: 'uppercase'}}
                 />
-                <Area type="monotone" dataKey="cost" stroke="#3b82f6" strokeWidth={3} fillOpacity={1} fill="url(#colorCost)" />
+                <Area type="monotone" dataKey="cost" stroke="#3b82f6" strokeWidth={4} fillOpacity={1} fill="url(#colorCost)" />
               </AreaChart>
             </ResponsiveContainer>
           </div>
         </div>
 
         {/* Usage by Provider Chart */}
-        <div className="bg-slate-800/20 border border-white/5 rounded-[2.5rem] p-8 space-y-6">
+        <div className="bg-white dark:bg-slate-800/20 border border-slate-200 dark:border-white/5 rounded-[2.5rem] p-8 space-y-8 shadow-sm">
           <div className="flex items-center justify-between">
-            <h3 className="text-lg font-black text-white">Usage by Provider</h3>
-            <span className="text-[10px] font-black text-slate-600 uppercase tracking-widest">Tokens Shared</span>
+            <h3 className="text-lg font-black text-slate-900 dark:text-white">Usage by Provider</h3>
+            <span className="text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest">Tokens Shared</span>
           </div>
           <div className="h-[300px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={USAGE_DATA} layout="vertical">
-                <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#1e293b" />
+                <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="currentColor" className="text-slate-100 dark:text-slate-800" />
                 <XAxis type="number" hide />
-                <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} tick={{fill: '#fff', fontSize: 12, fontWeight: 'black'}} width={80} />
+                <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} tick={{fill: 'currentColor', fontSize: 11, fontWeight: '900'}} className="text-slate-900 dark:text-white" width={80} />
                 <Tooltip 
-                  contentStyle={{backgroundColor: '#0f172a', border: '1px solid #1e293b', borderRadius: '12px'}}
-                  cursor={{fill: 'rgba(255,255,255,0.05)'}}
+                  contentStyle={{backgroundColor: 'white', border: '1px solid #e2e8f0', borderRadius: '16px', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'}}
+                  cursor={{fill: 'rgba(0,0,0,0.02)'}}
                 />
-                <Bar dataKey="tokens" fill="#6366f1" radius={[0, 8, 8, 0]} barSize={24} />
+                <Bar dataKey="tokens" fill="#6366f1" radius={[0, 12, 12, 0]} barSize={32} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -149,22 +149,22 @@ export default function AIAnalyticsPage() {
 
 function StatCard({ label, value, trend, trendUp, icon }: { label: string, value: string, trend: string, trendUp: boolean, icon: React.ReactNode }) {
   return (
-    <div className="bg-slate-800/20 border border-white/5 rounded-3xl p-6 space-y-4">
+    <div className="bg-white dark:bg-slate-800/20 border border-slate-200 dark:border-white/5 rounded-[2rem] p-6 space-y-5 shadow-sm">
       <div className="flex items-start justify-between">
-        <div className="w-10 h-10 rounded-2xl bg-white/5 flex items-center justify-center">
+        <div className="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 flex items-center justify-center shadow-inner">
           {icon}
         </div>
         <div className={cn(
-          "flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-black tracking-wider uppercase",
-          trendUp ? "bg-emerald-500/10 text-emerald-500" : "bg-red-500/10 text-red-500"
+          "flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[10px] font-black tracking-wider uppercase shadow-sm",
+          trendUp ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-500" : "bg-red-500/10 text-red-600 dark:text-red-500"
         )}>
           {trendUp ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
           {trend}
         </div>
       </div>
       <div>
-        <p className="text-[10px] font-black text-slate-600 uppercase tracking-widest leading-none mb-1">{label}</p>
-        <h3 className="text-2xl font-black text-white tracking-tight leading-none">{value}</h3>
+        <p className="text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-[0.2em] leading-none mb-2">{label}</p>
+        <h3 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight leading-none">{value}</h3>
       </div>
     </div>
   );

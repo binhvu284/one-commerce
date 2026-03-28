@@ -157,12 +157,30 @@ export default function AIPlaygroundPage() {
                   </div>
                </div>
             )}
-            {activeTab === 'customer' && (
-               <div className="flex-1 flex flex-col items-center justify-center gap-4">
-                  <UserRound className="w-12 h-12 text-slate-700" />
-                  <p className="text-slate-600 font-bold uppercase text-[10px] tracking-widest">Simulation Interface Placeholder</p>
-               </div>
-            )}
+             {/* User Section (Placeholder) */}
+             {activeTab === 'customer' && (
+                <div className="flex-1 flex flex-col items-center justify-center p-10 space-y-8">
+                   <div className="relative">
+                      <div className="w-32 h-32 bg-slate-100 dark:bg-white/5 rounded-full flex items-center justify-center border-4 border-white dark:border-slate-800 shadow-2xl relative z-10 overflow-hidden">
+                         <UserRound className="w-16 h-16 text-slate-400" />
+                      </div>
+                      <div className="absolute -top-4 -right-4 w-12 h-12 bg-emerald-500 rounded-2xl flex items-center justify-center text-white shadow-lg animate-bounce duration-3000 z-20">
+                         <MessageSquare className="w-6 h-6" />
+                      </div>
+                      <div className="absolute inset-0 bg-indigo-500/20 blur-[60px] rounded-full animate-pulse" />
+                   </div>
+                   
+                   <div className="text-center max-w-md space-y-4">
+                      <h3 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight uppercase">Customer Simulation</h3>
+                      <p className="text-sm text-slate-500 dark:text-slate-600 font-bold leading-relaxed">
+                         Test how your AI handles real-world customer objections and queries in a safe, sandboxed environment.
+                      </p>
+                      <button className="px-8 py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-black uppercase text-[11px] tracking-[0.2em] shadow-xl shadow-indigo-600/20 transition-all active:scale-95">
+                         Initialize Simulator
+                      </button>
+                   </div>
+                </div>
+             )}
           </motion.div>
         </AnimatePresence>
       </div>
