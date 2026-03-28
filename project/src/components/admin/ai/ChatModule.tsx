@@ -34,6 +34,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/cn';
 import { Button } from '@/components/ui/Button';
+import { OpenAIImg, GeminiImg, ClaudeImg } from '@/components/ui/Icons';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -43,9 +44,9 @@ interface Message {
 }
 
 const MODELS = [
-  { id: 'gemini-1-5-pro', name: 'Gemini 1.5 Pro', provider: 'Google', color: 'text-blue-500' },
-  { id: 'gpt-4o', name: 'GPT-4o', provider: 'OpenAI', color: 'text-emerald-500' },
-  { id: 'claude-3-5-sonnet', name: 'Claude 3.5 Sonnet', provider: 'Anthropic', color: 'text-orange-500' },
+  { id: 'gemini-1-5-pro', name: 'Gemini 1.5 Pro', provider: 'Google', icon: GeminiImg, color: 'text-blue-500' },
+  { id: 'gpt-4o', name: 'GPT-4o', provider: 'OpenAI', icon: OpenAIImg, color: 'text-emerald-500' },
+  { id: 'claude-3-5-sonnet', name: 'Claude 3.5 Sonnet', provider: 'Anthropic', icon: ClaudeImg, color: 'text-orange-500' },
 ];
 
 export function ChatModule({ onBack }: { onBack?: () => void }) {
@@ -207,7 +208,7 @@ export function ChatModule({ onBack }: { onBack?: () => void }) {
                                         )}
                                     >
                                         <div className="flex items-center gap-2">
-                                            <Sparkles className={cn("w-4 h-4", m.id === 'gemini-1-5-pro' ? "text-blue-500" : "text-amber-500")} />
+                                            <m.icon className={cn("w-4 h-4")} />
                                             <span className="text-sm font-bold text-slate-900 dark:text-white">{m.name}</span>
                                         </div>
                                         <span className="text-[10px] text-slate-400 font-medium ml-6">{m.provider} High Performance</span>
@@ -256,15 +257,15 @@ export function ChatModule({ onBack }: { onBack?: () => void }) {
                             msg.role === 'user' ? "flex-row-reverse" : "flex-row"
                         )}
                     >
-                        {/* Gemini Assistant Star or User Icon */}
+                        {/* Avatar */}
                         <div className={cn(
-                            "w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center flex-shrink-0 relative",
+                            "w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center flex-shrink-0 relative overflow-hidden",
                             msg.role === 'assistant' 
-                                ? "bg-transparent text-blue-500" 
+                                ? "bg-transparent ring-0" 
                                 : "bg-slate-200 dark:bg-white/[0.05] text-slate-600 dark:text-slate-300 font-bold"
                         )}>
                             {msg.role === 'assistant' ? (
-                                <Sparkles className="w-6 h-6 md:w-8 md:h-8" />
+                                <selectedModel.icon className="w-6 h-6 md:w-8 md:h-8" />
                             ) : (
                                 <div className="text-sm md:text-base">LB</div>
                             )}
@@ -315,7 +316,7 @@ export function ChatModule({ onBack }: { onBack?: () => void }) {
          </div>
 
          {/* 3. The New Gemini Pill Input (Truly Floating) */}
-         <div className="fixed bottom-0 left-0 right-0 p-4 md:p-8 flex flex-col items-center pointer-events-none z-40 bg-gradient-to-t from-white via-white/40 to-transparent dark:from-slate-950 dark:via-slate-950/40">
+         <div className="absolute bottom-0 left-0 right-0 p-4 md:p-8 flex flex-col items-center pointer-events-none z-40 bg-gradient-to-t from-white via-white/40 to-transparent dark:from-slate-950 dark:via-slate-950/40">
             <div 
                 className={cn(
                     "w-full max-w-4xl bg-slate-100 dark:bg-white/[0.04] p-1 rounded-[2.5rem] pointer-events-auto border-2 transition-all shadow-2xl overflow-hidden backdrop-blur-3xl",
