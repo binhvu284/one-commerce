@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { Search, Bell, Sun, Moon, ChevronRight, X, Menu } from 'lucide-react';
 import { useTheme } from '@/components/providers/ThemeProvider';
 import { useSidebar } from '@/components/providers/SidebarProvider';
@@ -12,22 +12,39 @@ const breadcrumbMap: Record<string, string> = {
   '/admin': 'Admin',
   '/admin/dashboard': 'Dashboard',
   '/admin/organizations': 'Organizations',
-  '/admin/customers': 'Customers',
-  '/admin/reports': 'Reports',
-  '/admin/revenue': 'Revenue',
-  '/admin/settings': 'Settings',
-  '/admin/security': 'Security',
+  '/admin/ai-center/configurations': 'Configurations',
+  '/admin/ai-center/analytics': 'Analytics',
+  '/admin/ai-center/playground': 'Playground',
+  '/admin/api-tokens': 'API Tokens',
+  '/admin/mcp': 'MCP Servers',
+  '/admin/database': 'Database',
 };
 
-function getBreadcrumbs(pathname: string) {
+function getBreadcrumbs(pathname: string, searchParams?: URLSearchParams) {
   const parts = pathname.split('/').filter(Boolean);
   const crumbs: { label: string; href: string }[] = [];
   let current = '';
+  
   for (const part of parts) {
     current += '/' + part;
-    const label = breadcrumbMap[current] ?? part.charAt(0).toUpperCase() + part.slice(1);
+    if (part === 'ai-center') continue;
+    
+    const label = breadcrumbMap[current] ?? (part.charAt(0).toUpperCase() + part.slice(1));
     crumbs.push({ label, href: current });
   }
+
+  // Handle lab subpage in Playground
+  if (pathname.includes('/playground') && searchParams?.get('tab')) {
+    const tab = searchParams.get('tab');
+    const labLabel = tab === 'chat' ? 'AI Chat Lab' : 
+                     tab === 'voice' ? 'Voice Lab' : 
+                     tab === 'agent' ? 'Agent Lab' : 
+                     tab === 'customer' ? 'Customer Sim' : null;
+    if (labLabel) {
+      crumbs.push({ label: labLabel, href: `${pathname}?tab=${tab}` });
+    }
+  }
+
   return crumbs;
 }
 
@@ -41,10 +58,11 @@ export function Header() {
   const { theme, toggleTheme } = useTheme();
   const { toggleMobile } = useSidebar();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [notifOpen, setNotifOpen] = useState(false);
   const [searchFocused, setSearchFocused] = useState(false);
 
-  const breadcrumbs = getBreadcrumbs(pathname);
+  const breadcrumbs = getBreadcrumbs(pathname, searchParams);
   const unreadCount = mockNotifications.filter(n => !n.read).length;
 
   return (

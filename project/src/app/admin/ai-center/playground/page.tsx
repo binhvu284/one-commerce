@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { 
   MessageSquare, 
   Mic2, 
@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/cn';
 
@@ -68,10 +69,21 @@ const FEATURES: Feature[] = [
   },
 ];
 
-export default function AIPlaygroundPage() {
-  const [activeTab, setActiveTab] = useState<LabTab>(null);
+function PlaygroundContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const activeTab = (searchParams.get('tab') as LabTab) || null;
+
   const [configs, setConfigs] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const setActiveTab = (tab: LabTab) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (tab) params.set('tab', tab);
+    else params.delete('tab');
+    router.push(`${pathname}?${params.toString()}`);
+  };
 
   useEffect(() => {
     fetch('/api/ai/config')
@@ -85,12 +97,7 @@ export default function AIPlaygroundPage() {
 
   const isReady = (requiredType?: string) => {
     if (!requiredType) return true;
-    return configs.some(c => {
-        const provider = c.provider_id;
-        // Search in PROVIDERS from configuration page logic (we mirror it here or fetch better)
-        // For MVP, we check if any config exists for this type
-        return c.is_configured;
-    });
+    return configs.some(c => c.is_configured);
   };
 
   if (!activeTab) {
@@ -101,10 +108,8 @@ export default function AIPlaygroundPage() {
             <FlaskConical className="w-4 h-4" />
             <span className="text-[10px] font-black uppercase tracking-[0.2em]">Testing Environment</span>
           </div>
-          <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight leading-none">AI Playground</h2>
-          <p className="text-sm text-slate-500 font-medium max-w-xl">
-            Select a feature to start testing. Some features require active API configurations.
-          </p>
+          <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight leading-none italic uppercase">AI Playground</h2>
+          <p className="text-sm text-slate-500 font-medium tracking-tight">Experiment with AI models and evaluate real-time outputs.</p>
         </header>
 
         <div className="space-y-12">
@@ -127,7 +132,7 @@ export default function AIPlaygroundPage() {
                                 return (
                                     <motion.div
                                         key={feature.id}
-                                        whileHover={{ y: -5 }}
+                                        whileHover={ready ? { y: -5 } : {}}
                                         onClick={() => ready && setActiveTab(feature.id)}
                                         className={cn(
                                             "group p-8 rounded-[2.5rem] bg-white dark:bg-slate-800/20 border-2 transition-all cursor-pointer shadow-sm relative overflow-hidden",
@@ -196,18 +201,16 @@ export default function AIPlaygroundPage() {
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-1 bg-white dark:bg-slate-950 border border-slate-200 dark:border-white/5 rounded-[2.5rem] overflow-hidden min-h-[600px] flex flex-col shadow-xl">
+      <div className="flex-1 bg-white dark:bg-slate-950 border border-slate-200 dark:border-white/5 rounded-[2.5rem] overflow-hidden min-h-[600px] flex flex-col shadow-xl origin-top">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 1.02 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
             className="flex-1 flex flex-col h-full bg-slate-50/30 dark:bg-slate-900/50"
           >
-            {activeTab === 'chat' && (
-               <ChatModule />
-            )}
+            {activeTab === 'chat' && <ChatModule />}
             {activeTab === 'voice' && (
                <div className="p-10 flex flex-col items-center justify-center gap-10">
                   <div className="relative">
@@ -216,25 +219,13 @@ export default function AIPlaygroundPage() {
                       </div>
                       <div className="absolute inset-0 bg-indigo-500/20 blur-[40px] rounded-full animate-pulse" />
                   </div>
-                  
                   <div className="text-center space-y-2">
                       <h3 className="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tight">Voice Lab Interface</h3>
                       <p className="text-xs text-slate-500 font-bold uppercase tracking-widest">Select sound engine to begin</p>
                   </div>
-
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-3xl">
-                     <VoiceOption 
-                        name="ElevenLabs" 
-                        description="Prime Voice AI - TTS & Cloning" 
-                        logo={<div className="font-black text-black text-lg">11</div>}
-                        bgColor="bg-white"
-                     />
-                     <VoiceOption 
-                        name="Vapi" 
-                        description="Real-time Voice AI Platform" 
-                        logo={<div className="font-black text-white italic">V</div>}
-                        bgColor="bg-blue-600"
-                     />
+                     <VoiceOption name="ElevenLabs" description="Prime Voice AI - TTS & Cloning" logo={<div className="font-black text-black text-lg">11</div>} bgColor="bg-white" />
+                     <VoiceOption name="Vapi" description="Real-time Voice AI Platform" logo={<div className="font-black text-white italic">V</div>} bgColor="bg-blue-600" />
                   </div>
                </div>
             )}
@@ -246,39 +237,24 @@ export default function AIPlaygroundPage() {
                       </div>
                       <div className="absolute inset-0 bg-orange-500/20 blur-[40px] rounded-full animate-pulse" />
                   </div>
-
                   <div className="text-center space-y-2">
                       <h3 className="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tight">Agent Flow Lab</h3>
                       <p className="text-xs text-slate-500 font-bold uppercase tracking-widest">Select orchestration logic</p>
                   </div>
-
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-3xl">
-                     <AgentOption 
-                        name="Direct Logic" 
-                        description="Custom coded workflow scripts" 
-                        icon={<Monitor className="w-6 h-6" />}
-                     />
-                     <AgentOption 
-                        name="Framework Agent" 
-                        description="Vercel AI SDK / LangChain / CrewAI" 
-                        icon={<Zap className="w-6 h-6 text-yellow-500" />}
-                     />
+                     <AgentOption name="Direct Logic" description="Custom coded workflow scripts" icon={<Monitor className="w-6 h-6" />} />
+                     <AgentOption name="Framework Agent" description="Vercel AI SDK / LangChain / CrewAI" icon={<Zap className="w-6 h-6 text-yellow-500" />} />
                   </div>
                </div>
             )}
-             {/* User Section (Placeholder) */}
-             {activeTab === 'customer' && (
+            {activeTab === 'customer' && (
                 <div className="flex-1 flex flex-col items-center justify-center p-10 space-y-8">
                    <div className="relative">
                       <div className="w-32 h-32 bg-slate-100 dark:bg-white/5 rounded-full flex items-center justify-center border-4 border-white dark:border-slate-800 shadow-2xl relative z-10 overflow-hidden">
                          <UserRound className="w-16 h-16 text-slate-400" />
                       </div>
-                      <div className="absolute -top-4 -right-4 w-12 h-12 bg-emerald-500 rounded-2xl flex items-center justify-center text-white shadow-lg animate-bounce duration-3000 z-20">
-                         <MessageSquare className="w-6 h-6" />
-                      </div>
                       <div className="absolute inset-0 bg-indigo-500/20 blur-[60px] rounded-full animate-pulse" />
                    </div>
-                   
                    <div className="text-center max-w-md space-y-4">
                       <h3 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight uppercase">Customer Simulation</h3>
                       <p className="text-sm text-slate-500 dark:text-slate-600 font-bold leading-relaxed">
@@ -294,6 +270,14 @@ export default function AIPlaygroundPage() {
         </AnimatePresence>
       </div>
     </div>
+  );
+}
+
+export default function AIPlaygroundPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center text-slate-500 font-bold uppercase tracking-widest">Loading Lab Environment...</div>}>
+      <PlaygroundContent />
+    </Suspense>
   );
 }
 

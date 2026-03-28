@@ -114,7 +114,7 @@ export function Sidebar() {
   const isActive = (href: string) => pathname === href || pathname.startsWith(href + '/');
 
   const sidebarContent = (
-    <div className="flex flex-col h-full bg-sidebar text-slate-300">
+    <div className="flex flex-col h-full bg-sidebar text-[var(--text-sidebar)]">
       {/* Brand */}
       <div className="p-4 flex-shrink-0">
         <div className="flex items-center gap-3 px-1 mb-6">
@@ -173,7 +173,7 @@ export function Sidebar() {
                     <motion.p
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
-                      className="text-[10px] uppercase font-black tracking-[0.2em] text-slate-500 group-hover/title:text-indigo-400 transition-colors"
+                      className="text-[10px] uppercase font-black tracking-[0.2em] text-[var(--text-sidebar-muted)] group-hover/title:text-indigo-400 transition-colors"
                     >
                       {section.title}
                     </motion.p>
@@ -207,8 +207,8 @@ export function Sidebar() {
                             className={cn(
                               'flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13px] font-semibold transition-all duration-300 relative',
                               active
-                                ? 'bg-indigo-500/10 dark:bg-blue-500/10 text-indigo-600 dark:text-blue-400 ring-1 ring-indigo-500/20'
-                                : 'hover:bg-slate-100 dark:hover:bg-white/5 text-slate-500 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-white'
+                                ? 'bg-indigo-500/10 dark:bg-blue-500/10 text-white shadow-[0_0_15px_rgba(99,102,241,0.1)]'
+                                : 'hover:bg-sidebar-hover text-[var(--text-sidebar)] hover:text-white'
                             )}
                           >
                             {active && (
