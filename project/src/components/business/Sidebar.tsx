@@ -24,7 +24,8 @@ import {
   ChevronDown,
   LayoutGrid,
   Wallet,
-  Share2
+  Share2,
+  Briefcase
 } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { useSidebar } from '@/components/providers/SidebarProvider';
@@ -50,10 +51,10 @@ export function Sidebar() {
   const { isCollapsed, setIsCollapsed, isOpen, setIsOpen } = useSidebar();
   const { role, isAdmin, isOwner, isManager } = useBusinessRole();
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
-  const [expandedSections, setExpandedSections] = useState<string[]>(['personal', 'operation', 'business']);
+  const [expandedSections, setExpandedSections] = useState<string[]>(['personal', 'operation', 'business', 'workspaces']);
   const pathname = usePathname();
 
-  // Reorganized Navigation Sections
+  // Reorganized Navigation Sections based on User Request
   const navSections: NavSection[] = [
     {
       title: 'Personal',
@@ -71,9 +72,8 @@ export function Sidebar() {
       id: 'operation',
       visible: isManager,
       items: [
-        { id: 'organization', label: 'My Organization', href: '/business/settings/organization', icon: <Building className="w-4 h-4" /> },
+        { id: 'organization', label: 'My Organization', href: '/business/organization', icon: <Building className="w-4 h-4" /> },
         { id: 'people', label: 'People & Access', href: '/business/people', icon: <Users className="w-4 h-4" />, visible: isAdmin },
-        { id: 'workspaces', label: 'Workspace', href: '/business/workspaces', icon: <LayoutGrid className="w-4 h-4" /> },
       ].filter(item => item.visible !== false),
     },
     {
@@ -85,6 +85,15 @@ export function Sidebar() {
         { id: 'orders', label: 'Orders', href: '/business/orders', icon: <ShoppingBag className="w-4 h-4" />, inDev: true },
         { id: 'customers', label: 'Customers', href: '/business/customers', icon: <Users className="w-4 h-4" />, inDev: true },
       ],
+    },
+    {
+      title: 'My Workspace',
+      id: 'workspaces',
+      visible: true,
+      items: [
+        { id: 'workspace-main', label: 'Main Workspace', href: '/business/workspaces', icon: <LayoutGrid className="w-4 h-4" /> },
+        { id: 'workspace-sub', label: 'BeautyHub VN', href: '#', icon: <Briefcase className="w-4 h-4" />, inDev: true },
+      ]
     }
   ].filter(section => section.visible);
 
@@ -241,7 +250,7 @@ export function Sidebar() {
       </div>
 
       {/* Bottom Documentation Section */}
-      <div className="flex-shrink-0 p-4 border-t border-white/5 bg-black/[0.05]">
+      <div className="flex-shrink-0 p-4 border-t border-white/5 bg-black/[0.1]">
           <div className="space-y-1">
              {bottomItems.map(renderItem)}
           </div>
@@ -303,7 +312,7 @@ export function Sidebar() {
               isCollapsed && "right-1/2 translate-x-1/2"
             )}
           >
-            {isCollapsed ? <ChevronRight className="w-3.5 h-3.5" /> : <ChevronLeft className="w-3.5 h-3.5" />}
+             {isCollapsed ? <ChevronRight className="w-3.5 h-3.5" /> : <ChevronLeft className="w-3.5 h-3.5" />}
           </button>
         </motion.aside>
       </div>
