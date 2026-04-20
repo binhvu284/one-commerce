@@ -20,7 +20,7 @@ CREATE TABLE profiles (
 );
 
 -- 3. Tenant Memberships (RBAC for Business Users)
-CREATE TYPE tenant_role AS ENUM ('owner', 'product_manager', 'sales');
+CREATE TYPE tenant_role AS ENUM ('owner', 'admin', 'staff');
 
 CREATE TABLE tenant_members (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),

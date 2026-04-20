@@ -28,7 +28,6 @@ const roles = [
     subRoles: [
       { label: 'Owner', role: 'OWNER', color: 'bg-emerald-500' },
       { label: 'Admin', role: 'ADMIN', color: 'bg-blue-500' },
-      { label: 'Manager', role: 'MANAGER', color: 'bg-purple-500' },
       { label: 'Staff', role: 'STAFF', color: 'bg-slate-500' },
     ]
   },

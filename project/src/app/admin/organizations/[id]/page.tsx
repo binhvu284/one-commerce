@@ -14,7 +14,7 @@ const statusBadge: Record<OrgStatus, 'success' | 'warning' | 'danger' | 'neutral
   active: 'success', pending: 'warning', inactive: 'neutral', suspended: 'danger',
 };
 const planBadge = { starter: 'neutral', growth: 'info', enterprise: 'purple' } as const;
-const roleBadge = { OWNER: 'purple', ADMIN: 'info', MANAGER: 'success', STAFF: 'neutral' } as const;
+const roleBadge = { OWNER: 'purple', ADMIN: 'info', STAFF: 'neutral' } as const;
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
