@@ -1,14 +1,22 @@
 'use client';
 
 import Link from 'next/link';
-import { ShoppingCart, User, Search, Menu, X } from 'lucide-react';
+import { ShoppingCart, User, Search, Menu, X, Package } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/cn';
+import {
+  selectCartCount,
+  useCartStore,
+  useHydratedCart,
+} from '@/lib/stores/cart-store';
 
 export function CustomerNavbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const hydrated = useHydratedCart();
+  const count = useCartStore(selectCartCount);
+  const displayCount = hydrated ? count : 0;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -55,10 +63,25 @@ export function CustomerNavbar() {
           <button className="p-2.5 rounded-full hover:bg-slate-100 transition-colors text-slate-600">
             <Search className="w-5 h-5" />
           </button>
-          <button className="p-2.5 rounded-full hover:bg-slate-100 transition-colors text-slate-600 relative group">
+          <Link
+            href="/customer/orders"
+            className="p-2.5 rounded-full hover:bg-slate-100 transition-colors text-slate-600"
+            aria-label="My orders"
+          >
+            <Package className="w-5 h-5" />
+          </Link>
+          <Link
+            href="/customer/cart"
+            className="p-2.5 rounded-full hover:bg-slate-100 transition-colors text-slate-600 relative group"
+            aria-label={`Shopping cart (${displayCount} items)`}
+          >
             <ShoppingCart className="w-5 h-5" />
-            <span className="absolute top-1 right-1 w-4 h-4 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center ring-2 ring-white">0</span>
-          </button>
+            {displayCount > 0 && (
+              <span className="absolute top-1 right-1 min-w-4 h-4 px-1 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center ring-2 ring-white">
+                {displayCount}
+              </span>
+            )}
+          </Link>
           <Link 
             href="/login" 
             className="hidden md:flex items-center gap-2 px-5 py-2.5 rounded-full bg-slate-900 text-white text-xs font-black uppercase tracking-widest hover:bg-rose-600 transition-all shadow-lg shadow-slate-900/10 active:scale-95"
