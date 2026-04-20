@@ -31,6 +31,7 @@ export interface Product {
   rating: number;
   reviewCount: number;
   soldCount: number;
+  createdAt?: string;
   flashSale?: {
     endTime: string;
     salePrice: number;

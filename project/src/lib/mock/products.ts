@@ -1,5 +1,7 @@
 import { Product } from '../types/product';
 
+const DAY = 24 * 60 * 60 * 1000;
+
 export const MOCK_PRODUCTS: Product[] = [
   {
     id: 'prod_1',
@@ -14,25 +16,26 @@ export const MOCK_PRODUCTS: Product[] = [
     status: 'active',
     variants: [
       { id: 'v1', name: 'Black Onyx', sku: 'WATCH-BLK', price: 999, stock: 15 },
-      { id: 'v2', name: 'Silver Slate', sku: 'WATCH-SLV', price: 1050, stock: 8 }
+      { id: 'v2', name: 'Silver Slate', sku: 'WATCH-SLV', price: 1050, stock: 8 },
     ],
     badges: [
       { type: 'hot', label: 'Bestseller' },
-      { type: 'new', label: 'New Arrival' }
+      { type: 'new', label: 'New Arrival' },
     ],
     rating: 4.9,
     reviewCount: 124,
     soldCount: 450,
+    createdAt: new Date(Date.now() - 2 * DAY).toISOString(),
     flashSale: {
       endTime: new Date(Date.now() + 1000 * 60 * 60 * 5).toISOString(),
       salePrice: 899,
       stockLimit: 10,
-      soldProgress: 65
+      soldProgress: 65,
     },
     attributes: {
-      "Color": ["Black Onyx", "Silver Slate"],
-      "Material": ["Stainless Steel", "Sapphire Glass"]
-    }
+      Color: ['Black Onyx', 'Silver Slate'],
+      Material: ['Stainless Steel', 'Sapphire Glass'],
+    },
   },
   {
     id: 'prod_2',
@@ -46,18 +49,17 @@ export const MOCK_PRODUCTS: Product[] = [
     status: 'active',
     variants: [
       { id: 'v3', name: 'Cloud White', sku: 'AUDIO-WHT', price: 350, stock: 30 },
-      { id: 'v4', name: 'Space Gray', sku: 'AUDIO-GRY', price: 350, stock: 45 }
+      { id: 'v4', name: 'Space Gray', sku: 'AUDIO-GRY', price: 350, stock: 45 },
     ],
-    badges: [
-      { type: 'mall', label: 'OneCommerce Choice' }
-    ],
+    badges: [{ type: 'mall', label: 'OneCommerce Choice' }],
     rating: 4.8,
     reviewCount: 310,
     soldCount: 890,
+    createdAt: new Date(Date.now() - 30 * DAY).toISOString(),
     attributes: {
-      "Color": ["Cloud White", "Space Gray"],
-      "Battery": ["40 Hours"]
-    }
+      Color: ['Cloud White', 'Space Gray'],
+      Battery: ['40 Hours'],
+    },
   },
   {
     id: 'prod_3',
@@ -71,23 +73,248 @@ export const MOCK_PRODUCTS: Product[] = [
     category: 'Bags',
     status: 'active',
     variants: [
-      { id: 'v5', name: 'Classic Tan', sku: 'BAG-TAN', price: 450, stock: 5 }
+      { id: 'v5', name: 'Classic Tan', sku: 'BAG-TAN', price: 450, stock: 5 },
     ],
-    badges: [
-      { type: 'sale', label: '25% OFF' }
-    ],
+    badges: [{ type: 'sale', label: '25% OFF' }],
     rating: 4.7,
     reviewCount: 88,
     soldCount: 120,
+    createdAt: new Date(Date.now() - 15 * DAY).toISOString(),
     attributes: {
-      "Material": ["Full-Grain Leather"]
-    }
-  }
+      Material: ['Full-Grain Leather'],
+    },
+  },
+  {
+    id: 'prod_4',
+    orgId: 'org_main',
+    name: 'Aviator Frames 02',
+    slug: 'aviator-frames-02',
+    description: 'Polarized titanium aviators with gradient lenses. Engineered for comfort and timeless style.',
+    basePrice: 280,
+    salePrice: 199,
+    images: [
+      'https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=800&q=80',
+    ],
+    category: 'Accessories',
+    status: 'active',
+    variants: [
+      { id: 'v6', name: 'Gunmetal', sku: 'GLS-GM', price: 199, stock: 22 },
+      { id: 'v7', name: 'Champagne', sku: 'GLS-CG', price: 219, stock: 18 },
+    ],
+    badges: [{ type: 'sale', label: 'Limited' }],
+    rating: 4.6,
+    reviewCount: 52,
+    soldCount: 210,
+    createdAt: new Date(Date.now() - 5 * DAY).toISOString(),
+    attributes: { Material: ['Titanium'], Lens: ['Polarized'] },
+  },
+  {
+    id: 'prod_5',
+    orgId: 'org_main',
+    name: 'Ceramic Pour-Over Set',
+    slug: 'ceramic-pour-over',
+    description: 'Hand-thrown ceramic dripper and carafe for the perfect morning ritual.',
+    basePrice: 120,
+    images: [
+      'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=800&q=80',
+    ],
+    category: 'Home',
+    status: 'active',
+    variants: [
+      { id: 'v8', name: 'Matte White', sku: 'CER-WHT', price: 120, stock: 40 },
+      { id: 'v9', name: 'Slate', sku: 'CER-SLT', price: 130, stock: 12 },
+    ],
+    badges: [{ type: 'new', label: 'New Arrival' }],
+    rating: 4.9,
+    reviewCount: 37,
+    soldCount: 88,
+    createdAt: new Date(Date.now() - 1 * DAY).toISOString(),
+    attributes: { Material: ['Hand-thrown Ceramic'] },
+  },
+  {
+    id: 'prod_6',
+    orgId: 'org_main',
+    name: 'Runner 7 Performance Shoe',
+    slug: 'runner-7',
+    description: 'Featherweight mesh upper with a responsive carbon plate midsole. Built for PRs.',
+    basePrice: 220,
+    salePrice: 179,
+    images: [
+      'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80',
+    ],
+    category: 'Shoes',
+    status: 'active',
+    variants: [
+      { id: 'v10', name: 'Volt 42', sku: 'SHOE-V42', price: 179, stock: 9 },
+      { id: 'v11', name: 'Volt 43', sku: 'SHOE-V43', price: 179, stock: 6 },
+      { id: 'v12', name: 'Midnight 42', sku: 'SHOE-M42', price: 179, stock: 14 },
+    ],
+    badges: [
+      { type: 'hot', label: 'Trending' },
+      { type: 'sale', label: '19% OFF' },
+    ],
+    rating: 4.7,
+    reviewCount: 204,
+    soldCount: 612,
+    createdAt: new Date(Date.now() - 8 * DAY).toISOString(),
+    flashSale: {
+      endTime: new Date(Date.now() + 1000 * 60 * 60 * 12).toISOString(),
+      salePrice: 149,
+      stockLimit: 20,
+      soldProgress: 40,
+    },
+    attributes: { Size: ['42', '43', '44'], Color: ['Volt', 'Midnight'] },
+  },
+  {
+    id: 'prod_7',
+    orgId: 'org_main',
+    name: 'Overshirt Heritage',
+    slug: 'overshirt-heritage',
+    description: 'Garment-dyed organic cotton overshirt. A modern take on the classic chore coat.',
+    basePrice: 185,
+    images: [
+      'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&w=800&q=80',
+    ],
+    category: 'Clothing',
+    status: 'active',
+    variants: [
+      { id: 'v13', name: 'Olive / M', sku: 'CLO-OLV-M', price: 185, stock: 11 },
+      { id: 'v14', name: 'Olive / L', sku: 'CLO-OLV-L', price: 185, stock: 7 },
+      { id: 'v15', name: 'Stone / M', sku: 'CLO-STN-M', price: 185, stock: 15 },
+    ],
+    badges: [{ type: 'new', label: 'Just Dropped' }],
+    rating: 4.5,
+    reviewCount: 64,
+    soldCount: 140,
+    createdAt: new Date(Date.now() - 3 * DAY).toISOString(),
+    attributes: { Color: ['Olive', 'Stone'], Size: ['S', 'M', 'L', 'XL'] },
+  },
+  {
+    id: 'prod_8',
+    orgId: 'org_main',
+    name: 'Linea Desk Lamp',
+    slug: 'linea-desk-lamp',
+    description: 'Sculptural aluminum desk lamp with warm dimmable LED. Designed in Copenhagen.',
+    basePrice: 260,
+    salePrice: 210,
+    images: [
+      'https://images.unsplash.com/photo-1565636192335-b8b4dab15d4a?auto=format&fit=crop&w=800&q=80',
+    ],
+    category: 'Home',
+    status: 'active',
+    variants: [
+      { id: 'v16', name: 'Ivory', sku: 'LMP-IVY', price: 210, stock: 18 },
+      { id: 'v17', name: 'Graphite', sku: 'LMP-GRP', price: 210, stock: 10 },
+    ],
+    badges: [{ type: 'sale', label: 'Save $50' }],
+    rating: 4.8,
+    reviewCount: 41,
+    soldCount: 95,
+    createdAt: new Date(Date.now() - 20 * DAY).toISOString(),
+    attributes: { Color: ['Ivory', 'Graphite'] },
+  },
+  {
+    id: 'prod_9',
+    orgId: 'org_main',
+    name: 'Minima Smart Speaker',
+    slug: 'minima-smart-speaker',
+    description: 'Room-filling sound in a palm-sized enclosure. Seamless multi-room pairing.',
+    basePrice: 199,
+    images: [
+      'https://images.unsplash.com/photo-1589003077984-894e133dabab?auto=format&fit=crop&w=800&q=80',
+    ],
+    category: 'Electronics',
+    status: 'active',
+    variants: [
+      { id: 'v18', name: 'Fabric Gray', sku: 'SPK-GRY', price: 199, stock: 28 },
+      { id: 'v19', name: 'Fabric Rose', sku: 'SPK-RSE', price: 199, stock: 16 },
+    ],
+    badges: [{ type: 'mall', label: 'Staff Pick' }],
+    rating: 4.6,
+    reviewCount: 156,
+    soldCount: 470,
+    createdAt: new Date(Date.now() - 12 * DAY).toISOString(),
+    attributes: { Color: ['Gray', 'Rose'] },
+  },
+  {
+    id: 'prod_10',
+    orgId: 'org_main',
+    name: 'Atlas Weekender Duffel',
+    slug: 'atlas-weekender',
+    description: 'Weatherproof waxed canvas duffel with vegetable-tanned leather trim.',
+    basePrice: 420,
+    salePrice: 339,
+    images: [
+      'https://images.unsplash.com/photo-1547949003-9792a18a2601?auto=format&fit=crop&w=800&q=80',
+    ],
+    category: 'Bags',
+    status: 'active',
+    variants: [
+      { id: 'v20', name: 'Field Olive', sku: 'DUF-OLV', price: 339, stock: 9 },
+      { id: 'v21', name: 'Midnight', sku: 'DUF-MID', price: 339, stock: 4 },
+    ],
+    badges: [{ type: 'sale', label: '20% OFF' }],
+    rating: 4.8,
+    reviewCount: 77,
+    soldCount: 180,
+    createdAt: new Date(Date.now() - 18 * DAY).toISOString(),
+    attributes: { Material: ['Waxed Canvas', 'Leather Trim'] },
+  },
+  {
+    id: 'prod_11',
+    orgId: 'org_main',
+    name: 'Trailblazer Hiking Boot',
+    slug: 'trailblazer-hiker',
+    description: 'Waterproof full-grain leather boot with Vibram sole. All-terrain grip, all-season comfort.',
+    basePrice: 310,
+    images: [
+      'https://images.unsplash.com/photo-1520639888713-7851133b1ed0?auto=format&fit=crop&w=800&q=80',
+    ],
+    category: 'Shoes',
+    status: 'active',
+    variants: [
+      { id: 'v22', name: 'Umber 43', sku: 'BOOT-U43', price: 310, stock: 7 },
+      { id: 'v23', name: 'Umber 44', sku: 'BOOT-U44', price: 310, stock: 5 },
+    ],
+    badges: [{ type: 'custom', label: 'Field Tested' }],
+    rating: 4.7,
+    reviewCount: 98,
+    soldCount: 260,
+    createdAt: new Date(Date.now() - 40 * DAY).toISOString(),
+    attributes: { Size: ['42', '43', '44', '45'] },
+  },
+  {
+    id: 'prod_12',
+    orgId: 'org_main',
+    name: 'Relaxed Tee Essentials',
+    slug: 'relaxed-tee-essentials',
+    description: 'Heavyweight 240gsm supima cotton tee with a boxy, relaxed silhouette.',
+    basePrice: 68,
+    salePrice: 49,
+    images: [
+      'https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?auto=format&fit=crop&w=800&q=80',
+    ],
+    category: 'Clothing',
+    status: 'active',
+    variants: [
+      { id: 'v24', name: 'Bone / M', sku: 'TEE-BN-M', price: 49, stock: 60 },
+      { id: 'v25', name: 'Charcoal / M', sku: 'TEE-CH-M', price: 49, stock: 48 },
+    ],
+    badges: [{ type: 'sale', label: 'Bundle 3 = -20%' }],
+    rating: 4.5,
+    reviewCount: 312,
+    soldCount: 1400,
+    createdAt: new Date(Date.now() - 25 * DAY).toISOString(),
+    attributes: { Color: ['Bone', 'Charcoal'], Size: ['S', 'M', 'L', 'XL'] },
+  },
 ];
 
 export const CATEGORIES = [
   { id: 'cat_1', orgId: 'org_main', name: 'All', slug: 'all', image: '' },
-  { id: 'cat_2', orgId: 'org_main', name: 'Accessories', slug: 'accessories', image: '' },
-  { id: 'cat_3', orgId: 'org_main', name: 'Electronics', slug: 'electronics', image: '' },
-  { id: 'cat_4', orgId: 'org_main', name: 'Bags', slug: 'bags', image: '' }
+  { id: 'cat_2', orgId: 'org_main', name: 'Accessories', slug: 'accessories', image: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=600&q=80' },
+  { id: 'cat_3', orgId: 'org_main', name: 'Electronics', slug: 'electronics', image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80' },
+  { id: 'cat_4', orgId: 'org_main', name: 'Bags', slug: 'bags', image: 'https://images.unsplash.com/photo-1547949003-9792a18a2601?auto=format&fit=crop&w=600&q=80' },
+  { id: 'cat_5', orgId: 'org_main', name: 'Home', slug: 'home', image: 'https://images.unsplash.com/photo-1565636192335-b8b4dab15d4a?auto=format&fit=crop&w=600&q=80' },
+  { id: 'cat_6', orgId: 'org_main', name: 'Shoes', slug: 'shoes', image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80' },
+  { id: 'cat_7', orgId: 'org_main', name: 'Clothing', slug: 'clothing', image: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&w=600&q=80' },
 ];

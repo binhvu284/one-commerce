@@ -47,13 +47,18 @@ export function CustomerNavbar() {
 
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-8">
-          {['Collections', 'New Arrivals', 'Offers', 'About'].map((item) => (
-            <Link 
-              key={item} 
-              href="#" 
+          {[
+            { label: 'Collections', href: '/customer/collections' },
+            { label: 'New Arrivals', href: '/customer/new-arrivals' },
+            { label: 'Offers', href: '/customer/offers' },
+            { label: 'About', href: '/customer/about' },
+          ].map((item) => (
+            <Link
+              key={item.label}
+              href={item.href}
               className="text-sm font-bold uppercase tracking-widest text-slate-500 hover:text-rose-500 transition-colors"
             >
-              {item}
+              {item.label}
             </Link>
           ))}
         </div>
@@ -120,18 +125,25 @@ export function CustomerNavbar() {
             </div>
             
             <div className="space-y-6">
-              {['Collections', 'New Arrivals', 'Offers', 'About'].map((item, idx) => (
+              {[
+                { label: 'Collections', href: '/customer/collections' },
+                { label: 'New Arrivals', href: '/customer/new-arrivals' },
+                { label: 'Offers', href: '/customer/offers' },
+                { label: 'About', href: '/customer/about' },
+                { label: 'My Orders', href: '/customer/orders' },
+              ].map((item, idx) => (
                 <motion.div
-                  key={item}
+                  key={item.label}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.1 + idx * 0.1 }}
                 >
-                  <Link 
-                    href="#" 
+                  <Link
+                    href={item.href}
+                    onClick={() => setIsMobileMenuOpen(false)}
                     className="text-4xl font-black text-slate-900 hover:text-rose-500 transition-colors"
                   >
-                    {item}
+                    {item.label}
                   </Link>
                 </motion.div>
               ))}
