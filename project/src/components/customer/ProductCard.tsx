@@ -2,10 +2,12 @@
 
 import { Product } from '@/lib/types/product';
 import { motion } from 'framer-motion';
-import { ShoppingBag, Star, TrendingUp, Sparkles, Award, Zap } from 'lucide-react';
+import { Check, ShoppingBag, Star, TrendingUp, Sparkles, Award, Zap } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState } from 'react';
 import { cn } from '@/lib/cn';
+import { useCartStore } from '@/lib/stores/cart-store';
 
 interface ProductCardProps {
   product: Product;
@@ -13,6 +15,19 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product, index }: ProductCardProps) {
+  const addItem = useCartStore((s) => s.addItem);
+  const [added, setAdded] = useState(false);
+  const hasVariant = product.variants.length > 0;
+
+  const handleQuickAdd = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!hasVariant) return;
+    addItem(product, product.variants[0], 1);
+    setAdded(true);
+    setTimeout(() => setAdded(false), 1400);
+  };
+
   const badgeColors: Record<string, string> = {
     mall: 'bg-indigo-500 text-white',
     hot: 'bg-rose-500 text-white',
@@ -66,9 +81,28 @@ export function ProductCard({ product, index }: ProductCardProps) {
 
           {/* Quick Action Overlay */}
           <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center pb-8 px-8">
-             <button className="w-full h-14 rounded-2xl bg-white text-slate-900 font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-3 shadow-2xl translate-y-4 group-hover:translate-y-0 transition-transform duration-500 hover:bg-rose-500 hover:text-white group/btn">
-                <ShoppingBag className="w-4 h-4 transition-transform group-hover/btn:scale-110" />
-                Quick Add
+             <button
+                onClick={handleQuickAdd}
+                disabled={!hasVariant}
+                className={cn(
+                  "w-full h-14 rounded-2xl font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-3 shadow-2xl translate-y-4 group-hover:translate-y-0 transition-all duration-500 group/btn",
+                  added
+                    ? "bg-emerald-500 text-white"
+                    : "bg-white text-slate-900 hover:bg-rose-500 hover:text-white",
+                  !hasVariant && "opacity-60 cursor-not-allowed"
+                )}
+             >
+                {added ? (
+                  <>
+                    <Check className="w-4 h-4" />
+                    Added to Cart
+                  </>
+                ) : (
+                  <>
+                    <ShoppingBag className="w-4 h-4 transition-transform group-hover/btn:scale-110" />
+                    Quick Add
+                  </>
+                )}
              </button>
           </div>
         </div>
